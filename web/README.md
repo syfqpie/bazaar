@@ -1,29 +1,39 @@
-# bazaar
+# Bazaar - Marketplace Webapp 🛒
 
-## Project setup
-```
-yarn install
+> A bazaar (Persian: بازار) or souk (Arabic: سوق, romanized: sūq; also transliterated as souq)
+> is a marketplace consisting of multiple small stalls or shops, especially in the Middle East,
+> North Africa, and India.
+
+## Project Setup
+
+```sh
+yarn
 ```
 
-### Compiles and hot-reloads for development
-```
-yarn serve
+### Compile and Hot-Reload for Development
+
+```sh
+yarn dev
 ```
 
-### Compiles and minifies for production
-```
+### Type-Check, Compile and Minify for Production
+
+```sh
 yarn build
 ```
 
-### Run your unit tests
-```
+### Run Unit Tests with Vitest
+
+```sh
 yarn test:unit
 ```
 
-### Lints and fixes files
-```
+### Lint with ESLint
+```sh
 yarn lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## References
+- [Vite Configuration Reference](https://vitejs.dev/config/)
+- [Vitest](https://vitest.dev/)
+- [ESLint](https://eslint.org/)
