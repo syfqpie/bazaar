@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full py-8 px-12">
+    <div class="w-full py-8 px-4 sm:px-12">
         <div>
             <img alt="Bazaar"
                 class="mx-auto h-12 w-auto"
