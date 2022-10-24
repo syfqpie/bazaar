@@ -30,9 +30,14 @@ const router = createRouter({
           component: () => import('../views/auth/LoginView.vue')
         },
         {
-          path: 'register',
-          name: 'register',
+          path: 'register/customer',
+          name: 'registerCustomer',
           component: () => import('../views/auth/RegistrationView.vue')
+        },
+        {
+          path: 'register/vendor',
+          name: 'registerVendor',
+          component: () => import('../views/auth/VendorRegistrationView.vue')
         },
         {
           path: 'reset',
