@@ -4,18 +4,14 @@ Customer apps' views
 
 from rest_framework import mixins, status, viewsets
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from dj_rest_auth.registration.views import RegisterView
 from django_filters.rest_framework import DjangoFilterBackend
 
-from utils.auth.permissions import IsSuperAdmin
-
-from .models import (
-    Customer,
-    CustomerAddress
-)
+from .policy import CustomerAccessPolicy
+from .models import Customer
 from .serializers import (
     CustomerSerializer,
     CustomerRegisterSerializer
@@ -36,13 +32,26 @@ class CustomerViewSet(mixins.RetrieveModelMixin,
     filterset_fields = [
         'is_active'
     ]
+    permission_classes = (CustomerAccessPolicy,)
 
-    def get_permissions(self):
-        """Append permissions"""
-        
-        permission_classes = [IsAuthenticated, IsSuperAdmin]
+    
+    @property
+    def access_policy(self):
+        """
+        To make get_queryset logic more explicit
+        """
 
-        return [permission() for permission in permission_classes]    
+        return self.permission_classes[0]
+
+    def get_queryset(self):
+        """
+        Ensure that current user can only see the models
+        they are allowed to see
+        """
+
+        return self.access_policy.scope_queryset(
+            self.request, self.queryset
+        ) 
 
 
 class CustomerRegisterView(RegisterView):
