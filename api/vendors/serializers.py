@@ -34,7 +34,7 @@ class VendorRegisterSerializer(RegisterSerializer):
     email = serializers.EmailField(required=False, source='username')
     password1 = serializers.HiddenField(required=False, default=random_pwd)
     password2 = serializers.HiddenField(required=False, default=random_pwd)
-    first_name = serializers.HiddenField(required=False, source='name')
+    first_name = serializers.CharField(required=False, source='name')
 
     # Vendor related
     name = serializers.CharField(max_length=100)
@@ -50,7 +50,7 @@ class VendorRegisterSerializer(RegisterSerializer):
             'password1': self.validated_data.get('password1', None),
             'password2': self.validated_data.get('password2', None),
             'email': self.validated_data.get('username', None),
-            'first_name': self.validated_data.get('first_name', None),
+            'first_name': self.validated_data.get('name', None),
             'name': self.validated_data.get('name', None),
             'phone_no': self.validated_data.get('phone_no', None)
         }
@@ -72,7 +72,7 @@ class VendorRegisterSerializer(RegisterSerializer):
         vendor = Vendor(
             user=vendor_user,
             name=self.cleaned_data.get('name'),
-            date_of_birth=self.cleaned_data.get('date_of_birth')
+            phone_no=self.cleaned_data.get('phone_no')
         )
 
         # Saving all instances
