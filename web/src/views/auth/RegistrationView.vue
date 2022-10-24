@@ -141,7 +141,7 @@ export default defineComponent({
     const validation = {
         username: { 
             required: helpers.withMessage(
-                'Token is required',
+                'Email is required',
                 required
             ),
             email: helpers.withMessage(
@@ -163,7 +163,7 @@ export default defineComponent({
         },
         phoneNo: { 
             required: helpers.withMessage(
-                'Phone number is required',
+                'Phone no. is required',
                 required
             )
         }
@@ -204,9 +204,10 @@ export default defineComponent({
                 } else if (err['status'] === 400 && 'nonFieldErrors' in err['data'] === false) {
                     // Field errors
                     for (var prop in err['data']) {
-                        toast.error(err['data'][prop][0])
+                        for (var i=0; i<err['data'][prop].length; i++)
+                        toast.error(err['data'][prop][i])
                     }
-                } 
+                }
             })
     }
 
