@@ -142,7 +142,7 @@ export default defineComponent({
                 toast.success('Success. Redirecting to /home')
                 
                 // Navigate home
-                router.push({ name: 'home' })
+                router.push({ path: '/home' })
             })
             .catch(err => {
                 isLoading.value = false

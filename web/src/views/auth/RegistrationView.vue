@@ -193,7 +193,7 @@ export default defineComponent({
                 toast.success(data.detail)
                 
                 // Navigate login
-                router.push({ name: 'login' })
+                router.push({ path: '/auth/login' })
             })
             .catch(err => {
                 isLoading.value = false

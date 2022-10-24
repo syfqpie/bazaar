@@ -131,7 +131,7 @@ export default defineComponent({
                     toast.success('Success. Redirecting to /login')
                     
                     // Navigate login
-                    router.push({ name: 'login' })
+                    router.push({ path: '/auth/login' })
                 })
                 .catch(err => {
                     isLoading.value = false
