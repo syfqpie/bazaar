@@ -103,14 +103,14 @@ export const useAuthStore = defineStore('auth', {
          * Resend verification email
          * 
          * @param payload - payload
-         * @param payload.token - received token
+         * @param payload.key - received token
          * @param payload.newPassword1 - new password
          * @param payload.newPassword2 - confirm new password
          * @returns Detail message
          */
         verifyAccount(payload: VerifyAccountInput): Promise<DetailResponse> {
             return new Promise((resolve, reject) => {
-                APIService.post(`${ BASE_PREFIX }/verify-email`, payload)
+                APIService.post(`${ BASE_PREFIX }/registration/verify-email`, payload)
                     .then(({ data }) => {
                         resolve(data)
                     })

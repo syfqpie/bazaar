@@ -64,7 +64,7 @@ export interface ResetPasswordInput extends ChangePasswordInput {
 /** Interface for verify account input */
 export interface VerifyAccountInput extends ChangePasswordInput {
     /** Received token */
-    token: string | null
+    key: string | null
 }
 
 /** Interface for login response */
