@@ -23,7 +23,9 @@ from rest_framework import routers
 from rest_framework_extensions.routers import NestedRouterMixin
 from rest_framework_simplejwt.views import TokenVerifyView
 
+from customers.views import CustomerViewSet, CustomerRegisterView
 from users.views import CustomUserViewSet
+from vendors.views import VendorViewSet, VendorRegisterView
 from utils.auth.views import (
     MyLoginView, MyRegisterView, MyVerifyEmailView,
     MyResendVerificationView, MyPasswordChangeView,
@@ -40,14 +42,26 @@ class NestedDefaultRouter(NestedRouterMixin, routers.DefaultRouter):
 
 router = NestedDefaultRouter()
 
+# Customers
+customers_router = router.register(
+    r'customers', CustomerViewSet
+)
+
 # Users
 users_router = router.register(
     r'users', CustomUserViewSet
 )
 
+# Vendors
+vendors_router = router.register(
+    r'vendors', VendorViewSet
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('auth/registration/', MyRegisterView.as_view(), name='public_register'),
+    path('auth/registration/customer/', CustomerRegisterView.as_view(), name='customer_register'),
+    path('auth/registration/vendor/', VendorRegisterView.as_view(), name='vendor_register'),
     path('auth/registration/verify-email/', MyVerifyEmailView.as_view(), name='account_email_verification_sent'),
     re_path(r'^auth/registration/account-confirm-email/(?P<key>[-:\w]+)/$', TemplateView.as_view(),
         name='account_confirm_email'),
