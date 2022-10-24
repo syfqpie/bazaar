@@ -34,6 +34,11 @@ class MyAccountAdapter(DefaultAccountAdapter):
                 email_template = "account/email/admin_email_confirmation_signup"
             else:
                 email_template = "account/email/admin_email_confirmation"
+        elif current_user.user_type == UserType.VENDOR:
+            if signup:
+                email_template = "account/email/vendor_email_confirmation_signup"
+            else:
+                email_template = "account/email/vendor_email_confirmation"
         elif current_user.user_type == UserType.CUSTOMER:
             if signup:
                 email_template = "account/email/customer_email_confirmation_signup"
