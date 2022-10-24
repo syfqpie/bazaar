@@ -37,7 +37,7 @@ export interface ResetPassword {
     newPassword2: string | null
 
     /** Received uid */
-    id: number | null,
+    uid: number | null,
 
     /** Received token */
     token: string | null
