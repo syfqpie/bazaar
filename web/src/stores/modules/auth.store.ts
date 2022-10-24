@@ -1,12 +1,14 @@
 import { APIService } from '@/common/api'
 import type {
-    ChangePassword,
-    DetailResponse,
-    EmailOnly,
+    ChangePasswordInput,
+    EmailOnlyInput,
     LoginInput,
-    LoginResponse,
-    ResetPassword,
-    TokenOnly } from '@/common/models/auth/auth.model'
+    RegisterCustomerInput,
+    RegisterVendorInput,
+    ResetPasswordInput,
+    VerifyAccountInput,
+    DetailResponse,
+    LoginResponse } from '@/common/models/auth.model'
 import { defineStore } from 'pinia'
 
 const BASE_PREFIX = 'auth'
@@ -38,13 +40,55 @@ export const useAuthStore = defineStore('auth', {
             })
         },
         /**
+         * Register vendor
+         * 
+         * @param payload - payload
+         * @param payload.username - vendor's email or username
+         * @param payload.name - vendor's name
+         * @param payload.phoneNo - vendor's phone no.
+         * @returns Detail message
+         */
+        registerVendor(payload: RegisterVendorInput): Promise<DetailResponse> {
+            return new Promise((resolve, reject) => {
+                APIService.post(`${ BASE_PREFIX }/registration/vendor`, payload)
+                    .then(({ data }) => {
+                        resolve(data)
+                    })
+                    .catch(err => {
+                        reject(err)
+                    })
+            })
+        },
+        /**
+         * Register customer
+         * 
+         * @param payload - payload
+         * @param payload.username - customer's email or username
+         * @param payload.firstName - customer's first name
+         * @param payload.lastName - customer's last name
+         * @param payload.phoneNo - customer's phone no.
+         * @param payload.dateOfBirth - customer's date of birth
+         * @returns Detail message
+         */
+         registerCustomer(payload: RegisterCustomerInput): Promise<DetailResponse> {
+            return new Promise((resolve, reject) => {
+                APIService.post(`${ BASE_PREFIX }/registration/customer`, payload)
+                    .then(({ data }) => {
+                        resolve(data)
+                    })
+                    .catch(err => {
+                        reject(err)
+                    })
+            })
+        },
+        /**
          * Resend verification email
          * 
          * @param payload - payload
          * @param payload.email - user's email
          * @returns Detail message
          */
-        resendVerification(payload: EmailOnly): Promise<DetailResponse> {
+        resendVerification(payload: EmailOnlyInput): Promise<DetailResponse> {
             return new Promise((resolve, reject) => {
                 APIService.post(`${ BASE_PREFIX }/resend-verification`, payload)
                     .then(({ data }) => {
@@ -60,9 +104,11 @@ export const useAuthStore = defineStore('auth', {
          * 
          * @param payload - payload
          * @param payload.token - received token
+         * @param payload.newPassword1 - new password
+         * @param payload.newPassword2 - confirm new password
          * @returns Detail message
          */
-        verifyAccount(payload: TokenOnly): Promise<DetailResponse> {
+        verifyAccount(payload: VerifyAccountInput): Promise<DetailResponse> {
             return new Promise((resolve, reject) => {
                 APIService.post(`${ BASE_PREFIX }/verify-email`, payload)
                     .then(({ data }) => {
@@ -81,7 +127,7 @@ export const useAuthStore = defineStore('auth', {
          * @param payload.newPassword2 - confirm new password
          * @returns Detail message
          */
-        changePassword(payload: ChangePassword): Promise<DetailResponse> {
+        changePassword(payload: ChangePasswordInput): Promise<DetailResponse> {
             return new Promise((resolve, reject) => {
                 APIService.post(`${ BASE_PREFIX }/password/change`, payload)
                     .then(({ data }) => {
@@ -99,7 +145,7 @@ export const useAuthStore = defineStore('auth', {
          * @param payload.email - user's email
          * @returns Detail message
          */
-        requestReset(payload: EmailOnly): Promise<DetailResponse> {
+        requestReset(payload: EmailOnlyInput): Promise<DetailResponse> {
             return new Promise((resolve, reject) => {
                 APIService.post(`${ BASE_PREFIX }/password/reset`, payload)
                     .then(({ data }) => {
@@ -120,7 +166,7 @@ export const useAuthStore = defineStore('auth', {
          * @param payload.token - received token
          * @returns Detail message
          */
-        resetPassword(payload: ResetPassword): Promise<DetailResponse> {
+        resetPassword(payload: ResetPasswordInput): Promise<DetailResponse> {
             return new Promise((resolve, reject) => {
                 APIService.post(`${ BASE_PREFIX }/password/reset/confirm`, payload)
                     .then(({ data }) => {
