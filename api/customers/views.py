@@ -76,7 +76,7 @@ class CustomerRegisterView(RegisterView):
 
         customer_user = self.perform_create(serializer)
         response_msg = {
-            'Success':  f'Account created, an email has been sent to {customer_user.email}'
+            'detail':  f'Account created, an email has been sent to {customer_user.email}'
         }
             
         return Response(
