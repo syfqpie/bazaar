@@ -55,7 +55,9 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'dj_rest_auth.registration',
 
+    'customers',
     'users',
+    'vendors',
 ]
 
 MIDDLEWARE = [
@@ -183,6 +185,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_RENDERER_CLASSES': [
         'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
+        # 'djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer',
         # Default renderer
         # 'rest_framework.renderers.JSONRenderer',
         # 'rest_framework.renderers.BrowsableAPIRenderer',
