@@ -56,6 +56,7 @@
 import { onMounted, defineComponent, ref } from 'vue'
 
 import type { ResetPasswordInput } from '@/common/models/auth.model'
+import router from '@/router'
 import { useAuthStore } from '@/stores'
 
 import { helpers, required } from '@vuelidate/validators'
@@ -135,10 +136,24 @@ export default defineComponent({
                 isLoading.value = false
                 
                 // Success toastr
-                // toast.success('Password reset email has been sent')
+                toast.success('Password reset been reset. Redirecting to /login')
+
+                // Navigate home
+                router.push({ path: '/auth/login' })
             })
-            .catch(() => {
+            .catch((err) => {
                 isLoading.value = false
+
+                if (err['status'] === 400 && 'nonFieldErrors' in err['data']) {
+                    // Non field errors
+                    toast.error(err['data']['nonFieldErrors'][0])
+                } else if (err['status'] === 400 && 'nonFieldErrors' in err['data'] === false) {
+                    // Field errors
+                    for (var prop in err['data']) {
+                        for (var i=0; i<err['data'][prop].length; i++)
+                        toast.error(err['data'][prop][i])
+                    }
+                }
             })
     }
 
