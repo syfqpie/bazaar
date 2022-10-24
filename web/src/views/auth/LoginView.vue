@@ -83,7 +83,7 @@
 <script lang="ts">
 import { onMounted, defineComponent, ref } from 'vue'
 
-import type { LoginInput } from '@/common/models/auth/auth.model'
+import type { LoginInput } from '@/common/models/auth.model'
 import router from '@/router'
 import { useAuthStore } from '@/stores'
 

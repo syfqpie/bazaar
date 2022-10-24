@@ -55,7 +55,7 @@
 <script lang="ts">
 import { onMounted, defineComponent, ref } from 'vue'
 
-import type { ResetPassword } from '@/common/models/auth/auth.model'
+import type { ResetPasswordInput } from '@/common/models/auth.model'
 import { useAuthStore } from '@/stores'
 
 import { helpers, required } from '@vuelidate/validators'
@@ -70,7 +70,7 @@ export default defineComponent({
   name: 'ConfirmReset',
   setup() {
     // Form
-    const resetForm = ref<ResetPassword>({
+    const resetForm = ref<ResetPasswordInput>({
         uid: null,
         token: null,
         newPassword1: null,

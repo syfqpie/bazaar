@@ -74,7 +74,7 @@
 <script lang="ts">
 import { onMounted, defineComponent, ref } from 'vue'
 
-import type { EmailOnly } from '@/common/models/auth/auth.model'
+import type { EmailOnlyInput } from '@/common/models/auth.model'
 import { useAuthStore } from '@/stores'
 
 import { email, helpers, required } from '@vuelidate/validators'
@@ -85,7 +85,7 @@ export default defineComponent({
   name: 'Reset',
   setup() {
     // Form
-    const resetForm = ref<EmailOnly>({
+    const resetForm = ref<EmailOnlyInput>({
         email: null,
     })
     const validation = {
