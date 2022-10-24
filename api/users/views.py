@@ -4,7 +4,7 @@ User's views
 
 import datetime
 
-from rest_framework import viewsets
+from rest_framework import mixins, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter, OrderingFilter
 
@@ -21,7 +21,11 @@ from .serializers import (
 )
 
 
-class CustomUserViewSet(viewsets.ModelViewSet):
+class CustomUserViewSet(mixins.RetrieveModelMixin,
+                        mixins.UpdateModelMixin,
+                        mixins.DestroyModelMixin,
+                        mixins.ListModelMixin,
+                        viewsets.GenericViewSet):
     """
     Viewset for custom user
     """
