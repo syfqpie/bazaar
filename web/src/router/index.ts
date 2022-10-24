@@ -46,7 +46,7 @@ const router = createRouter({
         },
         {
           path: 'confirm-reset',
-          name: 'confirm-reset',
+          name: 'confirmReset',
           component: () => import('../views/auth/ConfirmResetView.vue')
         },
         {
