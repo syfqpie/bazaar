@@ -11,7 +11,7 @@
             </h2>
         </div>
 
-        <form>
+        <form @submit.prevent>
             <div class="mt-8 max-w-md">
                 <div class="grid grid-cols-1 gap-3">
                     <div>
@@ -21,15 +21,17 @@
                             border-transparent px-3 py-2 focus:outline-none
                             focus:shadow-outline focus:ring-gray-500
                             focus:ring-1 focus:bg-white"
-                            placeholder="Enter your email" />
+                            placeholder="Enter your email"
+                            v-model="resetForm.email" />
                     </div>
 
                     <div>
-                        <button type="submit"
-                            class="mt-1 group relative flex w-full justify-center
+                        <button class="mt-1 group relative flex w-full justify-center
                             rounded-md border border-transparent bg-green-300
-                            px-3 py-2 text-white hover:bg-green-400
-                            focus:outline-none focus:ring-2 focus:ring-green-200">
+                            px-3 py-2 text-white enabled:bg-green-400
+                            focus:outline-none focus:ring-2 focus:ring-green-200"
+                            v-on:click="reset()"
+                            :disabled="isLoading || v$.$invalid">
                             Send request
                         </button>
                     </div>
@@ -70,16 +72,68 @@
 </template>
 
 <script lang="ts">
-import { onMounted, defineComponent } from 'vue'
+import { onMounted, defineComponent, ref } from 'vue'
+
+import type { EmailOnly } from '@/common/models/auth/auth.model'
+import { useAuthStore } from '@/stores'
+
+import { email, helpers, required } from '@vuelidate/validators'
+import { useToast } from 'vue-toastification'
+import useVuelidate from '@vuelidate/core'
 
 export default defineComponent({
   name: 'Reset',
   setup() {
+    // Form
+    const resetForm = ref<EmailOnly>({
+        email: null,
+    })
+    const validation = {
+        email: { 
+            required: helpers.withMessage(
+                'Email is required',
+                required
+            ),
+            email: helpers.withMessage(
+                'Valid email is required',
+                email
+            )
+        }
+    }
+    const v$ = useVuelidate(validation, resetForm.value)
+
+    // Services
+    const authStore = useAuthStore()
+    const toast = useToast()
+
+    // Checkers
+    const isLoading = ref<boolean>(false)
+
     onMounted(() => {
-      // console.log('Mounted Reset')
+        // console.log('Mounted Reset')
     })
 
-    return {}
+    const reset = () => {
+        isLoading.value = true
+
+        return authStore.requestReset(resetForm.value)
+            .then(data => {
+                isLoading.value = false
+                
+                // Success toastr
+                toast.success('Password reset email has been sent')
+            })
+            .catch(() => {
+                isLoading.value = false
+            })
+    }
+
+    return {
+        resetForm,
+        reset,
+        v$,
+        isLoading
+    }
   }
 })
 </script>
