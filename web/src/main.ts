@@ -6,6 +6,10 @@ import router from './router'
 
 import './assets/main.css'
 
+import { APIService } from '@/common/api'
+
+APIService.init()
+
 const app = createApp(App)
 
 app.use(createPinia())
