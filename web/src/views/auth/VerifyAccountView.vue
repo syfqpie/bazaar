@@ -145,7 +145,7 @@ export default defineComponent({
                             for (var i=0; i<err['data'][prop].length; i++)
                             toast.error(err['data'][prop][i])
                         }
-                    } 
+                    }
                 })
         }
 
