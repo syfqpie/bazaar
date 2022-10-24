@@ -11,7 +11,7 @@
             </h2>
         </div>
 
-        <form>
+        <form @submit.prevent>
             <div class="mt-8 max-w-md">
                 <div class="grid grid-cols-1 gap-3">
                     <div>
@@ -21,7 +21,8 @@
                             border-transparent px-3 py-2 focus:outline-none
                             focus:shadow-outline focus:ring-gray-500
                             focus:ring-1 focus:bg-white"
-                            placeholder="Enter your email" />
+                            placeholder="Enter your email"
+                            v-model="loginForm.username" />
                     </div>
 
                     <div>
@@ -31,29 +32,17 @@
                             border-transparent px-3 py-2 focus:outline-none
                             focus:shadow-outline focus:ring-gray-500
                             focus:ring-1 focus:bg-white"
-                            placeholder="Enter your password" />
-                    </div>
-
-                    <div class="mt-1 flex items-center justify-between">
-                        <div class="flex items-center">
-                            <input id="remember-me"
-                                name="remember-me"
-                                type="checkbox"
-                                class="h-4 w-4 rounded border-gray-300
-                                text-green-600 focus:ring-green-500" />
-                            <label for="remember-me"
-                                class="ml-2 block text-sm text-gray-900">
-                                Remember me
-                            </label>
-                        </div>
+                            placeholder="Enter your password"
+                            v-model="loginForm.password" />
                     </div>
 
                     <div>
-                        <button type="submit"
-                            class="mt-1 group relative flex w-full justify-center
+                        <button class="mt-1 group relative flex w-full justify-center
                             rounded-md border border-transparent bg-green-300
-                            px-3 py-2 text-white hover:bg-green-400
-                            focus:outline-none focus:ring-2 focus:ring-green-200">
+                            px-3 py-2 text-white enabled:bg-green-400
+                            focus:outline-none focus:ring-2 focus:ring-green-200"
+                            v-on:click="login()"
+                            :disabled="isLoading || v$.$invalid">
                             Sign in
                         </button>
                     </div>
@@ -92,16 +81,85 @@
 </template>
 
 <script lang="ts">
-import { onMounted, defineComponent } from 'vue'
+import { onMounted, defineComponent, ref } from 'vue'
+
+import type { LoginInput } from '@/common/models/auth/auth.model'
+import router from '@/router'
+import { useAuthStore } from '@/stores'
+
+import { email, helpers, required } from '@vuelidate/validators'
+import { useToast } from 'vue-toastification'
+import useVuelidate from '@vuelidate/core'
 
 export default defineComponent({
   name: 'Login',
   setup() {
+    // Form
+    const loginForm = ref<LoginInput>({
+        username: null,
+        password: null
+    })
+    const validation = {
+        username: { 
+            required: helpers.withMessage(
+                'Email is required',
+                required
+            ),
+            email: helpers.withMessage(
+                'Valid email is required',
+                email
+            )
+        },
+        password: { 
+            required: helpers.withMessage(
+                'Password is required',
+                required
+            )
+        }
+    }
+    const v$ = useVuelidate(validation, loginForm.value)
+
+    // Services
+    const authStore = useAuthStore()
+    const toast = useToast()
+
+    // Checkers
+    const isLoading = ref<boolean>(false)
+
     onMounted(() => {
-      // console.log('Mounted Login')
+        // console.log('Mounted Login')
     })
 
-    return {}
+    // Login
+    const login = () => {
+        isLoading.value = true
+
+        return authStore.login(loginForm.value)
+            .then(data => {
+                isLoading.value = false
+
+                // Success toastr
+                toast.success('Success. Redirecting to /home')
+                
+                // Navigate home
+                router.push({ name: 'home' })
+            })
+            .catch(err => {
+                isLoading.value = false
+                
+                // If username / password error
+                if (err['status'] === 400 && 'nonFieldErrors' in err['data']) {
+                    toast.error(err['data']['nonFieldErrors'][0])
+                }
+            })
+    }
+
+    return {
+        loginForm,
+        login,
+        v$,
+        isLoading
+    }
   }
 })
 </script>
