@@ -4,7 +4,7 @@ User's serializers
 
 from rest_framework import serializers
 
-from .models import CustomUser, UserType
+from .models import CustomUser
 
 
 class CustomUserSerializer(serializers.ModelSerializer):

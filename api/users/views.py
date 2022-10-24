@@ -1,8 +1,6 @@
 """
-User's views
+User's app views
 """
-
-import datetime
 
 from rest_framework import mixins, viewsets
 from rest_framework.permissions import IsAuthenticated
@@ -12,13 +10,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from utils.auth.permissions import IsSuperAdmin
 
-from .models import (
-    UserType,
-    CustomUser
-)
-from .serializers import (
-    CustomUserSerializer
-)
+from .models import CustomUser
+from .serializers import CustomUserSerializer
 
 
 class CustomUserViewSet(mixins.RetrieveModelMixin,
