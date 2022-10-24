@@ -55,7 +55,7 @@
                         <div class="text-sm text-center">
                             <p class="text-gray-500">
                                 Don't have an account?
-                                <router-link :to="{ name: 'register' }"
+                                <router-link :to="{ name: 'registerCustomer' }"
                                     class="font-medium 
                                     text-green-400 hover:text-green-300">
                                     Sign up
