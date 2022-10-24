@@ -8,6 +8,8 @@ from rest_framework import serializers
 from allauth.account.adapter import get_adapter
 from dj_rest_auth.registration.serializers import RegisterSerializer
 
+from users.models import UserType
+
 from .models import Vendor
 
 
@@ -34,6 +36,7 @@ class VendorRegisterSerializer(RegisterSerializer):
     email = serializers.EmailField(required=False, source='username')
     password1 = serializers.HiddenField(required=False, default=random_pwd)
     password2 = serializers.HiddenField(required=False, default=random_pwd)
+    user_type = serializers.HiddenField(required=False, default=UserType.VENDOR)
     first_name = serializers.CharField(required=False, source='name')
 
     # Vendor related
@@ -51,6 +54,7 @@ class VendorRegisterSerializer(RegisterSerializer):
             'password2': self.validated_data.get('password2', None),
             'email': self.validated_data.get('username', None),
             'first_name': self.validated_data.get('name', None),
+            'user_type': UserType.VENDOR,
             'name': self.validated_data.get('name', None),
             'phone_no': self.validated_data.get('phone_no', None)
         }
@@ -76,6 +80,7 @@ class VendorRegisterSerializer(RegisterSerializer):
         )
 
         # Saving all instances
+        vendor_user.user_type = self.cleaned_data.get('user_type')
         vendor_user.save()
         vendor.save()
 
