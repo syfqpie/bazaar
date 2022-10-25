@@ -10,6 +10,14 @@
 yarn
 ```
 
+### Add environment variables
+Create a .env file in ./web and add this default variables
+
+```sh
+VITE_APP_ENV=development
+VITE_BASE_URL=http://127.0.0.1:8000/
+```
+
 ### Compile and Hot-Reload for Development
 
 ```sh
