@@ -37,21 +37,67 @@ export const APIService = {
             return Promise.reject(response)
         })
     },
+    /**
+     * Set header to request
+     */
     setHeader () {
         // axios.defaults.headers.
     },
-    async get (resource: string, query: string | null = null) {
+    /**
+     * GET request
+     * 
+     * @param endpoint - API endpoint
+     * @param query - query string if needed
+     * 
+     * @return axios.get
+     */
+    async get (endpoint: string, query: string | null = null) {
         if (query !== null) {
-            resource = `${resource}/?${query}`
+            endpoint = `${endpoint}/?${query}`
         } else {
-            resource = `${resource}/`
+            endpoint = `${endpoint}/`
         }
-        return await axios.get(`${resource}`).catch(error => {
+        return await axios.get(`${endpoint}`).catch(error => {
             throw error
         })
     },
-    async post (resource: string, params: object) {
-        return await axios.post(`${resource}/`, params).catch(error => {
+    /**
+     * POST request
+     * 
+     * @param endpoint - API endpoint
+     * @param payload - request payload
+     * 
+     * @return axios.post
+     */
+    async post (endpoint: string, payload: object) {
+        return await axios.post(`${endpoint}/`, payload).catch(error => {
+            // console.log(error)
+            throw error
+        })
+    },
+    /**
+     * PATCH request
+     * 
+     * @param endpoint - API endpoint
+     * @param payload - request payload
+     * 
+     * @return axios.patch
+     */
+     async patch (endpoint: string, payload: object) {
+        return await axios.patch(`${endpoint}/`, payload).catch(error => {
+            // console.log(error)
+            throw error
+        })
+    },
+    /**
+     * DELETE request
+     * 
+     * @param endpoint - API endpoint
+     * 
+     * @return axios.delete
+     */
+     async destroy (endpoint: string) {
+        return await axios.delete(`${endpoint}/`).catch(error => {
             // console.log(error)
             throw error
         })
