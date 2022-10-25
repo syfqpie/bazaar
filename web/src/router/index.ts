@@ -30,14 +30,24 @@ const router = createRouter({
           component: () => import('../views/auth/LoginView.vue')
         },
         {
-          path: 'register/customer',
+          path: 'registration/customer',
           name: 'registerCustomer',
           component: () => import('../views/auth/RegistrationView.vue')
         },
         {
-          path: 'register/vendor',
+          path: 'registration/vendor',
           name: 'registerVendor',
           component: () => import('../views/auth/VendorRegistrationView.vue')
+        },
+        {
+          path: 'registration/resend-verification',
+          name: 'resendVerification',
+          component: () => import('../views/auth/ResendVerificationView.vue')
+        },
+        {
+          path: 'registration/verify',
+          name: 'verify',
+          component: () => import('../views/auth/VerifyAccountView.vue')
         },
         {
           path: 'reset',
@@ -45,15 +55,10 @@ const router = createRouter({
           component: () => import('../views/auth/ResetView.vue')
         },
         {
-          path: 'confirm-reset',
+          path: 'reset/confirm',
           name: 'confirmReset',
           component: () => import('../views/auth/ConfirmResetView.vue')
         },
-        {
-          path: 'verify',
-          name: 'verify',
-          component: () => import('../views/auth/VerifyAccountView.vue')
-        }
       ]
     }
   ]
