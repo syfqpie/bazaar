@@ -66,7 +66,7 @@
                         <div class="text-sm text-center">
                             <p class="text-gray-500">
                                 Forgot your password?
-                                <router-link :to="{ name: 'reset' }"
+                                <router-link :to="{ path: '/auth/reset' }"
                                     class="font-medium 
                                     text-green-400 hover:text-green-300">
                                     Reset
@@ -77,7 +77,7 @@
                         <div class="text-sm text-center">
                             <p class="text-gray-500">
                                 Already have an account?
-                                <router-link :to="{ name: 'login' }"
+                                <router-link :to="{ path: '/auth/login' }"
                                     class="font-medium 
                                     text-green-400 hover:text-green-300">
                                     Sign in

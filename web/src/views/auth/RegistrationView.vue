@@ -91,7 +91,7 @@
                         <div class="text-sm text-center">
                             <p class="text-gray-500">
                                 Want to be a vendor?
-                                <router-link :to="{ name: 'registerVendor' }"
+                                <router-link :to="{ path: '/auth/registration/vendor' }"
                                     class="font-medium 
                                     text-green-400 hover:text-green-300">
                                     Join
@@ -102,7 +102,7 @@
                         <div class="text-sm text-center">
                             <p class="text-gray-500">
                                 Already have an account?
-                                <router-link :to="{ name: 'login' }"
+                                <router-link :to="{ path: '/auth/login' }"
                                     class="font-medium 
                                     text-green-400 hover:text-green-300">
                                     Sign in

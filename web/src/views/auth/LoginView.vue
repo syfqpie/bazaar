@@ -55,7 +55,7 @@
                         <div class="text-sm text-center">
                             <p class="text-gray-500">
                                 Don't have an account?
-                                <router-link :to="{ name: 'registerCustomer' }"
+                                <router-link :to="{ path: '/auth/registration/customer' }"
                                     class="font-medium 
                                     text-green-400 hover:text-green-300">
                                     Sign up
@@ -66,7 +66,7 @@
                         <div class="text-sm text-center">
                             <p class="text-gray-500">
                                 Forgot your password?
-                                <router-link :to="{ name: 'reset' }"
+                                <router-link :to="{ path: '/auth/reset' }"
                                     class="font-medium 
                                     text-green-400 hover:text-green-300">
                                     Reset
