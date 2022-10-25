@@ -12,6 +12,8 @@ import type {
 import { defineStore } from 'pinia'
 
 const BASE_PREFIX = 'auth'
+const BASE_REGISTRATION = `${ BASE_PREFIX }/registration`
+const BASE_PASSWORD = `${ BASE_PREFIX }/password`
 
 /**
  * Authentication store
@@ -50,7 +52,7 @@ export const useAuthStore = defineStore('auth', {
          */
         registerVendor(payload: RegisterVendorInput): Promise<DetailResponse> {
             return new Promise((resolve, reject) => {
-                APIService.post(`${ BASE_PREFIX }/registration/vendor`, payload)
+                APIService.post(`${ BASE_REGISTRATION }/vendor`, payload)
                     .then(({ data }) => {
                         resolve(data)
                     })
@@ -72,7 +74,7 @@ export const useAuthStore = defineStore('auth', {
          */
          registerCustomer(payload: RegisterCustomerInput): Promise<DetailResponse> {
             return new Promise((resolve, reject) => {
-                APIService.post(`${ BASE_PREFIX }/registration/customer`, payload)
+                APIService.post(`${ BASE_REGISTRATION }/customer`, payload)
                     .then(({ data }) => {
                         resolve(data)
                     })
@@ -90,7 +92,7 @@ export const useAuthStore = defineStore('auth', {
          */
         resendVerification(payload: EmailOnlyInput): Promise<DetailResponse> {
             return new Promise((resolve, reject) => {
-                APIService.post(`${ BASE_PREFIX }/resend-verification`, payload)
+                APIService.post(`${ BASE_REGISTRATION }/resend-verification`, payload)
                     .then(({ data }) => {
                         resolve(data)
                     })
@@ -110,7 +112,7 @@ export const useAuthStore = defineStore('auth', {
          */
         verifyAccount(payload: VerifyAccountInput): Promise<DetailResponse> {
             return new Promise((resolve, reject) => {
-                APIService.post(`${ BASE_PREFIX }/registration/verify-email`, payload)
+                APIService.post(`${ BASE_REGISTRATION }/verify-email`, payload)
                     .then(({ data }) => {
                         resolve(data)
                     })
@@ -129,7 +131,7 @@ export const useAuthStore = defineStore('auth', {
          */
         changePassword(payload: ChangePasswordInput): Promise<DetailResponse> {
             return new Promise((resolve, reject) => {
-                APIService.post(`${ BASE_PREFIX }/password/change`, payload)
+                APIService.post(`${ BASE_PASSWORD }/change`, payload)
                     .then(({ data }) => {
                         resolve(data)
                     })
@@ -147,7 +149,7 @@ export const useAuthStore = defineStore('auth', {
          */
         requestReset(payload: EmailOnlyInput): Promise<DetailResponse> {
             return new Promise((resolve, reject) => {
-                APIService.post(`${ BASE_PREFIX }/password/reset`, payload)
+                APIService.post(`${ BASE_PASSWORD }/reset`, payload)
                     .then(({ data }) => {
                         resolve(data)
                     })
@@ -168,7 +170,7 @@ export const useAuthStore = defineStore('auth', {
          */
         resetPassword(payload: ResetPasswordInput): Promise<DetailResponse> {
             return new Promise((resolve, reject) => {
-                APIService.post(`${ BASE_PREFIX }/password/reset/confirm`, payload)
+                APIService.post(`${ BASE_PASSWORD }/reset/confirm`, payload)
                     .then(({ data }) => {
                         resolve(data)
                     })
