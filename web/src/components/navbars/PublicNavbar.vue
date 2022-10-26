@@ -67,14 +67,14 @@
                                 Home
                             </router-link>
 
-                            <router-link to="/explore"
+                            <router-link to="/"
                                 class="bg-transparent px-3 py-2 text-sm
                                 font-medium text-gray-300 hover:text-green-400"
                                 active-class="text-green-400">
                                 Explore
                             </router-link>
 
-                            <router-link to="/faq"
+                            <router-link to="/"
                                 class="bg-transparent px-3 py-2 text-sm
                                 font-medium text-gray-300 hover:text-green-400"
                                 active-class="text-green-400">
@@ -150,7 +150,7 @@
                             aria-labelledby="user-menu-button"
                             tabindex="-1">
                             <!-- Active: "bg-gray-100", Not Active: "" -->
-                            <router-link to="/profile"
+                            <router-link to="/"
                                 class="block px-4 py-2 text-sm text-gray-700"
                                 active-class="bg-gray-100">
                                 Your profile
