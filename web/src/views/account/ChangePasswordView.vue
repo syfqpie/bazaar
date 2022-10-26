@@ -16,11 +16,22 @@
                             Current password
                         </label>
                         <input type="password"
+                            @blur="v$.oldPassword.$touch"
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
-                            focus:shadow-outline focus:ring-gray-500
-                            focus:ring-1" />
+                            focus:shadow-outline"
+                            :class="{
+                                'border-red-400': v$.oldPassword.$dirty &&
+                                                    v$.oldPassword.$invalid 
+                                
+                            }"
+                            v-model="changeForm.oldPassword" />
+                        <p v-for="error of v$.oldPassword.$errors"
+                            :key="error.$uid"
+                            class="mt-2 text-xs text-red-600 dark:text-red-500">
+                            {{ error.$message }}
+                        </p>
                     </div>
 
                     <div class="mb-3">
@@ -28,11 +39,22 @@
                             New password
                         </label>
                         <input type="password"
+                            @blur="v$.newPassword1.$touch"
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
-                            focus:shadow-outline focus:ring-gray-500
-                            focus:ring-1" />
+                            focus:shadow-outline"
+                            :class="{
+                                'border-red-400': v$.newPassword1.$dirty &&
+                                                    v$.newPassword1.$invalid 
+                                
+                            }"
+                            v-model="changeForm.newPassword1" />
+                        <p v-for="error of v$.newPassword1.$errors"
+                            :key="error.$uid"
+                            class="mt-2 text-xs text-red-600 dark:text-red-500">
+                            {{ error.$message }}
+                        </p>
                     </div>
 
                     <div class="mb-3">
@@ -40,11 +62,22 @@
                             Confirm new password
                         </label>
                         <input type="password"
+                            @blur="v$.newPassword2.$touch"
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
-                            focus:shadow-outline focus:ring-gray-500
-                            focus:ring-1" />
+                            focus:shadow-outline"
+                            :class="{
+                                'border-red-400': v$.newPassword2.$dirty &&
+                                                    v$.newPassword2.$invalid 
+                                
+                            }"
+                            v-model="changeForm.newPassword2" />
+                        <p v-for="error of v$.newPassword2.$errors"
+                            :key="error.$uid"
+                            class="mt-2 text-xs text-red-600 dark:text-red-500">
+                            {{ error.$message }}
+                        </p>
                     </div>
 
                     <button class="block rounded-lg border border-transparent 
@@ -61,16 +94,76 @@
 </template>
 
 <script lang="ts">
-import { onMounted, defineComponent } from 'vue'
+import { onMounted, defineComponent, ref, computed } from 'vue'
+
+import type { ChangePasswordInput } from '@/common/models/auth.model'
+import { passwordRegex } from '@/common/helpers';
+import { useAuthStore } from '@/stores'
+
+import { helpers, required, sameAs } from '@vuelidate/validators'
+import { useToast } from 'vue-toastification'
+import useVuelidate from '@vuelidate/core'
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
     name: 'ChangePassword',
     setup() {
+        // Form
+        const changeForm = ref<ChangePasswordInput>({
+            oldPassword: null,
+            newPassword1: null,
+            newPassword2: null
+        })
+        const validation = computed(() => ({
+            oldPassword: { 
+                required: helpers.withMessage(
+                    'Old password is required',
+                    required
+                ),
+                strength: helpers.withMessage(
+                    'Minimum eight characters, at least one upper case letter,\
+                    one lower case letter, one digit and one special character',
+                    passwordRegex
+                )
+            },
+            newPassword1: { 
+                required: helpers.withMessage(
+                    'New password is required',
+                    required
+                ),
+                strength: helpers.withMessage(
+                    'Minimum eight characters, at least one upper case letter,\
+                    one lower case letter, one digit and one special character',
+                    passwordRegex
+                )
+            },
+            newPassword2: { 
+                required: helpers.withMessage(
+                    'Confirm new password is required',
+                    required
+                ),
+                sameAsNewPassword1: helpers.withMessage(
+                    'New password does not match',
+                    sameAs(changeForm.value.newPassword1)
+                )
+            }
+        })) 
+        const v$ = useVuelidate(validation, changeForm.value)
+
+        // Services
+        const authStore = useAuthStore()
+        const toast = useToast()
+        const route = useRoute()
+
         onMounted(() => {
             // console.log('Mounted ChangePassword')
         })
 
-        return {}
+        return {
+            changeForm,
+            v$,
+            validation
+        }
     }
 })
 </script>
