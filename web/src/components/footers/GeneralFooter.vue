@@ -1,5 +1,5 @@
 <template>
-    <footer class="bg-neutral-100 rounded-lg shadow px-4 py-4 md:py-8 lg:px-32">
+    <footer class="bg-neutral-100 rounded-lg shadow px-4 py-4 md:py-8 lg:px-32 sticky top-[100vh]">
         <div class="flex flex-col sm:flex-row items-center sm:justify-between">
             <a href="https://github.com/syfqpie/bazaar" class="flex items-center mb-4 sm:mb-0">
                 <img src="@/assets/img/default/trolley.png" class="mr-3 h-8" alt="Bazaar Logo" />

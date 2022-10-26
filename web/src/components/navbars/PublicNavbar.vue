@@ -150,7 +150,7 @@
                             aria-labelledby="user-menu-button"
                             tabindex="-1">
                             <!-- Active: "bg-gray-100", Not Active: "" -->
-                            <router-link to="/"
+                            <router-link to="/user/account/profile"
                                 class="block px-4 py-2 text-sm text-gray-700"
                                 active-class="bg-gray-100">
                                 Your profile
@@ -215,7 +215,9 @@ export default defineComponent({
         
         onMounted(() => {
             // console.log('Mounted PublicNavbar')
-            verifyToken()
+            if (!authStore.isAuthenticated && authStore.accessToken) {
+                verifyToken()
+            }
         })
 
         const verifyToken = () => {

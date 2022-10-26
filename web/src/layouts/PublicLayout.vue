@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen">
+    <div class="h-screen bg-neutral-100">
         <PublicNavbar />
         <RouterView />
         <GeneralFooter />

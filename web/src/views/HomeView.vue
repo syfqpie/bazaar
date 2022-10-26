@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bg-white">
     <section class="bg-neutral-100">
       <div class="container mx-auto py-12 max-w-7xl px-2 sm:px-6 lg:px-8">
         <div class="w-full rounded-lg overflow-hidden">
@@ -15,7 +15,7 @@
 
       <div class="mt-6 space-y-12 lg:grid lg:grid-cols-6 lg:gap-x-6 lg:space-y-0">
         <div class="group relative">
-          <div class="bg-red-50 relative h-80 w-full overflow-hidden
+          <div class="relative h-80 w-full overflow-hidden
             rounded-lg bg-white group-hover:opacity-75 sm:aspect-w-2
             sm:aspect-h-1 sm:h-32 lg:aspect-w-1 lg:aspect-h-1">
             <img src="https://placehold.co/150x150"
@@ -31,7 +31,7 @@
         </div>
 
         <div class="group relative">
-          <div class="bg-red-50 relative h-80 w-full overflow-hidden
+          <div class="relative h-80 w-full overflow-hidden
             rounded-lg bg-white group-hover:opacity-75 sm:aspect-w-2
             sm:aspect-h-1 sm:h-32 lg:aspect-w-1 lg:aspect-h-1">
             <img src="https://placehold.co/150x150"
@@ -47,7 +47,7 @@
         </div>
 
         <div class="group relative">
-          <div class="bg-red-50 relative h-80 w-full overflow-hidden
+          <div class="relative h-80 w-full overflow-hidden
             rounded-lg bg-white group-hover:opacity-75 sm:aspect-w-2
             sm:aspect-h-1 sm:h-32 lg:aspect-w-1 lg:aspect-h-1">
             <img src="https://placehold.co/150x150"
@@ -63,7 +63,7 @@
         </div>
 
         <div class="group relative">
-          <div class="bg-red-50 relative h-80 w-full overflow-hidden
+          <div class="relative h-80 w-full overflow-hidden
             rounded-lg bg-white group-hover:opacity-75 sm:aspect-w-2
             sm:aspect-h-1 sm:h-32 lg:aspect-w-1 lg:aspect-h-1">
             <img src="https://placehold.co/150x150"
@@ -79,7 +79,7 @@
         </div>
 
         <div class="group relative">
-          <div class="bg-red-50 relative h-80 w-full overflow-hidden
+          <div class="relative h-80 w-full overflow-hidden
             rounded-lg bg-white group-hover:opacity-75 sm:aspect-w-2
             sm:aspect-h-1 sm:h-32 lg:aspect-w-1 lg:aspect-h-1">
             <img src="https://placehold.co/150x150"
@@ -95,7 +95,7 @@
         </div>
 
         <div class="group relative">
-          <div class="bg-red-50 relative h-80 w-full overflow-hidden
+          <div class="relative h-80 w-full overflow-hidden
             rounded-lg bg-white group-hover:opacity-75 sm:aspect-w-2
             sm:aspect-h-1 sm:h-32 lg:aspect-w-1 lg:aspect-h-1">
             <img src="https://placehold.co/150x150"
@@ -117,7 +117,7 @@
 
       <div class="mt-6 space-y-12 lg:grid lg:grid-cols-5 lg:gap-x-6 lg:space-y-0">
         <div class="group relative">
-          <div class="bg-red-50 relative h-80 w-full overflow-hidden
+          <div class="relative h-80 w-full overflow-hidden
             rounded-lg bg-white group-hover:opacity-75 sm:aspect-w-2
             sm:aspect-h-1 sm:h-32 lg:aspect-w-1 lg:aspect-h-1">
             <img src="https://placehold.co/200x200"
@@ -133,7 +133,7 @@
         </div>
 
         <div class="group relative">
-          <div class="bg-red-50 relative h-80 w-full overflow-hidden
+          <div class="relative h-80 w-full overflow-hidden
             rounded-lg bg-white group-hover:opacity-75 sm:aspect-w-2
             sm:aspect-h-1 sm:h-32 lg:aspect-w-1 lg:aspect-h-1">
             <img src="https://placehold.co/200x200"
@@ -149,7 +149,7 @@
         </div>
 
         <div class="group relative">
-          <div class="bg-red-50 relative h-80 w-full overflow-hidden
+          <div class="relative h-80 w-full overflow-hidden
             rounded-lg bg-white group-hover:opacity-75 sm:aspect-w-2
             sm:aspect-h-1 sm:h-32 lg:aspect-w-1 lg:aspect-h-1">
             <img src="https://placehold.co/200x200"
@@ -165,7 +165,7 @@
         </div>
 
         <div class="group relative">
-          <div class="bg-red-50 relative h-80 w-full overflow-hidden
+          <div class="relative h-80 w-full overflow-hidden
             rounded-lg bg-white group-hover:opacity-75 sm:aspect-w-2
             sm:aspect-h-1 sm:h-32 lg:aspect-w-1 lg:aspect-h-1">
             <img src="https://placehold.co/200x200"
@@ -181,7 +181,7 @@
         </div>
 
         <div class="group relative">
-          <div class="bg-red-50 relative h-80 w-full overflow-hidden
+          <div class="relative h-80 w-full overflow-hidden
             rounded-lg bg-white group-hover:opacity-75 sm:aspect-w-2
             sm:aspect-h-1 sm:h-32 lg:aspect-w-1 lg:aspect-h-1">
             <img src="https://placehold.co/200x200"
