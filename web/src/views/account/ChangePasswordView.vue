@@ -9,7 +9,7 @@
                 For your account's security, do not share your password with anyone else
             </p>
 
-            <div class="grid grid-cols-2">
+            <div class="grid grid-cols-1 lg:grid-cols-2">
                 <form @submit.prevent>
                     <div class="mb-3">
                         <label class="text-sm text-gray-700">
@@ -21,6 +21,7 @@
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
                             focus:shadow-outline"
+                            placeholder="Enter your old password"
                             :class="{
                                 'border-red-400': v$.oldPassword.$dirty &&
                                                     v$.oldPassword.$invalid 
@@ -44,6 +45,7 @@
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
                             focus:shadow-outline"
+                            placeholder="Enter your new password"
                             :class="{
                                 'border-red-400': v$.newPassword1.$dirty &&
                                                     v$.newPassword1.$invalid 
@@ -62,17 +64,18 @@
                             Confirm new password
                         </label>
                         <input type="password"
-                            @blur="v$.newPassword2.$touch"
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
                             focus:shadow-outline"
+                            placeholder="Confirm your new password"
                             :class="{
                                 'border-red-400': v$.newPassword2.$dirty &&
                                                     v$.newPassword2.$invalid 
                                 
                             }"
-                            v-model="changeForm.newPassword2" />
+                            v-model="changeForm.newPassword2"
+                            @blur="v$.newPassword2.$touch" />
                         <p v-for="error of v$.newPassword2.$errors"
                             :key="error.$uid"
                             class="mt-2 text-xs text-red-600 dark:text-red-500">
@@ -80,11 +83,15 @@
                         </p>
                     </div>
 
-                    <button class="block rounded-lg border border-transparent 
-                        bg-green-300 focus:hover:enabled:bg-green-500
-                        px-3 py-2 text-white enabled:bg-green-400
-                        focus:outline-none focus:ring-2 focus:ring-green-200
-                        font-medium text-sm">
+                    <button class="block font-medium text-sm text-white mt-2
+                        p-2.5 bg-green-400 active:bg-green-500
+                        border-green-400 border border-solid active:border-green-500
+                        outline-none focus:outline-none rounded-lg align-middle
+                        transition-all duration-150 ease-in-out shadow-none hover:shadow-md
+                        disabled:bg-green-300 disabled:shadow-none disabled:cursor-not-allowed
+                        disabled:border-green-300"
+                        :disabled="v$.$invalid"
+                        @click="changePassword()">
                         Confirm
                     </button>
                 </form>
@@ -94,10 +101,10 @@
 </template>
 
 <script lang="ts">
-import { onMounted, defineComponent, ref, computed } from 'vue'
+import { computed, defineComponent, onMounted, ref  } from 'vue'
 
 import type { ChangePasswordInput } from '@/common/models/auth.model'
-import { passwordRegex } from '@/common/helpers';
+import { passwordRegexMedium } from '@/common/helpers'
 import { useAuthStore } from '@/stores'
 
 import { helpers, required, sameAs } from '@vuelidate/validators'
@@ -121,9 +128,9 @@ export default defineComponent({
                     required
                 ),
                 strength: helpers.withMessage(
-                    'Minimum eight characters, at least one upper case letter,\
-                    one lower case letter, one digit and one special character',
-                    passwordRegex
+                    'Minimum eight characters, at least one any case letter\
+                    and one digit',
+                    passwordRegexMedium
                 )
             },
             newPassword1: { 
@@ -132,9 +139,9 @@ export default defineComponent({
                     required
                 ),
                 strength: helpers.withMessage(
-                    'Minimum eight characters, at least one upper case letter,\
-                    one lower case letter, one digit and one special character',
-                    passwordRegex
+                    'Minimum eight characters, at least one any case letter\
+                    and one digit',
+                    passwordRegexMedium
                 )
             },
             newPassword2: { 
@@ -155,14 +162,39 @@ export default defineComponent({
         const toast = useToast()
         const route = useRoute()
 
+        // Checker
+        const isLoading = ref(false)
+
         onMounted(() => {
             // console.log('Mounted ChangePassword')
         })
 
+        const changePassword = () => {
+            isLoading.value = true
+
+            return authStore.changePassword(changeForm.value)
+            .then(data => {
+                isLoading.value = false
+
+                // Success toastr
+                toast.success('New password saved!')
+            })
+            .catch(err => {
+                isLoading.value = false
+                
+                // If username / password error
+                if (err['status'] === 400 && 'nonFieldErrors' in err['data']) {
+                    toast.error(err['data']['nonFieldErrors'][0])
+                }
+            })
+        }
+
         return {
             changeForm,
             v$,
-            validation
+            validation,
+            isLoading,
+            changePassword
         }
     }
 })
