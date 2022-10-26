@@ -1,4 +1,15 @@
+import { useAuthStore } from '@/stores'
 import axios from 'axios'
+
+const EXCEPTION_ENDPOINT = [
+    'auth/password/change/'
+]
+const NO_TOKEN_ENDPOINT = [
+    'auth/'
+]
+const JSON_TYPE_METHOD = [
+    'post', 'patch', 'put'
+]
 
 /**
  * API common service
@@ -9,9 +20,34 @@ export const APIService = {
      */
     init() {
         // URL configs
-        axios.defaults.baseURL = `${import.meta.env.VITE_BASE_URL}/`
+        axios.defaults.baseURL = `${import.meta.env.VITE_BASE_URL}`
 
-        // Error interceptors
+        // Request interceptor
+        axios.interceptors.request.use(
+            config => {
+                // Get auth store
+                const authStore = useAuthStore()
+                
+                if (config.url && authStore.accessToken) {
+                    if (EXCEPTION_ENDPOINT.includes(config.url) ||
+                        !NO_TOKEN_ENDPOINT.includes(config.url)) {
+                        // Append bearer token
+                        config.headers!['Authorization'] = 'Bearer ' + authStore.accessToken
+                    }
+                }
+                
+                if (config.method && JSON_TYPE_METHOD.includes(config.method)) {
+                    // Append content type if post, put, patch
+                    config.headers!['Content-Type'] = 'application/json';
+                }
+                
+                return config
+            },
+            error => {
+                Promise.reject(error)
+        })
+
+        // Response interceptors for error
         axios.interceptors.response.use(undefined, (error) => {
             const { response } = error
             if (!response) {
@@ -36,12 +72,6 @@ export const APIService = {
 
             return Promise.reject(response)
         })
-    },
-    /**
-     * Set header to request
-     */
-    setHeader () {
-        // axios.defaults.headers.
     },
     /**
      * GET request
