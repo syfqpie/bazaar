@@ -1,10 +1,16 @@
-/** Interface for change password input */
-export interface ChangePasswordInput {
+/** Base interface for change password */
+export interface ChangePasswordBaseInput {
     /** New password */
     newPassword1: string | null,
 
     /** Confirm new password */
     newPassword2: string | null
+}
+
+/** Interface for change password input */
+export interface ChangePasswordInput extends ChangePasswordBaseInput {
+    /** Old password */
+    oldPassword: string | null
 }
 
 /** Interface for email only input */
@@ -53,7 +59,7 @@ export interface RegisterVendorInput {
 }
 
 /** Interface for confirm reset password input */
-export interface ResetPasswordInput extends ChangePasswordInput {
+export interface ResetPasswordInput extends ChangePasswordBaseInput {
     /** Received uid */
     uid: number | null,
 
@@ -62,7 +68,7 @@ export interface ResetPasswordInput extends ChangePasswordInput {
 }
 
 /** Interface for verify account input */
-export interface VerifyAccountInput extends ChangePasswordInput {
+export interface VerifyAccountInput extends ChangePasswordBaseInput {
     /** Received token */
     key: string | null
 }
