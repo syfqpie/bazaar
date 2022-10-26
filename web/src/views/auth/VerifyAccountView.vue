@@ -20,10 +20,20 @@
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
-                            focus:shadow-outline focus:ring-gray-500
-                            focus:ring-1"
+                            focus:shadow-outline"
+                            :class="{
+                                'border-red-400': v$.newPassword1.$dirty &&
+                                                    v$.newPassword1.$invalid 
+                                
+                            }"
                             placeholder="Enter your new password"
-                            v-model="verifyForm.newPassword1" />
+                            v-model="verifyForm.newPassword1"
+                            @blur="v$.newPassword1.$touch" />
+                        <p v-for="error of v$.newPassword1.$errors"
+                            :key="error.$uid"
+                            class="mt-2 text-xs text-red-600 dark:text-red-500">
+                            {{ error.$message }}
+                        </p>
                     </div>
 
                     <div>
@@ -32,18 +42,32 @@
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
-                            focus:shadow-outline focus:ring-gray-500
-                            focus:ring-1"
+                            focus:shadow-outline"
+                            :class="{
+                                'border-red-400': v$.newPassword2.$dirty &&
+                                                    v$.newPassword2.$invalid 
+                                
+                            }"
                             placeholder="Enter your confirm new password"
-                            v-model="verifyForm.newPassword2" />
+                            v-model="verifyForm.newPassword2"
+                            @blur="v$.newPassword2.$touch" />
+                        <p v-for="error of v$.newPassword2.$errors"
+                            :key="error.$uid"
+                            class="mt-2 text-xs text-red-600 dark:text-red-500">
+                            {{ error.$message }}
+                        </p>
                     </div>
 
                     <div>
                         <button class="mt-1 group relative flex w-full justify-center
-                            rounded-lg border border-transparent bg-green-300
-                            p-2.5 text-white enabled:bg-green-400
-                            focus:outline-none focus:ring-2 focus:ring-green-200
-                            font-medium text-sm focus:hover:enabled:bg-green-500"
+                            rounded-lg p-2.5 border border-transparent outline-none
+                            font-medium text-sm shadow-none border-solid text-white 
+                            bg-green-400 border-green-400  active:bg-green-500 
+                            active:border-green-500 hover:shadow-md disabled:bg-green-300
+                            disabled:border-green-300 disabled:shadow-none
+                            disabled:cursor-not-allowed focus:outline-none focus:ring-2
+                            focus:ring-green-200 focus:hover:enabled:bg-green-500
+                            transition-all duration-150 ease-in-out"
                             v-on:click="verify()"
                             :disabled="isLoading || v$.$invalid">
                             Verify account
@@ -56,13 +80,14 @@
 </template>
 
 <script lang="ts">
-import { onMounted, defineComponent, ref } from 'vue'
+import { onMounted, defineComponent, ref, computed } from 'vue'
 
 import type { VerifyAccountInput } from '@/common/models/auth.model'
+import { passwordRegexMedium } from '@/common/helpers'
 import router from '@/router'
 import { useAuthStore } from '@/stores'
 
-import { helpers, required } from '@vuelidate/validators'
+import { helpers, required, sameAs } from '@vuelidate/validators'
 import { useToast } from 'vue-toastification'
 import useVuelidate from '@vuelidate/core'
 import { useRoute } from 'vue-router'
@@ -78,7 +103,7 @@ export default defineComponent({
             newPassword1: null,
             newPassword2: null
         })
-        const validation = {
+        const validation = computed(() => ({
             key: { 
                 required: helpers.withMessage(
                     'Token is required',
@@ -89,15 +114,24 @@ export default defineComponent({
                 required: helpers.withMessage(
                     'New password is required',
                     required
+                ),
+                strength: helpers.withMessage(
+                    'Minimum eight characters, at least one any case letter\
+                    and one digit',
+                    passwordRegexMedium
                 )
             },
             newPassword2: { 
                 required: helpers.withMessage(
                     'Confirm new password is required',
                     required
+                ),
+                sameAsNewPassword1: helpers.withMessage(
+                    'New password does not match',
+                    sameAs(verifyForm.value.newPassword1)
                 )
             }
-        }
+        }))
         const v$ = useVuelidate(validation, verifyForm.value)
 
         // Services

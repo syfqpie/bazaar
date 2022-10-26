@@ -20,10 +20,20 @@
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
-                            focus:shadow-outline focus:ring-gray-500
-                            focus:ring-1"
+                            focus:shadow-outline"
                             placeholder="Enter your email"
-                            v-model="loginForm.username" />
+                            :class="{
+                                'border-red-400': v$.username.$dirty &&
+                                                    v$.username.$invalid 
+                                
+                            }"
+                            v-model="loginForm.username"
+                            @blur="v$.username.$touch" />
+                        <p v-for="error of v$.username.$errors"
+                            :key="error.$uid"
+                            class="mt-2 text-xs text-red-600 dark:text-red-500">
+                            {{ error.$message }}
+                        </p>
                     </div>
 
                     <div>
@@ -32,18 +42,33 @@
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
-                            focus:shadow-outline focus:ring-gray-500
-                            focus:ring-1"
+                            focus:shadow-outline"
                             placeholder="Enter your password"
-                            v-model="loginForm.password" />
+                            :class="{
+                                'border-red-400': v$.password.$dirty &&
+                                                    v$.password.$invalid 
+                                
+                            }"
+                            v-model="loginForm.password"
+                            @blur="v$.password.$touch" />
+
+                        <p v-for="error of v$.password.$errors"
+                            :key="error.$uid"
+                            class="mt-2 text-xs text-red-600 dark:text-red-500">
+                            {{ error.$message }}
+                        </p>
                     </div>
 
                     <div>
                         <button class="mt-1 group relative flex w-full justify-center
-                            rounded-lg border border-transparent bg-green-300
-                            p-2.5 text-white enabled:bg-green-400
-                            focus:outline-none focus:ring-2 focus:ring-green-200
-                            font-medium text-sm focus:hover:enabled:bg-green-500"
+                            rounded-lg p-2.5 border border-transparent outline-none
+                            font-medium text-sm shadow-none border-solid text-white 
+                            bg-green-400 border-green-400  active:bg-green-500 
+                            active:border-green-500 hover:shadow-md disabled:bg-green-300
+                            disabled:border-green-300 disabled:shadow-none
+                            disabled:cursor-not-allowed focus:outline-none focus:ring-2
+                            focus:ring-green-200 focus:hover:enabled:bg-green-500
+                            transition-all duration-150 ease-in-out"
                             v-on:click="login()"
                             :disabled="isLoading || v$.$invalid">
                             Sign in
@@ -84,13 +109,13 @@
 </template>
 
 <script lang="ts">
-import { onMounted, defineComponent, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 
 import type { LoginInput } from '@/common/models/auth.model'
 import router from '@/router'
 import { useAuthStore } from '@/stores'
 
-import { email, helpers, required } from '@vuelidate/validators'
+import { email, helpers, minLength, required } from '@vuelidate/validators'
 import { useToast } from 'vue-toastification'
 import useVuelidate from '@vuelidate/core'
 
@@ -102,7 +127,7 @@ export default defineComponent({
         username: null,
         password: null
     })
-    const validation = {
+    const validation = computed(() => ({
         username: { 
             required: helpers.withMessage(
                 'Email is required',
@@ -117,9 +142,13 @@ export default defineComponent({
             required: helpers.withMessage(
                 'Password is required',
                 required
+            ),
+            minLength: helpers.withMessage(
+                'Min length is 8 characters',
+                minLength(8)
             )
         }
-    }
+    }))
     const v$ = useVuelidate(validation, loginForm.value)
 
     // Services
