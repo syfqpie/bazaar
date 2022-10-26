@@ -6,7 +6,7 @@
                     <!-- Mobile menu button-->
                     <button type="button"
                         class="inline-flex items-center justify-center
-                            rounded-md p-2 text-gray-400 hover:bg-gray-700
+                            rounded-lg p-2 text-gray-400 hover:bg-gray-700
                             hover:text-white focus:outline-none focus:ring-2
                             focus:ring-inset focus:ring-white"
                         aria-controls="mobile-menu" 
@@ -98,7 +98,7 @@
                             <button :href="href"
                                 @click="navigate"
                                 class="text-white bg-green-400 px-3 py-2 
-                                rounded-md text-sm font-medium border
+                                rounded-lg text-sm font-medium border
                                 border-transparent hover:bg-green-500
                                 focus:outline-none focus:ring-2 
                                 focus:ring-green-200 mr-2">
@@ -142,7 +142,7 @@
                             To: "transform opacity-0 scale-95"
                         -->
                         <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right
-                            rounded-md bg-white py-1 shadow ring-1 ring-black
+                            rounded-lg bg-white py-1 shadow ring-1 ring-black
                             ring-opacity-5 focus:outline-none"
                             v-if="isMenuOpen"
                             role="menu"
@@ -178,20 +178,20 @@
             <div class="space-y-1 px-2 pt-2 pb-3">
                 <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                 <a href="#" class="bg-green-400 text-white block px-3
-                    py-2 rounded-md text-base font-medium"
+                    py-2 rounded-lg text-base font-medium"
                     aria-current="page">
                     Home
                 </a>
 
                 <a href="#"
                     class="text-gray-300 hover:bg-gray-700 hover:text-white
-                        block px-3 py-2 rounded-md text-base font-medium">
+                        block px-3 py-2 rounded-lg text-base font-medium">
                     Explore
                 </a>
 
                 <a href="#"
                     class="text-gray-300 hover:bg-gray-700 hover:text-white
-                    block px-3 py-2 rounded-md text-base font-medium">
+                    block px-3 py-2 rounded-lg text-base font-medium">
                     FAQ
                 </a>
             </div>

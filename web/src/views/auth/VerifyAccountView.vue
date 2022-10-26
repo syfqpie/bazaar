@@ -15,32 +15,35 @@
             <div class="mt-8 max-w-md">
                 <div class="grid grid-cols-1 gap-3">
                     <div>
-                        <label class="text-gray-700">New password</label>
+                        <label class="text-sm text-gray-700">New password</label>
                         <input type="password"
-                            class="mt-1 block w-full rounded-md bg-gray-100
-                            border-transparent px-3 py-2 focus:outline-none
+                            class="mt-1 block w-full rounded-lg bg-gray-50
+                            border border-gray-300 text-gray-900
+                            text-sm p-2.5 focus:outline-none
                             focus:shadow-outline focus:ring-gray-500
-                            focus:ring-1 focus:bg-white"
+                            focus:ring-1"
                             placeholder="Enter your new password"
                             v-model="verifyForm.newPassword1" />
                     </div>
 
                     <div>
-                        <label class="text-gray-700">Confirm new password</label>
+                        <label class="text-sm text-gray-700">Confirm new password</label>
                         <input type="password"
-                            class="mt-1 block w-full rounded-md bg-gray-100
-                            border-transparent px-3 py-2 focus:outline-none
+                            class="mt-1 block w-full rounded-lg bg-gray-50
+                            border border-gray-300 text-gray-900
+                            text-sm p-2.5 focus:outline-none
                             focus:shadow-outline focus:ring-gray-500
-                            focus:ring-1 focus:bg-white"
+                            focus:ring-1"
                             placeholder="Enter your confirm new password"
                             v-model="verifyForm.newPassword2" />
                     </div>
 
                     <div>
                         <button class="mt-1 group relative flex w-full justify-center
-                            rounded-md border border-transparent bg-green-300
-                            px-3 py-2 text-white enabled:bg-green-400
-                            focus:outline-none focus:ring-2 focus:ring-green-200"
+                            rounded-lg border border-transparent bg-green-300
+                            p-2.5 text-white enabled:bg-green-400
+                            focus:outline-none focus:ring-2 focus:ring-green-200
+                            font-medium text-sm focus:hover:enabled:bg-green-500"
                             v-on:click="verify()"
                             :disabled="isLoading || v$.$invalid">
                             Verify account
