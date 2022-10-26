@@ -14,6 +14,35 @@ const router = createRouter({
           path: 'home',
           name: 'home',
           component: () => import('@/views/HomeView.vue')
+        },
+        {
+          path: 'user',
+          name: 'user',
+          component: () => import('@/views/AccountView.vue'),
+          children: [
+            {
+              path: 'account',
+              name: 'userAccount',
+              children: [
+                {
+                  path: 'profile',
+                  name: 'userAccountProfile',
+                  component: () => import('@/views/account/ProfileView.vue')
+                },
+                {
+                  path: 'address',
+                  name: 'userAccountAddress',
+                  component: () => import('@/views/account/AddressView.vue')
+                },
+                {
+                  path: 'change-password',
+                  name: 'userAccountChangePassword',
+                  component: () => import('@/views/account/ChangePasswordView.vue')
+                }
+              ]
+            }
+          ]
+            
         }
       ]
     },
