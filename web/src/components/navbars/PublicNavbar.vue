@@ -57,48 +57,77 @@
                             src="@/assets/img/default/trolley.png"
                             alt="Bazaar">
                     </div>
+
                     <div class="hidden sm:ml-6 sm:block">
                         <div class="flex space-x-4">
-                            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                            <a href="#" class="bg-primary text-dark px-3
-                                py-2 rounded-md text-sm font-medium"
-                                aria-current="page">
+                            <router-link to="/home"
+                                class="bg-transparent px-3 py-2 text-sm
+                                font-medium text-gray-300 hover:text-green-400"
+                                active-class="text-green-400">
                                 Home
-                            </a>
+                            </router-link>
 
-                            <a href="#"
-                                class="text-gray-300 hover:bg-gray-700
-                                    hover:text-white px-3 py-2 rounded-md
-                                    text-sm font-medium">
+                            <router-link to="/explore"
+                                class="bg-transparent px-3 py-2 text-sm
+                                font-medium text-gray-300 hover:text-green-400"
+                                active-class="text-green-400">
                                 Explore
-                            </a>
+                            </router-link>
 
-                            <a href="#"
-                                class="text-gray-300 hover:bg-gray-700
-                                    hover:text-white px-3 py-2 rounded-md
-                                    text-sm font-medium">
+                            <router-link to="/faq"
+                                class="bg-transparent px-3 py-2 text-sm
+                                font-medium text-gray-300 hover:text-green-400"
+                                active-class="text-green-400">
                                 FAQ
-                            </a>
+                            </router-link>
                         </div>
                     </div>
                 </div>
+
                 <div class="absolute inset-y-0 right-0 flex items-center pr-2
-                    sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                    sm:static sm:inset-auto sm:ml-6 sm:pr-0">    
+                    <button class="bg-transparent px-3 py-2 text-sm
+                        font-medium text-gray-300 hover:text-gray-400">
+                        <i class="fa-solid fa-bag-shopping fa-xl mr-2"></i>
+                    </button>
                     <!-- Profile dropdown -->
-                    <div class="relative ml-3">
+                    <div v-if="!authStore.isAuthenticated"
+                        class="hidden sm:block">
+                        <router-link to="/auth/login"
+                            v-slot="{href, navigate}">
+                            <button :href="href"
+                                @click="navigate"
+                                class="text-white bg-green-400 px-3 py-2 
+                                rounded-md text-sm font-medium border
+                                border-transparent hover:bg-green-500
+                                focus:outline-none focus:ring-2 
+                                focus:ring-green-200 mr-2">
+                                Join as vendor
+                            </button>
+                        </router-link>
+
+                        <router-link to="/auth/login"
+                            v-slot="{href, navigate}">
+                            <button :href="href"
+                                @click="navigate"
+                                class="bg-transparent px-3 py-2 text-sm
+                                font-medium text-gray-300 hover:text-gray-400">
+                                <i class="fa-solid fa-circle-user fa-xl"></i>
+                            </button>
+                        </router-link>
+                    </div>
+                    
+                    <div class="relative ml-3" v-else-if="authStore.isAuthenticated">
                         <div>
                             <button type="button"
-                                class="flex rounded-full bg-white text-sm
-                                    focus:outline-none focus:ring-2 focus:ring-gray-100
-                                    focus:ring-offset-2 focus:ring-offset-gray-200"
+                                class="flex rounded-full bg-transparent text-sm
+                                    focus:outline-none font-medium text-gray-300
+                                    hover:text-gray-400"
                                 id="user-menu-button"
                                 aria-expanded="false"
                                 aria-haspopup="true"
                                 @click="isMenuOpen = !isMenuOpen">
-                                <span class="sr-only">Open user menu</span>
-                                <img class="h-8 w-8 rounded-full"
-                                    src="https://cdn-icons-png.flaticon.com/512/2956/2956951.png"
-                                    alt="">
+                                <i class="fa-solid fa-circle-user fa-xl"></i>
                             </button>
                         </div>
 
@@ -113,7 +142,7 @@
                             To: "transform opacity-0 scale-95"
                         -->
                         <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right
-                            rounded-md bg-white py-1 shadow-lg ring-1 ring-black
+                            rounded-md bg-white py-1 shadow ring-1 ring-black
                             ring-opacity-5 focus:outline-none"
                             v-if="isMenuOpen"
                             role="menu"
@@ -121,12 +150,11 @@
                             aria-labelledby="user-menu-button"
                             tabindex="-1">
                             <!-- Active: "bg-gray-100", Not Active: "" -->
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700"
-                                role="menuitem"
-                                tabindex="-1"
-                                id="user-menu-item-0">
-                                Your Profile
-                            </a>
+                            <router-link to="/profile"
+                                class="block px-4 py-2 text-sm text-gray-700"
+                                active-class="bg-gray-100">
+                                Your profile
+                            </router-link>
                             <a href="#" class="block px-4 py-2 text-sm text-gray-700"
                                 role="menuitem"
                                 tabindex="-1"
@@ -149,7 +177,7 @@
         <div class="sm:hidden" id="mobile-menu">
             <div class="space-y-1 px-2 pt-2 pb-3">
                 <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                <a href="#" class="bg-gray-900 text-white block px-3
+                <a href="#" class="bg-green-400 text-white block px-3
                     py-2 rounded-md text-base font-medium"
                     aria-current="page">
                     Home
@@ -172,19 +200,37 @@
 </template>
 
 <script lang="ts">
+import { useAuthStore } from '@/stores'
 import { onMounted, defineComponent, ref } from 'vue'
 
 export default defineComponent({
     name: 'PublicNavbar',
     setup() {
-        const isMenuOpen = ref<boolean>(false)
+        // Services
+        const authStore = useAuthStore()
 
+        // Checkers
+        const isMenuOpen = ref<boolean>(false)
+        const isLoading = ref<boolean>(false)
+        
         onMounted(() => {
             // console.log('Mounted PublicNavbar')
+            verifyToken()
         })
 
+        const verifyToken = () => {
+            return authStore.verifyToken()
+                .then(data => {
+                    isLoading.value = false
+                })
+                .catch(err => {
+                    isLoading.value = false
+                })
+        }
+
         return {
-            isMenuOpen
+            isMenuOpen,
+            authStore 
         }
     }
 })
