@@ -150,6 +150,7 @@ export const useAuthStore = defineStore('auth', {
          * Change account password
          * 
          * @param payload - payload
+         * @param payload.oldPassword - old password
          * @param payload.newPassword1 - new password
          * @param payload.newPassword2 - confirm new password
          * @returns Detail message
