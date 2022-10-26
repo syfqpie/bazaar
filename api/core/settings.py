@@ -214,6 +214,7 @@ REST_AUTH_SERIALIZERS = {
     'JWT_TOKEN_CLAIMS_SERIALIZER': 'utils.auth.tokens.MyTokenObtainPairSerializer'
 }
 REST_USE_JWT = True
+OLD_PASSWORD_FIELD_ENABLED = True
 
 # Allauth
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
