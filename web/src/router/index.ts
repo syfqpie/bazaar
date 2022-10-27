@@ -13,12 +13,26 @@ const router = createRouter({
         {
           path: 'home',
           name: 'home',
-          component: () => import('@/views/HomeView.vue')
+          component: () => import('@/views/HomeView.vue'),
+          meta: { title: 'Home' }
+        },
+        {
+          path: 'explore',
+          name: 'explore',
+          component: () => import('@/views/ExploreView.vue'),
+          meta: { title: 'Explore' }
+        },
+        {
+          path: 'faq',
+          name: 'faq',
+          component: () => import('@/views/FaqView.vue'),
+          meta: { title: 'FAQ' }
         },
         {
           path: 'user',
           name: 'user',
           component: () => import('@/views/AccountView.vue'),
+          meta: { requiresAuth: true },
           children: [
             {
               path: 'account',
@@ -27,17 +41,20 @@ const router = createRouter({
                 {
                   path: 'profile',
                   name: 'userAccountProfile',
-                  component: () => import('@/views/account/ProfileView.vue')
+                  component: () => import('@/views/account/ProfileView.vue'),
+                  meta: { title: 'Profile' }
                 },
                 {
                   path: 'address',
                   name: 'userAccountAddress',
-                  component: () => import('@/views/account/AddressView.vue')
+                  component: () => import('@/views/account/AddressView.vue'),
+                  meta: { title: 'Address' }
                 },
                 {
                   path: 'change-password',
                   name: 'userAccountChangePassword',
-                  component: () => import('@/views/account/ChangePasswordView.vue')
+                  component: () => import('@/views/account/ChangePasswordView.vue'),
+                  meta: { title: 'Change password' }
                 }
               ]
             }
@@ -54,52 +71,77 @@ const router = createRouter({
         {
           path: 'login',
           name: 'login',
-          component: () => import('@/views/auth/LoginView.vue')
+          component: () => import('@/views/auth/LoginView.vue'),
+          meta: { title: 'Login' }
         },
         {
           path: 'registration/customer',
           name: 'registerCustomer',
-          component: () => import('@/views/auth/RegistrationView.vue')
+          component: () => import('@/views/auth/RegistrationView.vue'),
+          meta: { title: 'Customer registration' }
         },
         {
           path: 'registration/vendor',
           name: 'registerVendor',
-          component: () => import('@/views/auth/VendorRegistrationView.vue')
+          component: () => import('@/views/auth/VendorRegistrationView.vue'),
+          meta: { title: 'Vendor registration' }
         },
         {
           path: 'registration/resend-verification',
           name: 'resendVerification',
-          component: () => import('@/views/auth/ResendVerificationView.vue')
+          component: () => import('@/views/auth/ResendVerificationView.vue'),
+          meta: { title: 'Resend verification' }
         },
         {
           path: 'registration/verify',
           name: 'verify',
-          component: () => import('@/views/auth/VerifyAccountView.vue')
+          component: () => import('@/views/auth/VerifyAccountView.vue'),
+          meta: { title: 'Verify' }
         },
         {
           path: 'reset',
           name: 'reset',
-          component: () => import('@/views/auth/ResetView.vue')
+          component: () => import('@/views/auth/ResetView.vue'),
+          meta: { title: 'Reset' }
         },
         {
           path: 'reset/confirm',
           name: 'confirmReset',
-          component: () => import('@/views/auth/ConfirmResetView.vue')
+          component: () => import('@/views/auth/ConfirmResetView.vue'),
+          meta: { title: 'Confirm reset' }
         },
       ]
     }
   ]
 })
 
-// AuthGuard
+// RouteGuard
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
 
-  if (authStore.$state.accessToken && to.path.startsWith('/auth')) {
+  if (!authStore.$state.isAuthenticated && authStore.$state.accessToken) {
+    await authStore.verifyToken()
+      .catch(err => {
+        return next({ path: '/auth/login' })
+      })
+  }
+
+  if (authStore.$state.isAuthenticated && to.path.startsWith('/auth')) {
+    // Browser with access token cannot go to auth pages
     return next({ path: '/home' })
+  } else if (!authStore.$state.isAuthenticated && to.path.startsWith('/user')) {
+    // Browser without access token cannot go to users pages
+    return next({ path: '/auth/login' })
   }
 
   return next()
+})
+
+router.afterEach((to, from) => {
+  if (to.meta.title) {
+    // Update page title
+    document.title = `Bazaar - ${ to.meta.title }`
+  }
 })
 
 export default router
