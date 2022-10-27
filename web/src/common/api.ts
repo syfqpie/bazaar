@@ -1,5 +1,6 @@
 import { useAuthStore } from '@/stores'
 import axios from 'axios'
+import { HttpStatusCode } from './http.status'
 
 const EXCEPTION_ENDPOINT = [
     'auth/password/change/'
@@ -56,7 +57,7 @@ export const APIService = {
                 return
             }
     
-            if ([401, 403].includes(response.status)) {
+            if ([HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden].includes(response.status)) {
                 // if 401 or 403 response returned from api
                 // example: https://jasonwatmore.com/post/2020/10/06/vue-3-facebook-login-tutorial-example#error-interceptor-js
             }
