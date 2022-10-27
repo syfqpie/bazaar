@@ -62,22 +62,22 @@
                         <div class="flex space-x-4">
                             <router-link to="/home"
                                 class="bg-transparent px-3 py-2 text-sm
-                                font-medium text-gray-300 hover:text-green-400"
-                                active-class="text-green-400">
+                                font-medium text-gray-300 hover:text-green-500"
+                                active-class="!text-green-400">
                                 Home
                             </router-link>
 
-                            <router-link to="/"
+                            <router-link to="/explore"
                                 class="bg-transparent px-3 py-2 text-sm
                                 font-medium text-gray-300 hover:text-green-400"
-                                active-class="text-green-400">
+                                active-class="!text-green-400">
                                 Explore
                             </router-link>
 
-                            <router-link to="/"
+                            <router-link to="/faq"
                                 class="bg-transparent px-3 py-2 text-sm
                                 font-medium text-gray-300 hover:text-green-400"
-                                active-class="text-green-400">
+                                active-class="!text-green-400">
                                 FAQ
                             </router-link>
                         </div>
@@ -87,7 +87,8 @@
                 <div class="absolute inset-y-0 right-0 flex items-center pr-2
                     sm:static sm:inset-auto sm:ml-6 sm:pr-0">    
                     <button class="bg-transparent px-3 py-2 text-sm
-                        font-medium text-gray-300 hover:text-gray-400">
+                        font-medium text-gray-300 hover:text-gray-400"
+                        @click="cartStore.toggleOpen()">
                         <i class="fa-solid fa-bag-shopping fa-xl mr-2"></i>
                     </button>
                     <!-- Profile dropdown -->
@@ -200,14 +201,16 @@
 </template>
 
 <script lang="ts">
-import { useAuthStore } from '@/stores'
 import { onMounted, defineComponent, ref } from 'vue'
+
+import { useAuthStore, useCartStore } from '@/stores'
 
 export default defineComponent({
     name: 'PublicNavbar',
     setup() {
         // Services
         const authStore = useAuthStore()
+        const cartStore = useCartStore()
 
         // Checkers
         const isMenuOpen = ref<boolean>(false)
@@ -232,7 +235,8 @@ export default defineComponent({
 
         return {
             isMenuOpen,
-            authStore 
+            authStore,
+            cartStore
         }
     }
 })
