@@ -12,6 +12,7 @@ import type {
     VerifyAccountInput,
     DetailResponse,
     LoginResponse } from '@/common/models/auth.model'
+import { UserType } from '@/common/models/user.model'
 import { StorageService } from '@/common/storage'
 import { AUTH_PREFIX } from './prefix';
 import router from '@/router';
@@ -31,6 +32,13 @@ export const useAuthStore = defineStore('auth', {
         userId: undefined,
         email: undefined
     }),
+    getters: {
+        getUserTypeNormal: (state) => {
+            return state.userType === UserType.Admin ? 'Admin' :
+                state.userType === UserType.Vendor ? 'Vendor' :
+                state.userType === UserType.Customer ? 'Customer' : ''
+        }
+    },
     actions: {
         /**
          * Login to system
@@ -228,13 +236,22 @@ export const useAuthStore = defineStore('auth', {
                         reject(err)
                         
                         // Reset storage and state
-                        StorageService.clearStorage()
-                        this.$reset()
-
-                        // Navigate
-                        router.push({ path: '/auth/login' })
+                        this.logout()
                     })
             })
+        },
+        /**
+         * Logout from system
+         * 
+         * @returns Navigate to login page
+         */
+        logout() {
+            // Reset storage and state
+            StorageService.clearStorage()
+            this.$reset()
+
+            // Navigate
+            return router.push({ path: '/auth/login' })
         }
     }
 })
