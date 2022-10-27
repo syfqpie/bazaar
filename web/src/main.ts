@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+
 import Toast from 'vue-toastification'
 import { POSITION } from 'vue-toastification'
 import type { PluginOptions } from 'vue-toastification'
