@@ -118,7 +118,7 @@
                         </router-link>
                     </div>
                     
-                    <div class="relative ml-3" v-else-if="authStore.isAuthenticated">
+                    <div ref="menuBar" class="relative ml-3" v-else-if="authStore.isAuthenticated">
                         <div>
                             <button type="button"
                                 class="flex rounded-full bg-transparent text-sm
@@ -127,7 +127,7 @@
                                 id="user-menu-button"
                                 aria-expanded="false"
                                 aria-haspopup="true"
-                                @click="isMenuOpen = !isMenuOpen">
+                                @click="toggleMenu()">
                                 <i class="fa-solid fa-circle-user fa-xl"></i>
                             </button>
                         </div>
@@ -142,30 +142,59 @@
                             From: "transform opacity-100 scale-100"
                             To: "transform opacity-0 scale-95"
                         -->
-                        <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right
-                            rounded-lg bg-white py-1 shadow ring-1 ring-black
-                            ring-opacity-5 focus:outline-none"
-                            v-if="isMenuOpen"
+
+                        <div v-if="isMenuOpen" 
                             role="menu"
+                            tabindex="-1"
                             aria-orientation="vertical"
                             aria-labelledby="user-menu-button"
-                            tabindex="-1">
-                            <!-- Active: "bg-gray-100", Not Active: "" -->
+                            class="absolute right-0 z-10 mt-2 w-48 origin-top-right
+                            rounded-lg bg-white shadow-lg ring-1 ring-black
+                            ring-opacity-5 focus:outline-none text-sm overflow-hidden">
+                            <div class="py-2 px-4 font-medium text-center"
+                                :class="{
+                                    'bg-gray-100': authStore.userType === UserType.Admin,
+                                    'bg-pink-100': authStore.userType === UserType.Vendor,
+                                    'bg-indigo-100': authStore.userType === UserType.Customer
+                                }">
+                                <p class="mt-2 my-1"
+                                    :class="{
+                                        'text-gray-800': authStore.userType === UserType.Admin,
+                                        'text-pink-800': authStore.userType === UserType.Vendor,
+                                        'text-indigo-800': authStore.userType === UserType.Customer
+                                    }">
+                                    <i class="fa-solid fa-user-secret fa-2xl"></i>
+                                </p>
+                                <p class="text-sm"
+                                    :class="{
+                                            'text-gray-800': authStore.userType === UserType.Admin,
+                                            'text-pink-800': authStore.userType === UserType.Vendor,
+                                            'text-indigo-800': authStore.userType === UserType.Customer
+                                    }">
+                                    {{ authStore.getUserTypeNormal }}
+                                </p>
+                            </div>
+
+                            <div class="py-3 px-4 text-gray-900">
+                                <div class="truncate"
+                                    :title="authStore.email">
+                                    {{ authStore.email }}
+                                </div>
+                            </div>
+
                             <router-link to="/user/account/profile"
-                                class="block px-4 py-2 text-sm text-gray-700"
-                                active-class="bg-gray-100">
+                                class="block py-2 px-4 hover:bg-gray-100"
+                                active-class="bg-gray-100"
+                                @click="toggleMenu()">
                                 Your profile
                             </router-link>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700"
-                                role="menuitem"
-                                tabindex="-1"
-                                id="user-menu-item-1">
+
+                            <a href="#"
+                                class="block py-2 px-4 hover:bg-gray-100">
                                 Settings
                             </a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700"
-                                role="menuitem"
-                                tabindex="-1"
-                                id="user-menu-item-2">
+                            <a class="block py-2 px-4 hover:bg-gray-100 cursor-pointer"
+                                @click="authStore.logout()">
                                 Sign out
                             </a>
                         </div>
@@ -203,11 +232,17 @@
 <script lang="ts">
 import { onMounted, defineComponent, ref } from 'vue'
 
+import { onClickOutside } from '@vueuse/core'
+
 import { useAuthStore, useCartStore } from '@/stores'
+import { UserType } from '@/common/models/user.model'
 
 export default defineComponent({
     name: 'PublicNavbar',
     setup() {
+        // Component ref
+        const menuBar = ref(null)
+
         // Services
         const authStore = useAuthStore()
         const cartStore = useCartStore()
@@ -222,7 +257,7 @@ export default defineComponent({
                 verifyToken()
             }
         })
-
+        
         const verifyToken = () => {
             return authStore.verifyToken()
                 .then(data => {
@@ -233,10 +268,26 @@ export default defineComponent({
                 })
         }
 
+        // Event
+        onClickOutside(menuBar, (event) => {
+            if(isMenuOpen.value){ toggleMenu() }
+        })
+
+        // const logout = async () => {
+        //     return authStore.logout()
+        // }
+
+        const toggleMenu = () => {
+            isMenuOpen.value = !isMenuOpen.value
+        }
+
         return {
             isMenuOpen,
             authStore,
-            cartStore
+            cartStore,
+            menuBar,
+            UserType,
+            toggleMenu
         }
     }
 })
