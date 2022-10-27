@@ -2,11 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import { useAuthStore } from '@/stores'
 
+const ROOT_ROUTE = '/home'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
+      redirect: '/home',
       name: 'public',
       component: () => import('@/layouts/PublicLayout.vue'),
       children: [
@@ -127,8 +130,12 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (authStore.$state.isAuthenticated && to.path.startsWith('/auth')) {
+    if (from.path === ROOT_ROUTE) {
+      // If same path as root, don't do anything
+      return next(false)
+    }
     // Browser with access token cannot go to auth pages
-    return next({ path: '/home' })
+    return next({ path: ROOT_ROUTE })
   } else if (!authStore.$state.isAuthenticated && to.path.startsWith('/user')) {
     // Browser without access token cannot go to users pages
     return next({ path: '/auth/login' })
@@ -137,9 +144,9 @@ router.beforeEach(async (to, from, next) => {
   return next()
 })
 
-router.afterEach((to, from) => {
-  if (to.meta.title) {
-    // Update page title
+router.afterEach((to, from, failure) => {
+  if (to.meta.title && failure?.from.path !== ROOT_ROUTE) {
+    // Only update page title if no failure
     document.title = `Bazaar - ${ to.meta.title }`
   }
 })
