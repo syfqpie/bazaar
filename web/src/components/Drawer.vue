@@ -1,5 +1,6 @@
 <template>
-    <div tabindex="-1"
+    <div ref="cartDrawer"
+        tabindex="-1"
         class="fixed z-40 h-screen overflow-y-hidden p-4 lg:p-6
         bg-white w-11/12 lg:w-[28rem] right-0 top-0">
         <h5 id="drawer-label" 
@@ -46,21 +47,31 @@
 </template>
 
 <script lang="ts">
-import { onMounted, defineComponent } from 'vue'
+import { onMounted, defineComponent, ref } from 'vue'
+
+import { onClickOutside } from '@vueuse/core'
 
 import { useCartStore } from '@/stores'
 
 export default defineComponent({
     name: 'Drawer',
     setup() {
+        // Component ref
+        const cartDrawer = ref(null)
+
+        // Services
         const cartStore = useCartStore()
 
         onMounted(() => {
             // console.log('Mounted Drawer')
         })
 
+        // Event
+        onClickOutside(cartDrawer, (event) => cartStore.toggleOpen())
+
         return {
-            cartStore
+            cartStore,
+            cartDrawer
         }
     }
 })
