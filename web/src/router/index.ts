@@ -62,7 +62,6 @@ const router = createRouter({
               ]
             }
           ]
-            
         }
       ]
     },
@@ -123,8 +122,10 @@ router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
 
   if (!authStore.$state.isAuthenticated && authStore.$state.accessToken) {
+    // Verify token if there is any
     await authStore.verifyToken()
       .catch(err => {
+        // If error will be redirected to login
         return next({ path: '/auth/login' })
       })
   }
@@ -138,7 +139,7 @@ router.beforeEach(async (to, from, next) => {
     return next({ path: ROOT_ROUTE })
   } else if (!authStore.$state.isAuthenticated && to.path.startsWith('/user')) {
     // Browser without access token cannot go to users pages
-    return next({ path: '/auth/login' })
+    return next({ path: '/auth/login', query: { redirectTo: to.path }})
   }
 
   return next()

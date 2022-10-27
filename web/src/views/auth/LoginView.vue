@@ -171,10 +171,13 @@ export default defineComponent({
                 isLoading.value = false
 
                 // Success toastr
-                toast.success('Success. Redirecting to /home')
+                toast.success('Success. Redirecting...')
                 
                 // Navigate home
-                router.push({ path: '/home' })
+                const nextRoute = router.currentRoute.value.query['redirectTo'] ?
+                    String(router.currentRoute.value.query['redirectTo']) : '/home'
+                console.log(nextRoute)
+                router.push({ path: nextRoute })
             })
             .catch(err => {
                 isLoading.value = false
