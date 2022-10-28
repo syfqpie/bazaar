@@ -1,11 +1,13 @@
 <template>
     <div class="w-full py-8 px-12">
         <div>
-            <img alt="Bazaar"
+            <img
+                src="@/assets/img/default/trolley.png"
                 class="mx-auto h-12 w-auto"
-                src="@/assets/img/default/trolley.png" />
+                alt="Bazaar" />
 
-            <h2 class="mt-6 text-center text-3xl
+            <h2
+                class="mt-6 text-center text-3xl
                 font-bold tracking-tight text-gray-900">
                 Join us as a vendor
             </h2>
@@ -16,20 +18,22 @@
                 <div class="grid grid-cols-1 gap-3">
                     <div>
                         <label class="text-sm text-gray-700">Email</label>
-                        <input type="email"
+                        <input
+                            type="email"
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
                             focus:shadow-outline"
+                            placeholder="Enter your email"
+                            v-model="registerForm.username"
                             :class="{
                                 'border-red-400': v$.username.$dirty &&
                                                     v$.username.$invalid 
                                 
                             }"
-                            placeholder="Enter your email"
-                            v-model="registerForm.username"
                             @blur="v$.username.$touch" />
-                        <p v-for="error of v$.username.$errors"
+                        <p
+                            v-for="error of v$.username.$errors"
                             :key="error.$uid"
                             class="mt-2 text-xs text-red-600 dark:text-red-500">
                             {{ error.$message }}
@@ -38,20 +42,22 @@
 
                     <div>
                         <label class="text-sm text-gray-700">Business name</label>
-                        <input type="text"
+                        <input
+                            type="text"
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
                             focus:shadow-outline"
+                            placeholder="Enter your business name"
+                            v-model="registerForm.name"
                             :class="{
                                 'border-red-400': v$.name.$dirty &&
                                                     v$.name.$invalid 
                                 
                             }"
-                            placeholder="Enter your business name"
-                            v-model="registerForm.name"
                             @blur="v$.name.$touch" />
-                        <p v-for="error of v$.name.$errors"
+                        <p
+                            v-for="error of v$.name.$errors"
                             :key="error.$uid"
                             class="mt-2 text-xs text-red-600 dark:text-red-500">
                             {{ error.$message }}
@@ -60,20 +66,22 @@
 
                     <div>
                         <label class="text-sm text-gray-700">Phone no.</label>
-                        <input type="text"
+                        <input
+                            type="text"
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
                             focus:shadow-outline"
+                            placeholder="Enter your phone no."
+                            v-model="registerForm.phoneNo"
                             :class="{
                                 'border-red-400': v$.phoneNo.$dirty &&
                                                     v$.phoneNo.$invalid 
                                 
                             }"
-                            placeholder="Enter your phone no."
-                            v-model="registerForm.phoneNo"
                             @blur="v$.phoneNo.$touch" />
-                        <p v-for="error of v$.phoneNo.$errors"
+                        <p
+                            v-for="error of v$.phoneNo.$errors"
                             :key="error.$uid"
                             class="mt-2 text-xs text-red-600 dark:text-red-500">
                             {{ error.$message }}
@@ -81,7 +89,8 @@
                     </div>
 
                     <div>
-                        <button class="mt-1 group relative flex w-full justify-center
+                        <button
+                            class="mt-1 group relative flex w-full justify-center
                             rounded-lg p-2.5 border border-transparent outline-none
                             font-medium text-sm shadow-none border-solid text-white 
                             bg-green-400 border-green-400  active:bg-green-500 
@@ -104,7 +113,8 @@
                         <div class="text-center">
                             <p class="text-sm text-gray-500">
                                 Forgot your password?
-                                <router-link :to="{ path: '/auth/reset' }"
+                                <router-link
+                                    :to="{ path: '/auth/reset' }"
                                     class="font-medium 
                                     text-green-400 hover:text-green-300">
                                     Reset
@@ -115,7 +125,8 @@
                         <div class="text-center">
                             <p class="text-sm text-gray-500">
                                 Already have an account?
-                                <router-link :to="{ path: '/auth/login' }"
+                                <router-link
+                                    :to="{ path: '/auth/login' }"
                                     class="font-medium 
                                     text-green-400 hover:text-green-300">
                                     Sign in
@@ -136,12 +147,12 @@ import type { RegisterVendorInput } from '@/common/models/auth.model'
 import router from '@/router'
 import { useAuthStore } from '@/stores'
 
+import useVuelidate from '@vuelidate/core'
 import { email, helpers, required } from '@vuelidate/validators'
 import { useToast } from 'vue-toastification'
-import useVuelidate from '@vuelidate/core'
 
 export default defineComponent({
-  name: 'VendorRegistration',
+  name: 'RegisterVendor',
   setup() {
     // Form
     const registerForm = ref<RegisterVendorInput>({
@@ -175,18 +186,20 @@ export default defineComponent({
     }))
     const v$ = useVuelidate(validation, registerForm.value)
 
+    // Checkers
+    const isLoading = ref<boolean>(false)
+
     // Services
     const authStore = useAuthStore()
     const toast = useToast()
 
-    // Checkers
-    const isLoading = ref<boolean>(false)
-
     onMounted(() => {
-      // console.log('Mounted VendorRegistration')
+      // console.log('Mounted RegisterVendor')
     })
 
-    // Register
+    /**
+     * Make http request to API to register as vendor
+     */
     const register = () => {
         isLoading.value = true
 

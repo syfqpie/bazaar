@@ -1,11 +1,13 @@
 <template>
     <div class="w-full py-8 px-12">
         <div>
-            <img alt="Bazaar"
+            <img
+                src="@/assets/img/default/trolley.png"
                 class="mx-auto h-12 w-auto"
-                src="@/assets/img/default/trolley.png" />
+                alt="Bazaar" />
 
-            <h2 class="mt-6 text-center text-3xl
+            <h2
+                class="mt-6 text-center text-3xl
                 font-bold tracking-tight text-gray-900">
                 Verify your account with Bazaar
             </h2>
@@ -16,20 +18,22 @@
                 <div class="grid grid-cols-1 gap-3">
                     <div>
                         <label class="text-sm text-gray-700">New password</label>
-                        <input type="password"
+                        <input
+                            type="password"
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
                             focus:shadow-outline"
+                            placeholder="Enter your new password"
+                            v-model="verifyForm.newPassword1"
                             :class="{
                                 'border-red-400': v$.newPassword1.$dirty &&
                                                     v$.newPassword1.$invalid 
                                 
                             }"
-                            placeholder="Enter your new password"
-                            v-model="verifyForm.newPassword1"
                             @blur="v$.newPassword1.$touch" />
-                        <p v-for="error of v$.newPassword1.$errors"
+                        <p
+                            v-for="error of v$.newPassword1.$errors"
                             :key="error.$uid"
                             class="mt-2 text-xs text-red-600 dark:text-red-500">
                             {{ error.$message }}
@@ -38,20 +42,22 @@
 
                     <div>
                         <label class="text-sm text-gray-700">Confirm new password</label>
-                        <input type="password"
+                        <input
+                            type="password"
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
                             focus:shadow-outline"
+                            placeholder="Enter your confirm new password"
+                            v-model="verifyForm.newPassword2"
                             :class="{
                                 'border-red-400': v$.newPassword2.$dirty &&
                                                     v$.newPassword2.$invalid 
                                 
                             }"
-                            placeholder="Enter your confirm new password"
-                            v-model="verifyForm.newPassword2"
                             @blur="v$.newPassword2.$touch" />
-                        <p v-for="error of v$.newPassword2.$errors"
+                        <p
+                            v-for="error of v$.newPassword2.$errors"
                             :key="error.$uid"
                             class="mt-2 text-xs text-red-600 dark:text-red-500">
                             {{ error.$message }}
@@ -59,7 +65,8 @@
                     </div>
 
                     <div>
-                        <button class="mt-1 group relative flex w-full justify-center
+                        <button
+                            class="mt-1 group relative flex w-full justify-center
                             rounded-lg p-2.5 border border-transparent outline-none
                             font-medium text-sm shadow-none border-solid text-white 
                             bg-green-400 border-green-400  active:bg-green-500 
@@ -81,21 +88,21 @@
 
 <script lang="ts">
 import { onMounted, defineComponent, ref, computed } from 'vue'
+import { useRoute } from 'vue-router'
 
 import type { VerifyAccountInput } from '@/common/models/auth.model'
 import { passwordRegexMedium } from '@/common/helpers'
 import router from '@/router'
 import { useAuthStore } from '@/stores'
 
+import useVuelidate from '@vuelidate/core'
 import { helpers, required, sameAs } from '@vuelidate/validators'
 import { useToast } from 'vue-toastification'
-import useVuelidate from '@vuelidate/core'
-import { useRoute } from 'vue-router'
 
 const TOKEN_KEY = 'key'
 
 export default defineComponent({
-    name: 'VerifyAccount',
+    name: 'RegisterVerify',
     setup() {
         // Form
         const verifyForm = ref<VerifyAccountInput>({
@@ -134,18 +141,23 @@ export default defineComponent({
         }))
         const v$ = useVuelidate(validation, verifyForm.value)
 
+        // Checkers
+        const isLoading = ref<boolean>(false)
+
         // Services
         const authStore = useAuthStore()
         const toast = useToast()
         const route = useRoute()
 
-        // Checkers
-        const isLoading = ref<boolean>(false)
-
         onMounted(() => {
             queryParamChecker()
         })
 
+        /**
+         * Check for any query parameters in path
+         * 
+         * This component requires key paramxw
+         */
         const queryParamChecker = () => {
             if (TOKEN_KEY in route.query) {
                 // Append query parameter value to form
@@ -156,7 +168,9 @@ export default defineComponent({
             }
         }
 
-        // Verify
+        /**
+         * Make http request to API to verify account
+         */
         const verify = () => {
             isLoading.value = true
 

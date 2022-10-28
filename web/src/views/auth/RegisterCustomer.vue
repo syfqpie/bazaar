@@ -1,11 +1,13 @@
 <template>
     <div class="w-full py-8 px-4 sm:px-12">
         <div>
-            <img alt="Bazaar"
+            <img
+                src="@/assets/img/default/trolley.png"
                 class="mx-auto h-12 w-auto"
-                src="@/assets/img/default/trolley.png" />
+                alt="Bazaar" />
 
-            <h2 class="mt-6 text-center text-3xl
+            <h2
+                class="mt-6 text-center text-3xl
                 font-bold tracking-tight text-gray-900">
                 Create your account
             </h2>
@@ -16,20 +18,22 @@
                 <div class="grid grid-cols-1 gap-3">
                     <div>
                         <label class="text-sm text-gray-700">Email</label>
-                        <input type="email"
+                        <input
+                            type="email"
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
                             focus:shadow-outline"
                             placeholder="Enter your email"
+                            v-model="registerForm.username"
                             :class="{
                                 'border-red-400': v$.username.$dirty &&
                                                     v$.username.$invalid 
                                 
                             }"
-                            v-model="registerForm.username"
                             @blur="v$.username.$touch" />
-                        <p v-for="error of v$.username.$errors"
+                        <p
+                            v-for="error of v$.username.$errors"
                             :key="error.$uid"
                             class="mt-2 text-xs text-red-600 dark:text-red-500">
                             {{ error.$message }}
@@ -39,20 +43,22 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                             <label class="text-sm text-gray-700">First name</label>
-                            <input type="text"
+                            <input
+                                type="text"
                                 class="mt-1 block w-full rounded-lg bg-gray-50
                                 border border-gray-300 text-gray-900
                                 text-sm p-2.5 focus:outline-none
                                 focus:shadow-outline"
                                 placeholder="Enter your first name"
+                                v-model="registerForm.firstName"
                                 :class="{
                                     'border-red-400': v$.firstName.$dirty &&
                                                         v$.firstName.$invalid 
                                     
                                 }"
-                                v-model="registerForm.firstName"
                                 @blur="v$.firstName.$touch" />
-                            <p v-for="error of v$.firstName.$errors"
+                            <p
+                                v-for="error of v$.firstName.$errors"
                                 :key="error.$uid"
                                 class="mt-2 text-xs text-red-600 dark:text-red-500">
                                 {{ error.$message }}
@@ -60,18 +66,19 @@
                         </div>
                         <div>
                             <label class="text-sm text-gray-700">Last name</label>
-                            <input type="text"
+                            <input
+                                type="text"
                                 class="mt-1 block w-full rounded-lg bg-gray-50
                                 border border-gray-300 text-gray-900
                                 text-sm p-2.5 focus:outline-none
                                 focus:shadow-outline"
                                 placeholder="Enter your last name"
+                                v-model="registerForm.lastName"
                                 :class="{
                                     'border-red-400': v$.lastName.$dirty &&
                                                         v$.lastName.$invalid 
                                     
                                 }"
-                                v-model="registerForm.lastName"
                                 @blur="v$.lastName.$touch" />
                             <p v-for="error of v$.lastName.$errors"
                                 :key="error.$uid"
@@ -84,20 +91,22 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                             <label class="text-sm text-gray-700">Phone no.</label>
-                            <input type="text"
+                            <input
+                                type="text"
                                 class="mt-1 block w-full rounded-lg bg-gray-50
                                 border border-gray-300 text-gray-900
                                 text-sm p-2.5 focus:outline-none
                                 focus:shadow-outline"
                                 placeholder="Enter your phone no."
+                                v-model="registerForm.phoneNo"
                                 :class="{
                                     'border-red-400': v$.phoneNo.$dirty &&
                                                         v$.phoneNo.$invalid 
                                     
                                 }"
-                                v-model="registerForm.phoneNo"
                                 @blur="v$.phoneNo.$touch" />
-                            <p v-for="error of v$.phoneNo.$errors"
+                            <p
+                                v-for="error of v$.phoneNo.$errors"
                                 :key="error.$uid"
                                 class="mt-2 text-xs text-red-600 dark:text-red-500">
                                 {{ error.$message }}
@@ -106,24 +115,26 @@
 
                         <div>
                             <label class="text-sm text-gray-700">Date of birth</label>
-                            <input type="date"
+                            <input
+                                type="date"
                                 class="mt-1 block w-full rounded-lg bg-gray-50
                                 border border-gray-300 text-gray-900
                                 text-sm p-2.5 focus:outline-none
                                 focus:shadow-outline"
+                                placeholder="Select date of birth"
+                                v-model="registerForm.dateOfBirth"
                                 :class="{
                                     'border-red-400': v$.dateOfBirth.$dirty &&
                                                         v$.dateOfBirth.$invalid 
                                     
                                 }"
-                                placeholder="Select date of birth"
-                                v-model="registerForm.dateOfBirth"
                                 @blur="v$.dateOfBirth.$touch" />
                         </div>
                     </div>
 
                     <div>
-                        <button class="mt-1 group relative flex w-full justify-center
+                        <button 
+                            class="mt-1 group relative flex w-full justify-center
                             rounded-lg p-2.5 border border-transparent outline-none
                             font-medium text-sm shadow-none border-solid text-white 
                             bg-green-400 border-green-400  active:bg-green-500 
@@ -146,7 +157,8 @@
                         <div class="text-center">
                             <p class="text-sm text-gray-500">
                                 Want to be a vendor?
-                                <router-link :to="{ path: '/auth/registration/vendor' }"
+                                <router-link
+                                    :to="{ path: '/auth/registration/vendor' }"
                                     class="font-medium 
                                     text-green-400 hover:text-green-300">
                                     Join
@@ -157,7 +169,8 @@
                         <div class="text-center">
                             <p class="text-sm text-gray-500">
                                 Already have an account?
-                                <router-link :to="{ path: '/auth/login' }"
+                                <router-link
+                                    :to="{ path: '/auth/login' }"
                                     class="font-medium 
                                     text-green-400 hover:text-green-300">
                                     Sign in
@@ -178,12 +191,12 @@ import type { RegisterCustomerInput } from '@/common/models/auth.model'
 import router from '@/router'
 import { useAuthStore } from '@/stores'
 
+import useVuelidate from '@vuelidate/core'
 import { email, helpers, required } from '@vuelidate/validators'
 import { useToast } from 'vue-toastification'
-import useVuelidate from '@vuelidate/core'
 
 export default defineComponent({
-  name: 'CustomerRegistration',
+  name: 'RegisterCustomer',
   setup() {
     // Form
     const registerForm = ref<RegisterCustomerInput>({
@@ -226,18 +239,20 @@ export default defineComponent({
     }))
     const v$ = useVuelidate(validation, registerForm.value)
 
+    // Checkers
+    const isLoading = ref<boolean>(false)
+    
     // Services
     const authStore = useAuthStore()
     const toast = useToast()
 
-    // Checkers
-    const isLoading = ref<boolean>(false)
-
     onMounted(() => {
-      // console.log('Mounted CustomerRegistration')
+      // console.log('Mounted RegisterCustomer')
     })
 
-    // Register
+    /**
+     * Make http request to API to register as customer
+     */
     const register = () => {
         isLoading.value = true
         
