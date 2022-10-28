@@ -34,29 +34,29 @@ const router = createRouter({
         {
           path: 'user',
           name: 'user',
-          component: () => import('@/views/AccountView.vue'),
           meta: { requiresAuth: true },
           children: [
             {
               path: 'account',
               name: 'userAccount',
+              component: () => import('@/views/UserAccount.vue'),
               children: [
                 {
                   path: 'profile',
                   name: 'userAccountProfile',
-                  component: () => import('@/views/account/ProfileView.vue'),
+                  component: () => import('@/views/account/AccountProfile.vue'),
                   meta: { title: 'Profile' }
                 },
                 {
                   path: 'address',
                   name: 'userAccountAddress',
-                  component: () => import('@/views/account/AddressView.vue'),
+                  component: () => import('@/views/account/AccountAddress.vue'),
                   meta: { title: 'Address' }
                 },
                 {
                   path: 'change-password',
-                  name: 'userAccountChangePassword',
-                  component: () => import('@/views/account/ChangePasswordView.vue'),
+                  name: 'userAccountPasswordChange',
+                  component: () => import('@/views/account/AccountPasswordChange.vue'),
                   meta: { title: 'Change password' }
                 }
               ]

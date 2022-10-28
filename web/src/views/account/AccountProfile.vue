@@ -1,6 +1,7 @@
 <template>
     <div class="w-full">
-        <div class="p-4 sm:p-6 md:p-8 w-full bg-white
+        <div
+            class="p-4 sm:p-6 md:p-8 w-full bg-white
             rounded-lg border border-gray-200 shadow-sm">
             <h5 class="mb-0 text-base font-semibold text-gray-900 md:text-xl">
                 Profile
@@ -15,7 +16,8 @@
                         <label class="text-sm text-gray-700">
                             Email
                         </label>
-                        <input type="email"
+                        <input
+                            type="email"
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
@@ -27,7 +29,8 @@
                         <label class="text-sm text-gray-700">
                             Name
                         </label>
-                        <input type="text"
+                        <input
+                            type="text"
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
@@ -39,7 +42,8 @@
                         <label class="text-sm text-gray-700">
                             Phone no.
                         </label>
-                        <input type="text"
+                        <input
+                            type="text"
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
@@ -51,7 +55,8 @@
                         <label class="text-sm text-gray-700">
                             Gender
                         </label>
-                        <input type="text"
+                        <input
+                            type="text"
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
@@ -63,7 +68,8 @@
                         <label class="text-sm text-gray-700">
                             Date of birth
                         </label>
-                        <input type="date"
+                        <input
+                            type="date"
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
@@ -71,7 +77,8 @@
                             focus:ring-1" />
                     </div>
 
-                    <button class="block rounded-lg border border-transparent 
+                    <button
+                        class="block rounded-lg border border-transparent 
                         bg-green-300 focus:hover:enabled:bg-green-500
                         p-2.5 text-white enabled:bg-green-400
                         focus:outline-none focus:ring-2 focus:ring-green-200
@@ -88,10 +95,10 @@
 import { onMounted, defineComponent } from 'vue'
 
 export default defineComponent({
-    name: 'Profile',
+    name: 'AccountProfile',
     setup() {
         onMounted(() => {
-            // console.log('Mounted Profile')
+            // console.log('Mounted AccountProfile')
         })
 
         return {}

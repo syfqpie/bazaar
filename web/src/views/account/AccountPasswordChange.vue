@@ -1,6 +1,7 @@
 <template>
     <div class="w-full">
-        <div class="p-4 sm:p-6 md:p-8 w-full bg-white
+        <div
+            class="p-4 sm:p-6 md:p-8 w-full bg-white
             rounded-lg border border-gray-200 shadow-sm">
             <h5 class="mb-0 text-base font-semibold text-gray-900 md:text-xl">
                 Change password
@@ -15,20 +16,22 @@
                         <label class="text-sm text-gray-700">
                             Current password
                         </label>
-                        <input type="password"
-                            @blur="v$.oldPassword.$touch"
+                        <input
+                            type="password"
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
                             focus:shadow-outline"
                             placeholder="Enter your old password"
+                            v-model="changeForm.oldPassword"
                             :class="{
                                 'border-red-400': v$.oldPassword.$dirty &&
                                                     v$.oldPassword.$invalid 
                                 
                             }"
-                            v-model="changeForm.oldPassword" />
-                        <p v-for="error of v$.oldPassword.$errors"
+                            @blur="v$.oldPassword.$touch" />
+                        <p
+                            v-for="error of v$.oldPassword.$errors"
                             :key="error.$uid"
                             class="mt-2 text-xs text-red-600 dark:text-red-500">
                             {{ error.$message }}
@@ -39,20 +42,22 @@
                         <label class="text-sm text-gray-700">
                             New password
                         </label>
-                        <input type="password"
-                            @blur="v$.newPassword1.$touch"
+                        <input
+                            type="password"
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
                             focus:shadow-outline"
                             placeholder="Enter your new password"
+                            v-model="changeForm.newPassword1"
                             :class="{
                                 'border-red-400': v$.newPassword1.$dirty &&
                                                     v$.newPassword1.$invalid 
                                 
                             }"
-                            v-model="changeForm.newPassword1" />
-                        <p v-for="error of v$.newPassword1.$errors"
+                            @blur="v$.newPassword1.$touch" />
+                        <p
+                            v-for="error of v$.newPassword1.$errors"
                             :key="error.$uid"
                             class="mt-2 text-xs text-red-600 dark:text-red-500">
                             {{ error.$message }}
@@ -63,27 +68,30 @@
                         <label class="text-sm text-gray-700">
                             Confirm new password
                         </label>
-                        <input type="password"
+                        <input
+                            type="password"
                             class="mt-1 block w-full rounded-lg bg-gray-50
                             border border-gray-300 text-gray-900
                             text-sm p-2.5 focus:outline-none
                             focus:shadow-outline"
                             placeholder="Confirm your new password"
+                            v-model="changeForm.newPassword2"
                             :class="{
                                 'border-red-400': v$.newPassword2.$dirty &&
                                                     v$.newPassword2.$invalid 
                                 
                             }"
-                            v-model="changeForm.newPassword2"
                             @blur="v$.newPassword2.$touch" />
-                        <p v-for="error of v$.newPassword2.$errors"
+                        <p
+                            v-for="error of v$.newPassword2.$errors"
                             :key="error.$uid"
                             class="mt-2 text-xs text-red-600 dark:text-red-500">
                             {{ error.$message }}
                         </p>
                     </div>
 
-                    <button class="block font-medium text-sm text-white mt-2
+                    <button
+                        class="block font-medium text-sm text-white mt-2
                         p-2.5 bg-green-400 active:bg-green-500
                         border-green-400 border border-solid active:border-green-500
                         outline-none focus:outline-none rounded-lg align-middle
@@ -102,18 +110,18 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref  } from 'vue'
+import { useRoute } from 'vue-router'
 
 import type { ChangePasswordInput } from '@/common/models/auth.model'
 import { passwordRegexMedium } from '@/common/helpers'
 import { useAuthStore } from '@/stores'
 
+import useVuelidate from '@vuelidate/core'
 import { helpers, required, sameAs } from '@vuelidate/validators'
 import { useToast } from 'vue-toastification'
-import useVuelidate from '@vuelidate/core'
-import { useRoute } from 'vue-router'
 
 export default defineComponent({
-    name: 'ChangePassword',
+    name: 'AccountPasswordChange',
     setup() {
         // Form
         const changeForm = ref<ChangePasswordInput>({
@@ -157,18 +165,21 @@ export default defineComponent({
         })) 
         const v$ = useVuelidate(validation, changeForm.value)
 
+        // Checker
+        const isLoading = ref(false)
+
         // Services
         const authStore = useAuthStore()
         const toast = useToast()
         const route = useRoute()
 
-        // Checker
-        const isLoading = ref(false)
-
         onMounted(() => {
             // console.log('Mounted ChangePassword')
         })
 
+        /**
+         * Make http request to API to change password
+         */
         const changePassword = () => {
             isLoading.value = true
 
