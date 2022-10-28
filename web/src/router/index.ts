@@ -11,7 +11,7 @@ const router = createRouter({
       path: '/',
       redirect: '/home',
       name: 'public',
-      component: () => import('@/layouts/PublicLayout.vue'),
+      component: () => import('@/layouts/LayoutPublic.vue'),
       children: [
         {
           path: 'home',
@@ -68,48 +68,48 @@ const router = createRouter({
     {
       path: '/auth',
       name: 'authentication',
-      component: () => import('@/layouts/AuthLayout.vue'),
+      component: () => import('@/layouts/LayoutAuth.vue'),
       children: [
         {
           path: 'login',
           name: 'login',
-          component: () => import('@/views/auth/LoginView.vue'),
+          component: () => import('@/views/auth/TheLogin.vue'),
           meta: { title: 'Login' }
         },
         {
           path: 'registration/customer',
           name: 'registerCustomer',
-          component: () => import('@/views/auth/RegistrationView.vue'),
+          component: () => import('@/views/auth/RegisterCustomer.vue'),
           meta: { title: 'Customer registration' }
         },
         {
           path: 'registration/vendor',
           name: 'registerVendor',
-          component: () => import('@/views/auth/VendorRegistrationView.vue'),
+          component: () => import('@/views/auth/RegisterVendor.vue'),
           meta: { title: 'Vendor registration' }
         },
         {
           path: 'registration/resend-verification',
-          name: 'resendVerification',
-          component: () => import('@/views/auth/ResendVerificationView.vue'),
+          name: 'registerResendEmail',
+          component: () => import('@/views/auth/RegisterResendEmail.vue'),
           meta: { title: 'Resend verification' }
         },
         {
           path: 'registration/verify',
-          name: 'verify',
-          component: () => import('@/views/auth/VerifyAccountView.vue'),
+          name: 'registerVerify',
+          component: () => import('@/views/auth/RegisterVerify.vue'),
           meta: { title: 'Verify' }
         },
         {
           path: 'reset',
-          name: 'reset',
-          component: () => import('@/views/auth/ResetView.vue'),
+          name: 'resetRequest',
+          component: () => import('@/views/auth/ResetRequest.vue'),
           meta: { title: 'Reset' }
         },
         {
           path: 'reset/confirm',
-          name: 'confirmReset',
-          component: () => import('@/views/auth/ConfirmResetView.vue'),
+          name: 'resetConfirmation',
+          component: () => import('@/views/auth/ResetConfirmation.vue'),
           meta: { title: 'Confirm reset' }
         },
       ]
@@ -118,6 +118,13 @@ const router = createRouter({
 })
 
 // RouteGuard
+/**
+ * there is an issue here
+ * 
+ * sometimes when login or logout
+ * the url changed but somehow the page
+ * doesnt reload
+ */
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
 
