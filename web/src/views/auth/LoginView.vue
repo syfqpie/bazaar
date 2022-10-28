@@ -176,7 +176,7 @@ export default defineComponent({
                 // Navigate home
                 const nextRoute = router.currentRoute.value.query['redirectTo'] ?
                     String(router.currentRoute.value.query['redirectTo']) : '/home'
-                console.log(nextRoute)
+                
                 router.push({ path: nextRoute })
             })
             .catch(err => {
