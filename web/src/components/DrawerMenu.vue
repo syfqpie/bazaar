@@ -53,7 +53,7 @@ import { onClickOutside } from '@vueuse/core'
 import { useCartStore } from '@/stores'
 
 export default defineComponent({
-    name: 'Drawer',
+    name: 'DrawerMenu',
     setup() {
         // Component ref
         const cartDrawer = ref(null)
@@ -62,7 +62,7 @@ export default defineComponent({
         const cartStore = useCartStore()
 
         onMounted(() => {
-            // console.log('Mounted Drawer')
+            // console.log('Mounted DrawerMenu')
         })
 
         // Event

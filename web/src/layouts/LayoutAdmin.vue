@@ -19,10 +19,10 @@
 import { onMounted, defineComponent } from 'vue'
 
 export default defineComponent({
-    name: 'AuthLayout',
+    name: 'LayoutAdmin',
     setup() {
         onMounted(() => {
-            // console.log('Mounted AuthLayout')
+            // console.log('Mounted LayoutAdmin')
         })
 
         return {}

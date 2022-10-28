@@ -2,10 +2,10 @@
 import { onMounted, defineComponent } from 'vue';
 
 export default defineComponent({
-    name: 'MainLayout',
+    name: 'LayoutMain',
     setup() {
         onMounted(() => {
-            // console.log('Mounted MainLayout');
+            // console.log('Mounted LayoutMain');
         })
 
         return {}

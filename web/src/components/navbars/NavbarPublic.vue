@@ -4,11 +4,12 @@
             <div class="relative flex h-16 items-center justify-between">
                 <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
                     <!-- Mobile menu button-->
-                    <button type="button"
+                    <button
+                        type="button"
                         class="inline-flex items-center justify-center
-                            rounded-lg p-2 text-gray-400 hover:bg-gray-700
-                            hover:text-white focus:outline-none focus:ring-2
-                            focus:ring-inset focus:ring-white"
+                        rounded-lg p-2 text-gray-400 hover:bg-gray-700
+                        hover:text-white focus:outline-none focus:ring-2
+                        focus:ring-inset focus:ring-white"
                         aria-controls="mobile-menu" 
                         aria-expanded="false">
                         <span class="sr-only">Open main menu</span>
@@ -19,7 +20,8 @@
 
                             Menu open: "hidden", Menu closed: "block"
                         -->
-                        <svg class="block h-6 w-6" 
+                        <svg
+                            class="block h-6 w-6" 
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none" viewBox="0 0 24 24"
                             stroke-width="1.5"
@@ -36,7 +38,8 @@
 
                             Menu open: "block", Menu closed: "hidden"
                         -->
-                        <svg class="hidden h-6 w-6"
+                        <svg
+                            class="hidden h-6 w-6"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none" viewBox="0 0 24 24"
                             stroke-width="1.5"
@@ -50,31 +53,36 @@
 
                 <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                     <div class="flex flex-shrink-0 items-center">
-                        <img class="block h-8 w-auto lg:hidden"
+                        <img
+                            class="block h-8 w-auto lg:hidden"
                             src="@/assets/img/default/trolley.png"
-                            alt="Bazaar">
-                        <img class="hidden h-8 w-auto lg:block"
+                            alt="Bazaar" />
+                        <img
+                            class="hidden h-8 w-auto lg:block"
                             src="@/assets/img/default/trolley.png"
-                            alt="Bazaar">
+                            alt="Bazaar" />
                     </div>
 
                     <div class="hidden sm:ml-6 sm:block">
                         <div class="flex space-x-4">
-                            <router-link to="/home"
+                            <router-link
+                                to="/home"
                                 class="bg-transparent px-3 py-2 text-sm
                                 font-medium text-gray-300 hover:text-green-500"
                                 active-class="!text-green-400">
                                 Home
                             </router-link>
 
-                            <router-link to="/explore"
+                            <router-link
+                                to="/explore"
                                 class="bg-transparent px-3 py-2 text-sm
                                 font-medium text-gray-300 hover:text-green-400"
                                 active-class="!text-green-400">
                                 Explore
                             </router-link>
 
-                            <router-link to="/faq"
+                            <router-link
+                                to="/faq"
                                 class="bg-transparent px-3 py-2 text-sm
                                 font-medium text-gray-300 hover:text-green-400"
                                 active-class="!text-green-400">
@@ -84,19 +92,24 @@
                     </div>
                 </div>
 
-                <div class="absolute inset-y-0 right-0 flex items-center pr-2
+                <div
+                    class="absolute inset-y-0 right-0 flex items-center pr-2
                     sm:static sm:inset-auto sm:ml-6 sm:pr-0">    
-                    <button class="bg-transparent px-3 py-2 text-sm
+                    <button
+                        class="bg-transparent px-3 py-2 text-sm
                         font-medium text-gray-300 hover:text-gray-400"
                         @click="cartStore.toggleOpen()">
                         <i class="fa-solid fa-bag-shopping fa-xl mr-2"></i>
                     </button>
                     <!-- Profile dropdown -->
-                    <div v-if="!authStore.isAuthenticated"
+                    <div
+                        v-if="!authStore.isAuthenticated"
                         class="hidden sm:block">
-                        <router-link to="/auth/login"
+                        <router-link
+                            to="/auth/login"
                             v-slot="{href, navigate}">
-                            <button :href="href"
+                            <button
+                                :href="href"
                                 @click="navigate"
                                 class="text-white bg-green-400 px-3 py-2 
                                 rounded-lg text-sm font-medium border
@@ -107,9 +120,11 @@
                             </button>
                         </router-link>
 
-                        <router-link to="/auth/login"
+                        <router-link
+                            to="/auth/login"
                             v-slot="{href, navigate}">
-                            <button :href="href"
+                            <button
+                                :href="href"
                                 @click="navigate"
                                 class="bg-transparent px-3 py-2 text-sm
                                 font-medium text-gray-300 hover:text-gray-400">
@@ -118,12 +133,16 @@
                         </router-link>
                     </div>
                     
-                    <div ref="menuBar" class="relative ml-3" v-else-if="authStore.isAuthenticated">
+                    <div 
+                        v-else-if="authStore.isAuthenticated"
+                        ref="menuBar"
+                        class="relative ml-3">
                         <div>
-                            <button type="button"
+                            <button 
+                                ype="button"
                                 class="flex rounded-full bg-transparent text-sm
-                                    focus:outline-none font-medium text-gray-300
-                                    hover:text-gray-400"
+                                focus:outline-none font-medium text-gray-300
+                                hover:text-gray-400"
                                 id="user-menu-button"
                                 aria-expanded="false"
                                 aria-haspopup="true"
@@ -143,7 +162,8 @@
                             To: "transform opacity-0 scale-95"
                         -->
 
-                        <div v-if="isMenuOpen" 
+                        <div
+                            v-if="isMenuOpen" 
                             role="menu"
                             tabindex="-1"
                             aria-orientation="vertical"
@@ -152,25 +172,13 @@
                             rounded-lg bg-white shadow-lg ring-1 ring-black
                             ring-opacity-5 focus:outline-none text-sm overflow-hidden">
                             <div class="py-2 px-4 font-medium text-center"
-                                :class="{
-                                    'bg-gray-100': authStore.userType === UserType.Admin,
-                                    'bg-pink-100': authStore.userType === UserType.Vendor,
-                                    'bg-indigo-100': authStore.userType === UserType.Customer
-                                }">
+                                :class="userBgColor">
                                 <p class="mt-2 my-1"
-                                    :class="{
-                                        'text-gray-800': authStore.userType === UserType.Admin,
-                                        'text-pink-800': authStore.userType === UserType.Vendor,
-                                        'text-indigo-800': authStore.userType === UserType.Customer
-                                    }">
+                                    :class="userTextColor">
                                     <i class="fa-solid fa-user-secret fa-2xl"></i>
                                 </p>
                                 <p class="text-sm"
-                                    :class="{
-                                            'text-gray-800': authStore.userType === UserType.Admin,
-                                            'text-pink-800': authStore.userType === UserType.Vendor,
-                                            'text-indigo-800': authStore.userType === UserType.Customer
-                                    }">
+                                    :class="userTextColor">
                                     {{ authStore.getUserTypeNormal }}
                                 </p>
                             </div>
@@ -182,18 +190,21 @@
                                 </div>
                             </div>
 
-                            <router-link to="/user/account/profile"
+                            <router-link
+                                to="/user/account/profile"
                                 class="block py-2 px-4 hover:bg-gray-100"
                                 active-class="bg-gray-100"
                                 @click="toggleMenu()">
                                 Your profile
                             </router-link>
 
-                            <a href="#"
+                            <a
+                                href="#"
                                 class="block py-2 px-4 hover:bg-gray-100">
                                 Settings
                             </a>
-                            <a class="block py-2 px-4 hover:bg-gray-100 cursor-pointer"
+                            <a 
+                                class="block py-2 px-4 hover:bg-gray-100 cursor-pointer"
                                 @click="authStore.logout()">
                                 Sign out
                             </a>
@@ -207,19 +218,23 @@
         <div class="sm:hidden" id="mobile-menu">
             <div class="space-y-1 px-2 pt-2 pb-3">
                 <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                <a href="#" class="bg-green-400 text-white block px-3
+                <a
+                    href="#"
+                    class="bg-green-400 text-white block px-3
                     py-2 rounded-lg text-base font-medium"
                     aria-current="page">
                     Home
                 </a>
 
-                <a href="#"
+                <a
+                    href="#"
                     class="text-gray-300 hover:bg-gray-700 hover:text-white
-                        block px-3 py-2 rounded-lg text-base font-medium">
+                    block px-3 py-2 rounded-lg text-base font-medium">
                     Explore
                 </a>
 
-                <a href="#"
+                <a
+                    href="#"
                     class="text-gray-300 hover:bg-gray-700 hover:text-white
                     block px-3 py-2 rounded-lg text-base font-medium">
                     FAQ
@@ -230,7 +245,7 @@
 </template>
 
 <script lang="ts">
-import { onMounted, defineComponent, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 
 import { onClickOutside } from '@vueuse/core'
 
@@ -238,7 +253,7 @@ import { useAuthStore, useCartStore } from '@/stores'
 import { UserType } from '@/common/models/user.model'
 
 export default defineComponent({
-    name: 'PublicNavbar',
+    name: 'NavbarPublic',
     setup() {
         // Component ref
         const menuBar = ref(null)
@@ -252,7 +267,7 @@ export default defineComponent({
         const isLoading = ref<boolean>(false)
         
         onMounted(() => {
-            // console.log('Mounted PublicNavbar')
+            // console.log('Mounted NavbarPublic')
             if (!authStore.isAuthenticated && authStore.accessToken) {
                 verifyToken()
             }
@@ -281,13 +296,27 @@ export default defineComponent({
             isMenuOpen.value = !isMenuOpen.value
         }
 
+        // Class
+        const userTextColor = computed(() => ({
+            'text-gray-800': authStore.userType === UserType.Admin,
+            'text-pink-800': authStore.userType === UserType.Vendor,
+            'text-indigo-800': authStore.userType === UserType.Customer
+        }))
+        const userBgColor = computed(() => ({
+            'bg-gray-100': authStore.userType === UserType.Admin,
+            'bg-pink-100': authStore.userType === UserType.Vendor,
+            'bg-indigo-100': authStore.userType === UserType.Customer
+        }))
+
         return {
             isMenuOpen,
             authStore,
             cartStore,
             menuBar,
             UserType,
-            toggleMenu
+            toggleMenu,
+            userTextColor,
+            userBgColor
         }
     }
 })
