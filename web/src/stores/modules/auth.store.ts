@@ -6,12 +6,16 @@ import type {
     ChangePasswordInput,
     EmailOnlyInput,
     LoginInput,
+    RefreshTokenInput,
     RegisterCustomerInput,
     RegisterVendorInput,
     ResetPasswordInput,
     VerifyAccountInput,
     DetailResponse,
-    LoginResponse } from '@/common/models/auth.model'
+    LoginResponse,
+    TokenRefresh,
+    TokenDecoded
+    } from '@/common/models/auth.model'
 import { UserType } from '@/common/models/user.model'
 import { StorageService } from '@/common/storage'
 import { AUTH_PREFIX } from './prefix';
@@ -28,9 +32,11 @@ export const useAuthStore = defineStore('auth', {
         accessToken: StorageService.getStorage('accessToken'),
         refreshToken: StorageService.getStorage('refreshToken'),
         isAuthenticated: false,
-        userType: undefined,
-        userId: undefined,
-        email: undefined
+        userType: undefined as number | undefined,
+        userId: undefined as number | undefined,
+        email: undefined as string | undefined,
+        customerId: undefined as number | undefined,
+        vendorId: undefined as number | undefined
     }),
     getters: {
         getUserTypeNormal: (state) => {
@@ -60,14 +66,8 @@ export const useAuthStore = defineStore('auth', {
                         this.accessToken = data.accessToken
                         this.refreshToken = data.refreshToken
 
-                        // Authenticate user
-                        this.isAuthenticated = true
-
-                        // Decode JWT and assign
-                        const decoded = jwt_decode(data.accessToken) as object
-                        this.userType = decoded['userType' as keyof typeof decoded]
-                        this.userId = decoded['user_id' as keyof typeof decoded]
-                        this.email = decoded['email' as keyof typeof decoded]
+                        // Actions after authenticated
+                        this.doAfterAuthenticated()
                     })
                     .catch(err => {
                         reject(err)
@@ -135,7 +135,7 @@ export const useAuthStore = defineStore('auth', {
             })
         },
         /**
-         * Resend verification email
+         * Verify user account
          * 
          * @param payload - payload
          * @param payload.key - received token
@@ -214,23 +214,40 @@ export const useAuthStore = defineStore('auth', {
             })
         },
         /**
-         * Reset account password
+         * Verify access token
          * 
          * @returns Detail message
          */
-        verifyToken(): Promise<DetailResponse> {
+        verifyToken(): Promise<object> {
             const payload = { token: this.accessToken }
             return new Promise((resolve, reject) => {
                 APIService.post(`${ AUTH_PREFIX }/token/verify`, payload)
                     .then(({ data }) => {
                         resolve(data)
-                        this.isAuthenticated = true
                         
-                        // Decode JWT and assign
-                        const decoded = jwt_decode(this.accessToken) as object
-                        this.userType = decoded['userType' as keyof typeof decoded]
-                        this.userId = decoded['user_id' as keyof typeof decoded]
-                        this.email = decoded['email' as keyof typeof decoded]
+                        // Actions after authenticated
+                        this.doAfterAuthenticated()
+                    })
+                    .catch(err => {
+                        reject(err)
+                        
+                        // Reset storage and state
+                        this.logout()
+                    })
+            })
+        },
+        /**
+         * Refresh access token
+         * 
+         * @param payload - payload
+         * @param payload.refresh - refresh token
+         * @returns New access and refresh token
+         */
+        refreshTokens(payload: RefreshTokenInput): Promise<TokenRefresh> {
+            return new Promise((resolve, reject) => {
+                APIService.post(`${ AUTH_PREFIX }/token/refresh`, payload)
+                    .then(({ data }) => {
+                        resolve(data)
                     })
                     .catch(err => {
                         reject(err)
@@ -252,6 +269,25 @@ export const useAuthStore = defineStore('auth', {
 
             // Navigate
             return router.push({ path: '/auth/login' })
+        },
+        /**
+         * Actions after successful login / verify token
+         */
+        doAfterAuthenticated() {
+            // Flag authenticated
+            this.isAuthenticated = true
+            
+            // Decode JWT and assign
+            const decoded = jwt_decode(this.accessToken) as TokenDecoded
+            this.userType = decoded.userType
+            this.userId = decoded.id
+            this.email = decoded.email
+            
+            if (this.userType === UserType.Vendor) {
+                this.vendorId = decoded.vendorId
+            } else if (this.userType === UserType.Customer) {
+                this.customerId = decoded.customerId
+            }
         }
     }
 })
