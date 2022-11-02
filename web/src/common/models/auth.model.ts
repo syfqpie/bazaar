@@ -1,3 +1,5 @@
+import type { UserType } from './user.model'
+
 /** Base interface for change password */
 export interface ChangePasswordBaseInput {
     /** New password */
@@ -26,6 +28,12 @@ export interface LoginInput {
 
     /** User's password */
     password: string | null
+}
+
+/** Interface for refresh token input */
+export interface RefreshTokenInput {
+    /** Current refresh token */
+    refresh: string | null
 }
 
 /** Interface for register customer input */
@@ -71,6 +79,56 @@ export interface ResetPasswordInput extends ChangePasswordBaseInput {
 export interface VerifyAccountInput extends ChangePasswordBaseInput {
     /** Received token */
     key: string | null
+}
+
+export enum TokenType {
+    Access = 'access',
+    Refresh = 'refresh'
+}
+
+/** Interface for decoded token */
+export interface TokenDecoded {
+    /** Type of token  */
+    tokenType?: TokenType,
+
+    /** Token expiration unix timestamp  */
+    exp?: number,
+
+    /** Token issued unix timestamp  */
+    iat?: number,
+
+    /** Token unique identifier */
+    jti?: string,
+
+    /** User ID  */
+    id?: number,
+
+    /** User username  */
+    username?: string,
+
+    /** User email  */
+    email?: string,
+
+    /** User type */
+    userType?: UserType,
+
+    /** Related customer ID if any */
+    customerId?: number,
+
+    /** Related vendor ID if any */
+    vendorId?: number
+}
+
+/** Interface for token refresh */
+export interface TokenRefresh {
+    /** New access token */
+    access: string,
+
+    /** New refresh token */
+    refresh: string,
+
+    /** New access token expiration date */
+    accessTokenExpiration: string
 }
 
 /** Interface for login response */
