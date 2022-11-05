@@ -47,7 +47,12 @@ class VendorViewSet(mixins.RetrieveModelMixin,
         Ensure that current user can only see the models
         they are allowed to see
         """
-
+        
+        # For retrieve action will use unscoped queryset
+        # access policy will take care of the rest
+        if self.action == 'retrieve':
+            return self.queryset
+        
         return self.access_policy.scope_queryset(
             self.request, self.queryset
         ) 
