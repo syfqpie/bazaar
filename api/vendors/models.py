@@ -13,6 +13,7 @@ class Vendor(MyBaseModel):
     name = models.CharField(_('name of vendor'), max_length=100)
     description = models.TextField(_('description of vendor'), null=True)
     phone_no = models.CharField(_('phone number'), max_length=30)
+    is_verified = models.BooleanField(_('is vendor verified'), default=True)
     
     user = models.OneToOneField(
         CustomUser,
