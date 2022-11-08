@@ -21,7 +21,11 @@ class VendorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vendor
         fields = '__all__'
-        read_only_fields = ['is_verified']
+        read_only_fields = [
+            'user',
+            'is_verified',
+            'is_active'
+        ]
 
 
 class VendorRegisterSerializer(RegisterSerializer):
