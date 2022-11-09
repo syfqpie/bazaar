@@ -19,6 +19,10 @@ class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = '__all__'
+        read_only_fields = [
+            'user',
+            'is_active',
+        ]
 
 
 class CustomerAddressSerializer(serializers.ModelSerializer):
@@ -29,6 +33,10 @@ class CustomerAddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerAddress
         fields = '__all__'
+        read_only_fields = [
+            'customer',
+            'is_active',
+        ]
 
 
 class CustomerRegisterSerializer(RegisterSerializer):
