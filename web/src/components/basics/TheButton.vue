@@ -1,11 +1,9 @@
 <template>
-    <button 
-        class="block rounded-lg border border-transparent 
-        bg-green-400 focus:hover:enabled:bg-green-500
-        p-2.5 text-white enabled:bg-green-400
-        focus:outline-none focus:ring-2 focus:ring-green-200
-        font-medium text-sm disabled:bg-green-300
-        disabled:border-green-300 disabled:shadow-none
+    <button
+        class="py-2 px-3 text-sm font-medium text-center
+        text-white bg-indigo-500 rounded-lg hover:bg-indigo-700
+        focus:outline focus:outline-2 focus:outline-none
+        transition-all ease-in duration-150 disabled:bg-indigo-300
         disabled:cursor-not-allowed">
         <slot>Button</slot>
     </button>
@@ -17,7 +15,6 @@ import { defineComponent } from 'vue'
 export default defineComponent({
     name: 'TheButton',
     setup() {
-
         return { }
     }
 })
