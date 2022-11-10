@@ -9,7 +9,7 @@
         :value="$attrs.value"
         @blur="$emit('blur')"
         @change="$emit('update:modelValue',
-                      Number(($event.target as HTMLInputElement).value))"  />
+                      Number(($event.target as HTMLInputElement).value))" />
 </template>
 
 <script lang="ts">
