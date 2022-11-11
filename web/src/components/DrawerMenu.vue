@@ -28,19 +28,13 @@
                 <span>Total (0 item):</span>
                 <span>RM0.00</span>
             </div>
-            
-            <button class="mt-1 group relative flex w-full justify-center
-                rounded-lg p-2.5 border border-transparent outline-none
-                font-medium text-sm shadow-none border-solid text-white 
-                bg-green-400 border-green-400  active:bg-green-500 
-                active:border-green-500 hover:shadow-md disabled:bg-green-300
-                disabled:border-green-300 disabled:shadow-none
-                disabled:cursor-not-allowed focus:outline-none focus:ring-2
-                focus:ring-green-200 focus:hover:enabled:bg-green-500
-                transition-all duration-150 ease-in-out"
-                @click="cartStore.toggleOpen()">
-                Proceed to checkout
-            </button>
+
+            <TheButton 
+                :size="'lg'"
+                :is-full="true"
+                @click="cartStore.toggleOpen()"> 
+                Process to checkout
+            </TheButton>
         </div>
     </div>
 </template>
@@ -48,9 +42,10 @@
 <script lang="ts">
 import { onMounted, defineComponent, ref } from 'vue'
 
-import { onClickOutside } from '@vueuse/core'
-
+import TheButton from './basics/TheButton.vue'
 import { useCartStore } from '@/stores'
+
+import { onClickOutside } from '@vueuse/core'
 
 export default defineComponent({
     name: 'DrawerMenu',
@@ -72,6 +67,7 @@ export default defineComponent({
             cartStore,
             cartDrawer
         }
-    }
+    },
+    components: { TheButton }
 })
 </script>
