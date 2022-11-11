@@ -1,6 +1,6 @@
 <template>
     <div
-        class="h-screen bg-neutral-100"
+        class="min-h-screen bg-neutral-100"
         :class="{
             'overflow-hidden': cartStore.isCartDrawerOpen
         }">
