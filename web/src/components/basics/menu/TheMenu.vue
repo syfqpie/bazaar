@@ -22,7 +22,7 @@
 <script lang="ts">
 import { defineComponent, onMounted } from 'vue'
 
-import { MenuType, type MenuItem } from '@/common/models/utility.model'
+import { MenuType, type MenuItem } from '@/common/utility/menu.model'
 import TheMenuItem from './TheMenuItem.vue'
 import TheSubMenuItem from './TheSubMenuItem.vue'
 

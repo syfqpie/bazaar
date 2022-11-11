@@ -20,7 +20,7 @@
 <script lang="ts">
 import { defineComponent, onMounted } from 'vue'
 
-import type { MenuItem } from '@/common/models/utility.model'
+import type { MenuItem } from '@/common/utility/menu.model'
 
 export default defineComponent({
     name: 'TheMenuItem',

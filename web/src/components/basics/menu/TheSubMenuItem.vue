@@ -56,9 +56,10 @@
 </template>
 
 <script lang="ts">
-import type { MenuItem } from '@/common/models/utility.model'
 import { defineComponent, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+
+import type { MenuItem } from '@/common/utility/menu.model'
 
 export default defineComponent({
     name: 'TheSubMenuItem',
