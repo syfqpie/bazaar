@@ -17,3 +17,9 @@ export const passwordRegexHigh = helpers.regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[
  * - Minimum eight in length .{8,} (with the anchors)
  */
 export const passwordRegexMedium = helpers.regex(/^(?=.*?[A-Za-z])(?=.*?[0-9]).{8,}$/)
+
+/**
+ * Phone no. regex
+ * - No. and - + signs only allow
+ */
+export const phoneNoRegex = helpers.regex(/^[\d\(\)\-+]+$/m)
