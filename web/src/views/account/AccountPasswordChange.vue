@@ -16,12 +16,8 @@
                         <label class="text-sm text-gray-700">
                             Current password
                         </label>
-                        <input
+                        <TheInput
                             type="password"
-                            class="mt-1 block w-full rounded-lg bg-gray-50
-                            border border-gray-300 text-gray-900
-                            text-sm p-2.5 focus:outline-none
-                            focus:shadow-outline"
                             placeholder="Enter your old password"
                             v-model="changeForm.oldPassword"
                             :class="{
@@ -42,12 +38,8 @@
                         <label class="text-sm text-gray-700">
                             New password
                         </label>
-                        <input
+                        <TheInput
                             type="password"
-                            class="mt-1 block w-full rounded-lg bg-gray-50
-                            border border-gray-300 text-gray-900
-                            text-sm p-2.5 focus:outline-none
-                            focus:shadow-outline"
                             placeholder="Enter your new password"
                             v-model="changeForm.newPassword1"
                             :class="{
@@ -68,12 +60,8 @@
                         <label class="text-sm text-gray-700">
                             Confirm new password
                         </label>
-                        <input
+                        <TheInput
                             type="password"
-                            class="mt-1 block w-full rounded-lg bg-gray-50
-                            border border-gray-300 text-gray-900
-                            text-sm p-2.5 focus:outline-none
-                            focus:shadow-outline"
                             placeholder="Confirm your new password"
                             v-model="changeForm.newPassword2"
                             :class="{
@@ -90,18 +78,17 @@
                         </p>
                     </div>
 
-                    <button
-                        class="block font-medium text-sm text-white mt-2
-                        p-2.5 bg-green-400 active:bg-green-500
-                        border-green-400 border border-solid active:border-green-500
-                        outline-none focus:outline-none rounded-lg align-middle
-                        transition-all duration-150 ease-in-out shadow-none hover:shadow-md
-                        disabled:bg-green-300 disabled:shadow-none disabled:cursor-not-allowed
-                        disabled:border-green-300"
+                    <TheButton
                         :disabled="v$.$invalid"
                         @click="changePassword()">
-                        Confirm
-                    </button>
+                        <span v-if="!isLoading">
+                            Confirm
+                        </span>
+                        <span v-else>
+                            <i class="fa-solid fa-circle-notch animate-spin"></i>
+                            Loading
+                        </span>
+                    </TheButton>
                 </form>
             </div>
         </div>
@@ -112,6 +99,8 @@
 import { computed, defineComponent, onMounted, ref  } from 'vue'
 import { useRoute } from 'vue-router'
 
+import TheButton from '@/components/basics/TheButton.vue'
+import TheInput from '@/components/basics/TheInput.vue'
 import type { ChangePasswordInput } from '@/common/models/auth.model'
 import { passwordRegexMedium } from '@/common/helpers'
 import { useAuthStore } from '@/stores'
@@ -207,6 +196,10 @@ export default defineComponent({
             isLoading,
             changePassword
         }
+    },
+    components: {
+        TheButton,
+        TheInput
     }
 })
 </script>
