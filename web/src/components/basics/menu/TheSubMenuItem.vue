@@ -4,7 +4,8 @@
         class="flex items-center px-3 py-2 w-full text-sm font-medium
         rounded-lg transition duration-100 hover:text-indigo-500" 
         :class="{
-            'text-indigo-500 bg-gray-200': 
+            'text-indigo-500 bg-gray-200 focus:outline \
+            focus:outline-2 focus:outline-indigo-100': 
                 $route.path.startsWith(subMenuItem.path),
             'text-gray-500 bg-gray-100 hover:bg-gray-100': 
                 !$route.path.startsWith(subMenuItem.path)
@@ -44,8 +45,9 @@
                     :to="`${subMenuItem.path}/${sub.path}`"
                     class="flex items-center px-3 py-2 pl-[1.85rem] w-full text-sm
                     font-medium text-gray-500 max-h-full rounded-lg
-                    transition-all duration-150 group hover:text-indigo-500"
-                    active-class="!text-indigo-500 !bg-gray-200">
+                    transition-all duration-100 group hover:text-indigo-500"
+                    active-class="!text-indigo-500 !bg-gray-200
+                    focus:outline focus:outline-2 focus:outline-indigo-100">
                     {{ sub.title }}
                 </router-link>
             </li>
