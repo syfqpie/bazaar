@@ -4,24 +4,20 @@
             <label class="text-sm text-gray-700">
                 Name
             </label>
-            <input
+            <TheInput
                 type="text"
-                class="mt-1 block w-full rounded-lg bg-gray-50
-                border border-gray-300 text-gray-900
-                text-sm p-2.5 focus:outline-none
-                focus:shadow-outline"
                 placeholder="Enter your name"
                 v-model="vendorForm.name"
                 :class="{
-                    'border-red-400': v$.name.$dirty &&
-                                        v$.name.$invalid 
+                    '!border-red-400': v$.name.$dirty &&
+                                         v$.name.$invalid 
                     
                 }"
                 @blur="v$.name.$touch" />
             <p
                 v-for="error of v$.name.$errors"
                 :key="error.$uid"
-                class="mt-2 text-xs text-red-600 dark:text-red-500">
+                class="mt-2 text-xs text-red-600">
                 {{ error.$message }}
             </p>
         </div>
@@ -30,45 +26,40 @@
             <label class="text-sm text-gray-700">
                 Description
             </label>
-            <textarea
-                type="text"
+            <TheTextArea
                 class="mt-1 block w-full rounded-lg bg-gray-50
                 border border-gray-300 text-gray-900
-                text-sm p-2.5 focus:outline-none
-                focus:shadow-outline"
+                text-sm p-2.5 focus:outline-none focus:border-indigo-700
+                transition ease-out duration-300"
                 placeholder="Enter your description"
                 v-model="vendorForm.description"
                 :class="{
-                    'border-red-400': v$.description.$dirty &&
-                                        v$.description.$invalid 
+                    '!border-red-400': v$.description.$dirty &&
+                                         v$.description.$invalid 
                     
                 }"
                 @blur="v$.description.$touch" >
-            </textarea>
+            </TheTextArea>
         </div>
 
         <div class="mb-3">
             <label class="text-sm text-gray-700">
                 Phone no.
             </label>
-            <input
+            <TheInput
                 type="text"
-                class="mt-1 block w-full rounded-lg bg-gray-50
-                border border-gray-300 text-gray-900
-                text-sm p-2.5 focus:outline-none
-                focus:shadow-outline"
                 placeholder="Enter your phone no."
                 v-model="vendorForm.phoneNo"
                 :class="{
-                    'border-red-400': v$.phoneNo.$dirty &&
-                                        v$.phoneNo.$invalid 
+                    '!border-red-400': v$.phoneNo.$dirty &&
+                                         v$.phoneNo.$invalid 
                     
                 }"
                 @blur="v$.phoneNo.$touch" />
             <p
                 v-for="error of v$.phoneNo.$errors"
                 :key="error.$uid"
-                class="mt-2 text-xs text-red-600 dark:text-red-500">
+                class="mt-2 text-xs text-red-600">
                 {{ error.$message }}
             </p>
         </div>
@@ -90,10 +81,7 @@
         </div>
 
         <div class="flex items-center mb-4">
-            <input
-                type="checkbox"
-                class="w-4 h-4 accent-green-500"
-                v-model="vendorForm.isNewsletterEnabled">
+            <TheCheckbox v-model="vendorForm.isNewsletterEnabled" />
             <label
                 for="default-checkbox"
                 class="ml-2 text-sm text-gray-700">
@@ -101,24 +89,27 @@
             </label>
         </div>
 
-        <button
-            class="block rounded-lg border border-transparent 
-            bg-green-400 focus:hover:enabled:bg-green-500
-            p-2.5 text-white enabled:bg-green-400
-            focus:outline-none focus:ring-2 focus:ring-green-200
-            font-medium text-sm disabled:bg-green-300
-            disabled:border-green-300 disabled:shadow-none
-            disabled:cursor-not-allowed"
-            @click="updateVendor()"
-            :disabled="isLoading || v$.$invalid">
-            Save
-        </button>
+        <TheButton
+            :disabled="isLoading || v$.$invalid"
+            @click="updateVendor()">
+            <span v-if="isLoading">
+                Save
+            </span>
+            <span v-else>
+                <i class="fa-solid fa-circle-notch animate-spin"></i>
+                Loading
+            </span>
+        </TheButton>
     </form>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue'
 
+import TheButton from '@/components/basics/TheButton.vue'
+import TheCheckbox from '@/components/basics/TheCheckbox.vue'
+import TheInput from '@/components/basics/TheInput.vue'
+import TheTextArea from '@/components/basics/TheTextArea.vue'
 import { phoneNoRegex } from '@/common/helpers'
 import { useAuthStore, useVendorStore } from '@/stores'
 
@@ -137,7 +128,7 @@ export default defineComponent({
             isNewsletterEnabled: true
         })
         const validation = computed(() => ({
-            name: { 
+            name: {
                 required: helpers.withMessage(
                     'Name is required',
                     required
@@ -147,8 +138,8 @@ export default defineComponent({
                     maxLength(100)
                 )
             },
-            description: { },
-            phoneNo: { 
+            description: {},
+            phoneNo: {
                 required: helpers.withMessage(
                     'Phone no. is required',
                     required
@@ -166,7 +157,7 @@ export default defineComponent({
                     phoneNoRegex
                 )
             },
-            isNewsletterEnabled: { },
+            isNewsletterEnabled: {},
         }))
         const v$ = useVuelidate(validation, vendorForm.value)
 
@@ -183,21 +174,21 @@ export default defineComponent({
             getVendorData()
         })
 
-        /** */
+        /** 
+         * Get vendor data
+         */
         const getVendorData = () => {
             isLoading.value = true
-
             return vendorStore.retrieve(authStore.vendorId!)
                 .then(data => {
                     isLoading.value = false
-
+                    
                     // Success toastr and set data
                     toast.success('Vendor loaded')
                     setFormData()
                 })
                 .catch(err => {
                     isLoading.value = false
-                    
                     toast.error('Vendor not loaded')
                 })
         }
@@ -220,7 +211,6 @@ export default defineComponent({
          */
         const updateVendor = () => {
             isLoading.value = true
-
             return vendorStore.patch(authStore.vendorId!, vendorForm.value)
                 .then(data => {
                     isLoading.value = false
@@ -233,26 +223,23 @@ export default defineComponent({
                     isLoading.value = false
                 })
         }
-
         return {
-            vendorStore,
+            // Data
             vendorForm,
             v$,
-            validation,
+            // Checker
             isLoading,
+            // Services
+            vendorStore,
+            // Methods
             updateVendor
         }
+    },
+    components: {
+        TheButton,
+        TheCheckbox,
+        TheInput,
+        TheTextArea
     }
 })
 </script>
-
-<style scope>
-input[type='checkbox']:checked:after {
-  content: '✔';
-  color: white !important;
-}
-input[type='checkbox']:checked:before {
-  content: '✔';
-  color: white !important;
-}
-</style>
