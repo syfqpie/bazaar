@@ -92,7 +92,7 @@
         <TheButton
             :disabled="isLoading || v$.$invalid"
             @click="updateVendor()">
-            <span v-if="isLoading">
+            <span v-if="!isLoading">
                 Save
             </span>
             <span v-else>
