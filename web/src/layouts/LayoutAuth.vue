@@ -4,7 +4,7 @@
             <div class="sm:col-start-2 sm:col-span-4">
                 <div class="grid grid-cols-1 sm:grid-cols-2 bg-white
                     gap-0 rounded-lg overflow-hidden shadow-lg">
-                    <div class="bg-green-400 hidden sm:block"></div>
+                    <div class="bg-indigo-500 hidden sm:block"></div>
 
                     <div>
                         <RouterView />

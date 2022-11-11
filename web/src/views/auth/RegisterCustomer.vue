@@ -18,12 +18,8 @@
                 <div class="grid grid-cols-1 gap-3">
                     <div>
                         <label class="text-sm text-gray-700">Email</label>
-                        <input
+                        <TheInput
                             type="email"
-                            class="mt-1 block w-full rounded-lg bg-gray-50
-                            border border-gray-300 text-gray-900
-                            text-sm p-2.5 focus:outline-none
-                            focus:shadow-outline"
                             placeholder="Enter your email"
                             v-model="registerForm.username"
                             :class="{
@@ -43,12 +39,8 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                             <label class="text-sm text-gray-700">First name</label>
-                            <input
+                            <TheInput
                                 type="text"
-                                class="mt-1 block w-full rounded-lg bg-gray-50
-                                border border-gray-300 text-gray-900
-                                text-sm p-2.5 focus:outline-none
-                                focus:shadow-outline"
                                 placeholder="Enter your first name"
                                 v-model="registerForm.firstName"
                                 :class="{
@@ -66,12 +58,8 @@
                         </div>
                         <div>
                             <label class="text-sm text-gray-700">Last name</label>
-                            <input
+                            <TheInput
                                 type="text"
-                                class="mt-1 block w-full rounded-lg bg-gray-50
-                                border border-gray-300 text-gray-900
-                                text-sm p-2.5 focus:outline-none
-                                focus:shadow-outline"
                                 placeholder="Enter your last name"
                                 v-model="registerForm.lastName"
                                 :class="{
@@ -91,12 +79,8 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                             <label class="text-sm text-gray-700">Phone no.</label>
-                            <input
+                            <TheInput
                                 type="text"
-                                class="mt-1 block w-full rounded-lg bg-gray-50
-                                border border-gray-300 text-gray-900
-                                text-sm p-2.5 focus:outline-none
-                                focus:shadow-outline"
                                 placeholder="Enter your phone no."
                                 v-model="registerForm.phoneNo"
                                 :class="{
@@ -115,12 +99,8 @@
 
                         <div>
                             <label class="text-sm text-gray-700">Date of birth</label>
-                            <input
+                            <TheInput
                                 type="date"
-                                class="mt-1 block w-full rounded-lg bg-gray-50
-                                border border-gray-300 text-gray-900
-                                text-sm p-2.5 focus:outline-none
-                                focus:shadow-outline"
                                 placeholder="Select date of birth"
                                 v-model="registerForm.dateOfBirth"
                                 :class="{
@@ -133,20 +113,19 @@
                     </div>
 
                     <div>
-                        <button 
-                            class="mt-1 group relative flex w-full justify-center
-                            rounded-lg p-2.5 border border-transparent outline-none
-                            font-medium text-sm shadow-none border-solid text-white 
-                            bg-green-400 border-green-400  active:bg-green-500 
-                            active:border-green-500 hover:shadow-md disabled:bg-green-300
-                            disabled:border-green-300 disabled:shadow-none
-                            disabled:cursor-not-allowed focus:outline-none focus:ring-2
-                            focus:ring-green-200 focus:hover:enabled:bg-green-500
-                            transition-all duration-150 ease-in-out"
-                            v-on:click="register()"
+                        <TheButton 
+                            @click="register()"
+                            :size="'lg'"
+                            :is-full="true"
                             :disabled="isLoading || v$.$invalid">
-                            Join as vendor
-                        </button>
+                            <span v-if="!isLoading">
+                                Register
+                            </span>
+                            <span v-else>
+                                <i class="fa-solid fa-circle-notch animate-spin"></i>
+                                Loading
+                            </span>
+                        </TheButton>
                     </div>
 
                     <div class="mt-2 mb-1 justify-self-center text-sm">
@@ -160,7 +139,7 @@
                                 <router-link
                                     :to="{ path: '/auth/registration/vendor' }"
                                     class="font-medium 
-                                    text-green-400 hover:text-green-300">
+                                    text-indigo-500 hover:text-indigo-600">
                                     Join
                                 </router-link>
                             </p>
@@ -172,7 +151,7 @@
                                 <router-link
                                     :to="{ path: '/auth/login' }"
                                     class="font-medium 
-                                    text-green-400 hover:text-green-300">
+                                    text-indigo-500 hover:text-indigo-600">
                                     Sign in
                                 </router-link>
                             </p>
@@ -188,6 +167,8 @@
 import { computed, defineComponent, onMounted, ref } from 'vue'
 
 import type { RegisterCustomerInput } from '@/common/models/auth.model'
+import TheButton from '@/components/basics/TheButton.vue'
+import TheInput from '@/components/basics/TheInput.vue'
 import router from '@/router'
 import { useAuthStore } from '@/stores'
 
@@ -288,6 +269,10 @@ export default defineComponent({
         v$,
         isLoading
     }
+  },
+  components: {
+    TheButton,
+    TheInput
   }
 })
 </script>
