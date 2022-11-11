@@ -2,14 +2,11 @@ import type BaseModel from './base.model'
 
 /** Interface for Customer model */
 export interface Customer extends BaseModel {
-    /** Customer's name */
-    name: string
-
     /** Customer's phone no. */
     phoneNo: string
 
     /** Customer's gender */
-    gender: string
+    gender: GenderType
 
     /** Customer's date of birth */
     dateOfBirth: string
