@@ -34,12 +34,12 @@ const router = createRouter({
         {
           path: 'user',
           name: 'user',
+          component: () => import('@/views/UserAccount.vue'),
           meta: { requiresAuth: true },
           children: [
             {
               path: 'account',
               name: 'userAccount',
-              component: () => import('@/views/UserAccount.vue'),
               children: [
                 {
                   path: 'profile',
@@ -60,6 +60,12 @@ const router = createRouter({
                   meta: { title: 'Change password' }
                 }
               ]
+            },
+            {
+              path: 'system',
+              name: 'userSystem',
+              component: () => import('@/views/TheSystem.vue'),
+              meta: { title: 'System' }
             }
           ]
         }
