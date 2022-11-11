@@ -94,18 +94,13 @@
                         v-if="!authStore.isAuthenticated"
                         class="hidden sm:block">
                         <router-link
-                            to="/auth/login"
+                            to="/auth/registration/vendor"
                             v-slot="{href, navigate}">
-                            <button
+                            <TheButton
                                 :href="href"
-                                @click="navigate"
-                                class="text-white bg-indigo-400 px-3 py-2 
-                                rounded-lg text-sm font-medium border
-                                border-transparent hover:bg-indigo-500
-                                focus:outline-none focus:ring-2 
-                                focus:ring-indigo-200 mr-2">
+                                @click="navigate">
                                 Join as vendor
-                            </button>
+                            </TheButton>
                         </router-link>
 
                         <router-link
@@ -255,6 +250,7 @@ import { computed, defineComponent, onMounted, ref } from 'vue'
 
 import { onClickOutside } from '@vueuse/core'
 
+import TheButton from '@/components/basics/TheButton.vue'
 import { useAuthStore, useCartStore } from '@/stores'
 import { UserType } from '@/common/models/user.model'
 
@@ -327,6 +323,7 @@ export default defineComponent({
             userTextColor,
             userBgColor
         }
-    }
+    },
+    components: { TheButton }
 })
 </script>
