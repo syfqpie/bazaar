@@ -1,12 +1,19 @@
 <template>
-    <button 
-        class="block rounded-lg border border-transparent 
-        bg-green-400 focus:hover:enabled:bg-green-500
-        p-2.5 text-white enabled:bg-green-400
-        focus:outline-none focus:ring-2 focus:ring-green-200
-        font-medium text-sm disabled:bg-green-300
-        disabled:border-green-300 disabled:shadow-none
-        disabled:cursor-not-allowed">
+    <button
+        class="font-medium text-center text-white 
+        bg-indigo-500 hover:bg-indigo-700 focus:outline
+        focus:outline-2 focus:outline-indigo-300 transition-all
+        ease-in duration-150 disabled:bg-indigo-300
+        disabled:cursor-not-allowed"
+        :class="{
+            'w-full relative': isFull,
+            'py-2 px-3': size === 'sm' || size === 'md',
+            'p-3': size === 'lg',
+            'text-xs': size === 'sm',
+            'text-sm': size === 'md' || size === 'lg',
+            'rounded-lg': !pill,
+            'rounded-full': pill
+        }">
         <slot>Button</slot>
     </button>
 </template>
@@ -17,8 +24,21 @@ import { defineComponent } from 'vue'
 export default defineComponent({
     name: 'TheButton',
     setup() {
-
         return { }
+    },
+    props: {
+        isFull: {
+            type: Boolean,
+            default: false
+        },
+        size: {
+            type: String,
+            default: 'md'
+        },
+        pill: {
+            type: Boolean,
+            default: false
+        }
     }
 })
 </script>
