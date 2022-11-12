@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from users.models import CustomUser, UserType
+from utils.choices import CountryChoice
 from utils.models import MyBaseModel
 
 
@@ -62,14 +63,24 @@ class CustomerAddress(MyBaseModel):
     )
     name = models.CharField(_('name of receiver'), max_length=150)
     phone_no = models.CharField(_('phone number of receiver'), max_length=30)
+    is_default = models.BooleanField(_('default address'), default=False)
+    instructions = models.CharField(
+        _('address instructions'),
+        max_length=255,
+        null=True
+    )
 
     # Address
     address = models.CharField(_('address'), max_length=255)
-    district = models.CharField(_('address'), max_length=50)
     zipcode = models.CharField(_('address'), max_length=5)
     city = models.CharField(_('address'), max_length=50)
     state = models.CharField(_('address'), max_length=50)
-    country = models.CharField(_('address'), max_length=50)
+    country = models.CharField(
+        _('address'),
+        choices=CountryChoice.choices,
+        default=CountryChoice.MY,
+        max_length=30
+    )
 
     class Meta:
         ordering = ['-last_modified_at']
