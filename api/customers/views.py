@@ -10,10 +10,11 @@ from rest_framework.response import Response
 from dj_rest_auth.registration.views import RegisterView
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .policy import CustomerAccessPolicy
-from .models import Customer
+from .policy import CustomerAccessPolicy, CustomerAddressAccessPolicy
+from .models import Customer, CustomerAddress
 from .serializers import (
     CustomerSerializer,
+    CustomerAddressSerializer,
     CustomerRegisterSerializer
 )
 
@@ -51,7 +52,43 @@ class CustomerViewSet(mixins.RetrieveModelMixin,
 
         return self.access_policy.scope_queryset(
             self.request, self.queryset
-        ) 
+        )
+
+
+class CustomerAddressViewSet(viewsets.ModelViewSet):
+    """
+    Viewset for CustomerAddress model
+    """
+
+    queryset = CustomerAddress.objects.all()
+    serializer_class = CustomerAddressSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = [
+        'is_active'
+    ]
+    permission_classes = (CustomerAddressAccessPolicy,)
+    
+    @property
+    def access_policy(self):
+        """
+        To make get_queryset logic more explicit
+        """
+
+        return self.permission_classes[0]
+
+    def get_queryset(self):
+        """
+        Ensure that current user can only see the models
+        they are allowed to see
+        """
+
+        return self.access_policy.scope_queryset(
+            self.request, self.queryset
+        )
+    
+    def perform_create(self, serializer):
+        request = serializer.context['request']
+        serializer.save(customer=request.user.related_customer)
 
 
 class CustomerRegisterView(RegisterView):
