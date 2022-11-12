@@ -11,11 +11,14 @@ export interface CustomerAddress extends BaseModel {
     /** Receiver's phone no. */
     phoneNo: string,
 
+    /** Is address default? */
+    isDefault: boolean,
+
+    /** Instructions */
+    instructions: string,
+
     /** Address */
     address: string,
-
-    /** District */
-    district: string,
 
     /** Zipcode */
     zipcode: string,
