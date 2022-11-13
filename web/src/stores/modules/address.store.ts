@@ -62,5 +62,31 @@ export const useAddressStore = defineStore('address', {
                     })
             })
         },
+        /**
+         * Patch an address
+         * 
+         * @param id - address ID
+         * @param payload - payload
+         * 
+         * @return an updated address
+         */
+        patch(id: number, payload: any): Promise<CustomerAddress> {
+            return new Promise((resolve, reject) => {
+                APIService.patch(`${ BASE_ENDPOINT }/${ id }`, payload)
+                    .then(({ data }) => {
+                        resolve(data)
+                        
+                        // Update state value
+                        this.addresses.map((item, index) => {
+                            if (item.id === data.id) {
+                                this.addresses[index] = data
+                            }
+                        })
+                    })
+                    .catch(err => {
+                        reject(err)
+                    })
+            })
+        }
     }
 })
