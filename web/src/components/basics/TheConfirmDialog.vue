@@ -33,6 +33,7 @@
                 rounded-b border-gray-200">
                 <TheButton
                     type="button"
+                    :disabled="isLoading"
                     @click="onConfirm()">
                     <span v-if="!isLoading">
                         {{ confirmText }}
@@ -45,6 +46,7 @@
                 
                 <TheOutlineButton
                     type="button"
+                    :disabled="isLoading"
                     @click="onCancel()">
                     {{ cancelText }}
                 </TheOutlineButton>
