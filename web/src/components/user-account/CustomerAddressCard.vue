@@ -61,7 +61,7 @@
                 </Transition>
             </div>
         </div>
-        
+
         <p class="font-semibold text-sm text-gray-700 mb-3">
             {{ address.phoneNo }}
         </p>
@@ -123,7 +123,7 @@ export default defineComponent({
          * Make address as default
          */
         const makeDefault = (id: number) => {
-            console.log(id)
+            // console.log(id)
             toggleOption()
         }
 
