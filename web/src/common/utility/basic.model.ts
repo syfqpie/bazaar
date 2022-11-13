@@ -18,6 +18,12 @@ export enum BasicColor {
 
 /** Enum for modal size */
 export enum ModalSize {
+    /** Super extra small modal size */
+    SS = 'ss',
+
+    /** Extra small modal size */
+    XS = 'xs',
+    
     /** Small modal size */
     SM = 'sm',
 
