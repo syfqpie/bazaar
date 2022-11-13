@@ -187,6 +187,7 @@
                 rounded-b border-t border-gray-200">
                 <TheButton
                     type="button"
+                    :disabled="isLoading || v$.$invalid"
                     @click="onSubmit()">
                     <span v-if="!isLoading">
                         Save
@@ -199,6 +200,7 @@
                 
                 <TheOutlineButton
                     type="button"
+                    :disabled="isLoading"
                     @click="onCancel()">
                     Cancel
                 </TheOutlineButton>
