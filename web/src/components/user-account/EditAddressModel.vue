@@ -292,10 +292,10 @@ export default defineComponent({
 
         // Checker
         const isLoading = ref(false)
-        const toast = useToast()
 
         // Services
         const addressStore = useAddressStore()
+        const toast = useToast()
 
         onMounted(() => {
             // console.log('Mounted EditAddressModel')
