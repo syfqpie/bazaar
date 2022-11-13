@@ -1,0 +1,7 @@
+@import './base.css';
+@import './icons.css';
+@import './toastr.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
