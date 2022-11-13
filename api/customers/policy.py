@@ -14,7 +14,7 @@ class CustomerAccessPolicy(BaseAccessPolicy):
             'effect': 'allow'
         },
         {
-            'action': ['partial_update'],
+            'action': ['partial_update', 'destroy'],
             'principal': ['authenticated'],
             'effect': 'allow',
             'condition': 'is_customer_user'
