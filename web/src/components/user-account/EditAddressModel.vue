@@ -309,16 +309,16 @@ export default defineComponent({
         }
 
         /**
-         * Submit form to add address
+         * Submit form to update address
          */
         const onSubmit = () => {
             isLoading.value = true
-            return addressStore.create(addressForm.value)
+            return addressStore.patch(props.currentAddress.id, addressForm.value)
                 .then(data => {
                     isLoading.value = false
 
                     // Success toastr and close modal
-                    toast.success('New address saved')
+                    toast.success('Address information saved')
                     onCancel()
                 })
                 .catch(err => {
