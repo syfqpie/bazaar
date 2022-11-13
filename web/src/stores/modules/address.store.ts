@@ -87,6 +87,36 @@ export const useAddressStore = defineStore('address', {
                         reject(err)
                     })
             })
+        },
+        /**
+         * Delete an address
+         * 
+         * @param id - address ID
+         * 
+         * @return an updated address
+         */
+        destroy(id: number): Promise<CustomerAddress> {
+            return new Promise((resolve, reject) => {
+                APIService.destroy(`${ BASE_ENDPOINT }/${ id }`)
+                    .then(({ data }) => {
+                        resolve(data)
+                        
+                        // Find index of entry
+                        const indexOfEntry = this.addresses.findIndex(
+                            (item) => {
+                                return item.id === id
+                            }
+                        )
+                        
+                        // Remove entry from addresses if index != -1
+                        if (indexOfEntry !== -1) {
+                            this.addresses.splice(indexOfEntry, 1)
+                        }
+                    })
+                    .catch(err => {
+                        reject(err)
+                    })
+            })
         }
     }
 })
