@@ -154,7 +154,9 @@ export default defineComponent({
 
         onMounted(() => {
             // console.log('Mounted ProfileCustomer')
-            getCustomerData()
+            if (!customerStore.customer) {
+                getCustomerData()
+            }
         })
 
         /**
@@ -167,14 +169,12 @@ export default defineComponent({
                 .then(data => {
                     isLoading.value = false
 
-                    // Success toastr and set data
-                    toast.success('Customer loaded')
+                    // Set form data
                     setFormData()
                 })
                 .catch(err => {
                     isLoading.value = false
-                    
-                    toast.error('Customer not loaded')
+                    toast.error('Error fetching data')
                 })
         }
 

@@ -171,7 +171,9 @@ export default defineComponent({
 
         onMounted(() => {
             // console.log('Mounted AccountProfile')
-            getVendorData()
+            if (!vendorStore.vendor) {
+                getVendorData()
+            }
         })
 
         /** 
@@ -183,13 +185,12 @@ export default defineComponent({
                 .then(data => {
                     isLoading.value = false
                     
-                    // Success toastr and set data
-                    toast.success('Vendor loaded')
+                    // set form data
                     setFormData()
                 })
                 .catch(err => {
                     isLoading.value = false
-                    toast.error('Vendor not loaded')
+                    toast.error('Error fetching data')
                 })
         }
 
@@ -215,8 +216,8 @@ export default defineComponent({
                 .then(data => {
                     isLoading.value = false
 
-                    // Success toastr and set data
-                    toast.success('Vendor information saved')
+                    // Success toastr and patch form data
+                    toast.success('Information saved')
                     setFormData()
                 })
                 .catch(err => {
