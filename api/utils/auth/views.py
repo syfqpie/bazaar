@@ -1,15 +1,19 @@
+from datetime import datetime, timezone
+
+from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework import viewsets, status
+from rest_framework import status
 
 from allauth.account.models import EmailAddress
 from allauth.account.utils import send_email_confirmation
+from dj_rest_auth.registration.serializers import VerifyEmailSerializer
 from dj_rest_auth.registration.views import (
     RegisterView,
-    VerifyEmailView
+    VerifyEmailView,
 )
 from dj_rest_auth.views import (
     LoginView, LogoutView,
@@ -17,11 +21,12 @@ from dj_rest_auth.views import (
     PasswordResetConfirmView
 )
 
+from users.models import CustomUser
 from utils.auth.serializers import (
     MyRegisterSerializer, MyResendVerificationSerializer,
-    MyPasswordResetSerializer
+    MyPasswordResetSerializer, MySetPasswordSerializer,
+    MyVerifyEmailSerializer
 )
-from users.models import CustomUser
 
 
 class MyLoginView(LoginView):
@@ -89,6 +94,54 @@ class MyVerifyEmailView(VerifyEmailView):
     
     Verify a new registered account in the system
     """
+    def get_serializer(self, *args, **kwargs):
+        """ Override to return custom serializer"""
+
+        return MyVerifyEmailSerializer(*args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        """ Override to append custom validations and actions """
+        
+        # Email form validation
+        serializers = self.get_serializer(data=request.data)
+        serializers.is_valid(raise_exception=True)
+
+        # Get email instance
+        verify_email_serializer = VerifyEmailSerializer(data={'key': request.data['key']})        
+        verify_email_serializer.is_valid(raise_exception=True)
+        self.kwargs['key'] = verify_email_serializer.validated_data['key']
+        confirmation = self.get_object()
+
+        # If already verified, return 400
+        if confirmation.email_address.verified:
+            return Response({'detail': _('This email address is verified')}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Get use instance and activation datetime
+        User = get_user_model()
+        user = User.objects.get(email=confirmation.email_address.email)
+        user.activated_at = datetime.now(timezone.utc)
+
+        # Password validation
+        set_password_serializer = MySetPasswordSerializer(
+            data={
+                'new_password1': request.data['new_password1'],
+                'new_password2': request.data['new_password2']
+            },
+            context={
+                'request': {
+                    'user': user
+                }
+            }
+        )
+        set_password_serializer.is_valid(raise_exception=True)
+
+        # Confirm and save new password
+        confirmation.confirm(self.request)
+        user.save()
+        set_password_serializer.save()
+
+        # Return response
+        return Response({'detail': _('ok')}, status=status.HTTP_200_OK)
 
 
 class MyResendVerificationView(GenericAPIView):

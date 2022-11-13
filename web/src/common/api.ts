@@ -1,4 +1,16 @@
+import { useAuthStore } from '@/stores'
 import axios from 'axios'
+import { HttpStatusCode } from './http.status'
+
+const EXCEPTION_ENDPOINT = [
+    'auth/password/change/'
+]
+const NO_TOKEN_ENDPOINT = [
+    'auth/'
+]
+const JSON_TYPE_METHOD = [
+    'post', 'patch', 'put'
+]
 
 /**
  * API common service
@@ -9,9 +21,34 @@ export const APIService = {
      */
     init() {
         // URL configs
-        axios.defaults.baseURL = `${import.meta.env.VITE_BASE_URL}/`
+        axios.defaults.baseURL = `${import.meta.env.VITE_BASE_URL}`
 
-        // Error interceptors
+        // Request interceptor
+        axios.interceptors.request.use(
+            config => {
+                // Get auth store
+                const authStore = useAuthStore()
+                
+                if (config.url && authStore.accessToken) {
+                    if (EXCEPTION_ENDPOINT.includes(config.url) ||
+                        !NO_TOKEN_ENDPOINT.includes(config.url)) {
+                        // Append bearer token
+                        config.headers!['Authorization'] = 'Bearer ' + authStore.accessToken
+                    }
+                }
+                
+                if (config.method && JSON_TYPE_METHOD.includes(config.method)) {
+                    // Append content type if post, put, patch
+                    config.headers!['Content-Type'] = 'application/json';
+                }
+                
+                return config
+            },
+            error => {
+                Promise.reject(error)
+        })
+
+        // Response interceptors for error
         axios.interceptors.response.use(undefined, (error) => {
             const { response } = error
             if (!response) {
@@ -20,7 +57,7 @@ export const APIService = {
                 return
             }
     
-            if ([401, 403].includes(response.status)) {
+            if ([HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden].includes(response.status)) {
                 // if 401 or 403 response returned from api
                 // example: https://jasonwatmore.com/post/2020/10/06/vue-3-facebook-login-tutorial-example#error-interceptor-js
             }
@@ -37,21 +74,61 @@ export const APIService = {
             return Promise.reject(response)
         })
     },
-    setHeader () {
-        // axios.defaults.headers.
-    },
-    async get (resource: string, query: string | null = null) {
+    /**
+     * GET request
+     * 
+     * @param endpoint - API endpoint
+     * @param query - query string if needed
+     * 
+     * @return axios.get
+     */
+    async get (endpoint: string, query: string | null = null) {
         if (query !== null) {
-            resource = `${resource}/?${query}`
+            endpoint = `${endpoint}/?${query}`
         } else {
-            resource = `${resource}/`
+            endpoint = `${endpoint}/`
         }
-        return await axios.get(`${resource}`).catch(error => {
+        return await axios.get(`${endpoint}`).catch(error => {
             throw error
         })
     },
-    async post (resource: string, params: object) {
-        return await axios.post(`${resource}/`, params).catch(error => {
+    /**
+     * POST request
+     * 
+     * @param endpoint - API endpoint
+     * @param payload - request payload
+     * 
+     * @return axios.post
+     */
+    async post (endpoint: string, payload: object) {
+        return await axios.post(`${endpoint}/`, payload).catch(error => {
+            // console.log(error)
+            throw error
+        })
+    },
+    /**
+     * PATCH request
+     * 
+     * @param endpoint - API endpoint
+     * @param payload - request payload
+     * 
+     * @return axios.patch
+     */
+    async patch (endpoint: string, payload: object) {
+        return await axios.patch(`${endpoint}/`, payload).catch(error => {
+            // console.log(error)
+            throw error
+        })
+    },
+    /**
+     * DELETE request
+     * 
+     * @param endpoint - API endpoint
+     * 
+     * @return axios.delete
+     */
+    async destroy (endpoint: string) {
+        return await axios.delete(`${endpoint}/`).catch(error => {
             // console.log(error)
             throw error
         })
