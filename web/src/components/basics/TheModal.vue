@@ -6,6 +6,8 @@
         <div 
             class="relative p-2.5 w-full h-full md:h-auto"
             :class="{
+                'max-w-xs': modalSize === ModalSize.SS,
+                'max-w-sm': modalSize === ModalSize.XS,
                 'max-w-md': modalSize === ModalSize.SM,
                 'max-w-lg': modalSize === ModalSize.MD,
                 'max-w-4xl': modalSize === ModalSize.LG,
