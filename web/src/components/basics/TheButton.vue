@@ -2,7 +2,8 @@
     <button
         class="font-medium text-center text-white 
         focus:outline focus:outline-2 transition-all border
-        ease-in duration-150 disabled:cursor-not-allowed"
+        ease-in duration-150 disabled:cursor-not-allowed
+        disabled:border-0"
         :class="{
             'w-full relative': isFull,
             'py-2 px-3': size === 'sm' || size === 'md',
