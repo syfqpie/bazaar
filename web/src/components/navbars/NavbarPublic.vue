@@ -123,7 +123,7 @@
                         class="relative ml-3">
                         <div>
                             <button 
-                                ype="button"
+                                type="button"
                                 class="flex rounded-full bg-transparent text-sm
                                 focus:outline-none font-medium text-gray-300
                                 transition-all duration-150 ease-out
