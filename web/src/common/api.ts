@@ -114,7 +114,7 @@ export const APIService = {
      * 
      * @return axios.patch
      */
-     async patch (endpoint: string, payload: object) {
+    async patch (endpoint: string, payload: object) {
         return await axios.patch(`${endpoint}/`, payload).catch(error => {
             // console.log(error)
             throw error
@@ -127,7 +127,7 @@ export const APIService = {
      * 
      * @return axios.delete
      */
-     async destroy (endpoint: string) {
+    async destroy (endpoint: string) {
         return await axios.delete(`${endpoint}/`).catch(error => {
             // console.log(error)
             throw error
