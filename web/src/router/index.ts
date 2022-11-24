@@ -68,6 +68,12 @@ const router = createRouter({
               meta: { title: 'System' }
             }
           ]
+        },
+        {
+          path: 'product-listing',
+          name: 'productListing',
+          component: () => import('@/views/ProductListingView.vue'),
+          meta: { title: 'Product Listing' }
         }
       ]
     },
