@@ -1,12 +1,15 @@
 from rest_framework import viewsets
 
 from .models import Product, Category, Variant, Inventory, Media
+from .policy import CategoryAccessPolicy
 from .serializers import (
     ProductSerializer,
     CategorySerializer,
     VariantSerializer,
     InventorySerializer,
-    MediaSerializer
+    MediaSerializer,
+
+    PublicCategorySerializer
 )
 
 
@@ -47,9 +50,8 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    filter_backend = []
-    filterset_fields = []
-    permission_classes = []
+    serializer_public_class = { 'list': PublicCategorySerializer }
+    permission_classes = [CategoryAccessPolicy]
 
     @property
     def access_policy(self):
@@ -68,6 +70,20 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return self.access_policy.scope_queryset(
             self.request, self.queryset
         )
+    
+    def get_serializer_class(self):
+        """
+        Override get_serializer_class for
+        default action
+        """
+
+        user = self.request.user
+
+        if hasattr(self, 'serializer_public_class') and user.is_anonymous:
+            return self.serializer_public_class.get(self.action, self.serializer_class)
+
+        # Return default class
+        return super().get_serializer_class()
 
 
 class VariantViewSet(viewsets.ModelViewSet):
