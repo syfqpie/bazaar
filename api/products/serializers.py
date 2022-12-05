@@ -33,6 +33,16 @@ class CategorySerializer(serializers.ModelSerializer):
         ]
 
 
+class PublicCategorySerializer(serializers.ModelSerializer):
+    """
+    Public serializer for Category model
+    """
+
+    class Meta:
+        model = Category
+        fields = ['name', 'slug', 'parent']
+
+
 class VariantSerializer(serializers.ModelSerializer):
     """
     Base serializer for Variant model
