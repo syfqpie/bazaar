@@ -4,7 +4,10 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Product, Category, Variant, Inventory, Media
-from .policy import CategoryAccessPolicy
+from .policy import (
+    CategoryAccessPolicy,
+    ProductAccessPolicy
+)
 from .serializers import (
     ProductSerializer,
     CategorySerializer,
@@ -25,7 +28,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     filter_backend = []
     filterset_fields = []
-    permission_classes = []
+    permission_classes = [ProductAccessPolicy]
 
     @property
     def access_policy(self):
@@ -44,6 +47,14 @@ class ProductViewSet(viewsets.ModelViewSet):
         return self.access_policy.scope_queryset(
             self.request, self.queryset
         )
+    
+    def perform_create(self, serializer):
+        """
+        Override perform_create to update created_by
+        """
+
+        request = serializer.context['request']
+        serializer.save(vendor=request.user.related_vendor)
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
