@@ -40,10 +40,10 @@ class Product(MyBaseModel):
     name = models.CharField(_('product name'), max_length=128)
     slug = models.SlugField(_('product slug'), max_length=128, unique=True)
     description = models.TextField(_('product description'))
-    category = models.ForeignKey(
+    category = models.ManyToManyField(
         Category,
-        on_delete=models.SET_NULL,
-        null=True,
+        through='CategoryProduct',
+        through_fields=('product', 'category'),
         related_name='related_product',
         verbose_name=_('product category')
     )
@@ -61,6 +61,26 @@ class Product(MyBaseModel):
 
     def __str__(self):
         return ('%s'%(self.name))
+
+
+class CategoryProduct(models.Model):
+    """
+    A through model for Product - Category
+    models
+    """
+
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.CASCADE,
+        related_name='category_products',
+        verbose_name=_('category products')
+    )
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name='product_categories',
+        verbose_name=_('product categories')
+    )
 
 
 class Variant(MyBaseModel):
