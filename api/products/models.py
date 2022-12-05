@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -66,9 +68,6 @@ class Variant(MyBaseModel):
     A product variant model. If a product don't
     have any variant, so it should be default to
     one variant
-
-    TODO:
-        - Add media
     """
 
     sku = models.CharField(_('variant sku'), null=True, max_length=128)
@@ -110,4 +109,40 @@ class Inventory(MyBaseModel):
 
     def __str__(self):
         return ('%s'%(self.id))
+
+
+class Media(models.Model):
+    """
+    A product media model. Use to keep media
+    """
+
+    id = models.UUIDField(
+        _('media id'),
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    short_description = models.CharField(
+        _('media short description'),
+        null=True,
+        max_length=128
+    )
+
+    upload = models.FileField(_('media uploaded'), upload_to='product-medias/')
+    variant = models.ForeignKey(
+        Variant,
+        on_delete=models.CASCADE,
+        related_name='medias',
+        verbose_name=_('media variant')
+
+    )
+
+    is_main = models.BooleanField(_('is media main?'), default=False)
+    created_at = models.DateTimeField(_('created at'), auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return ('%s'%(str(self.id)))
 
