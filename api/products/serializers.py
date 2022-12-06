@@ -6,21 +6,6 @@ from rest_framework import serializers
 from .models import Product, Category, Variant, Inventory, Media
 
 
-class ProductSerializer(serializers.ModelSerializer):
-    """
-    Base serializer for Product model
-    """
-
-    class Meta:
-        model = Product
-        fields = '__all__'
-        read_only_fields = [
-            'is_active',
-            'rating',
-            'vendor'
-        ]
-
-
 class CategorySerializer(serializers.ModelSerializer):
     """
     Base serializer for Category model
@@ -29,9 +14,7 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
-        read_only_fields = [
-            'is_active'
-        ]
+        read_only_fields = ['is_active']
 
 
 class PublicCategorySerializer(serializers.ModelSerializer):
@@ -44,6 +27,34 @@ class PublicCategorySerializer(serializers.ModelSerializer):
         fields = ['name', 'slug', 'parent']
 
 
+class ProductSerializer(serializers.ModelSerializer):
+    """
+    Base serializer for Product model
+    """
+
+    category = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=Category.objects.all()
+    )
+
+    class Meta:
+        model = Product
+        fields = '__all__'
+        read_only_fields = ['is_active','rating','vendor']
+
+
+class PublicProductSerializer(serializers.ModelSerializer):
+    """
+    Public serializer for Product model
+    """
+
+    category = PublicCategorySerializer(many=True)
+
+    class Meta:
+        model = Product
+        fields = '__all__'
+        read_only_fields = ['is_active','rating','vendor']
+
+
 class VariantSerializer(serializers.ModelSerializer):
     """
     Base serializer for Variant model
@@ -52,9 +63,7 @@ class VariantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Variant
         fields = '__all__'
-        read_only_fields = [
-            'is_active'
-        ]
+        read_only_fields = ['is_active']
 
 
 class InventorySerializer(serializers.ModelSerializer):
@@ -65,9 +74,7 @@ class InventorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Inventory
         fields = '__all__'
-        read_only_fields = [
-            'is_active'
-        ]
+        read_only_fields = ['is_active']
 
 
 class MediaSerializer(serializers.ModelSerializer):
