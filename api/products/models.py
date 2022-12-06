@@ -119,25 +119,23 @@ class Variant(MyBaseModel):
         return ('%s - %s'%(self.sku, self.name))
 
 
-class Inventory(MyBaseModel):
+class Inventory(models.Model):
     """
     A product inventory model. Used to keep
     the current stock for each variants
     """
 
-    quantity = models.PositiveIntegerField(_('variant quantity'), default=0)
-    variant = models.ForeignKey(
+    variant = models.OneToOneField(
         Variant,
         on_delete=models.CASCADE,
-        related_name='inventories',
-        verbose_name=_('inventory variant')
+        related_name='inventory',
+        verbose_name=_('inventory variant'),
+        primary_key=True
     )
-
-    class Meta:
-        ordering = ['-created_at']
+    quantity = models.PositiveIntegerField(_('variant quantity'), default=0)
 
     def __str__(self):
-        return ('%s'%(self.id))
+        return ('%s'%(self.variant))
 
 
 class Media(models.Model):
