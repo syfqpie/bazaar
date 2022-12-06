@@ -63,7 +63,18 @@ class VariantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Variant
         fields = '__all__'
-        read_only_fields = ['is_active']
+        read_only_fields = ['is_active', 'product']
+
+
+class PublicVariantSerializer(serializers.ModelSerializer):
+    """
+    Public serializer for Variant model
+    """
+
+    class Meta:
+        model = Variant
+        exclude = ['is_active', 'created_at', 'last_modified_at', 'product']
+        read_only_fields = ['is_active', 'product']
 
 
 class InventorySerializer(serializers.ModelSerializer):
