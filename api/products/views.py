@@ -15,7 +15,8 @@ from .serializers import (
     InventorySerializer,
     MediaSerializer,
 
-    PublicCategorySerializer
+    PublicCategorySerializer,
+    PublicProductSerializer
 )
 
 
@@ -26,8 +27,11 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backend = []
-    filterset_fields = []
+    serializer_public_class = { 'list': PublicProductSerializer }
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['category','rating','vendor']
+    search_fields = ['name']
+    ordering_fields = ['name','rating']
     permission_classes = [ProductAccessPolicy]
 
     @property
@@ -55,6 +59,20 @@ class ProductViewSet(viewsets.ModelViewSet):
 
         request = serializer.context['request']
         serializer.save(vendor=request.user.related_vendor)
+    
+    def get_serializer_class(self):
+        """
+        Override get_serializer_class for
+        default action
+        """
+
+        user = self.request.user
+
+        if hasattr(self, 'serializer_public_class') and user.is_anonymous:
+            return self.serializer_public_class.get(self.action, self.serializer_class)
+
+        # Return default class
+        return super().get_serializer_class()
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
