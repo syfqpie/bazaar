@@ -8,13 +8,13 @@ from .models import Product, Category, Variant, Inventory, Media
 from .policy import (
     CategoryAccessPolicy,
     ProductAccessPolicy,
-    VariantAccessPolicy
+    VariantAccessPolicy,
+    MediaAccessPolicy
 )
 from .serializers import (
     ProductSerializer,
     CategorySerializer,
     VariantSerializer,
-    InventorySerializer,
     MediaSerializer,
 
     PublicCategorySerializer,
@@ -201,9 +201,7 @@ class MediaViewSet(viewsets.ModelViewSet):
 
     queryset = Media.objects.all()
     serializer_class = MediaSerializer
-    filter_backend = []
-    filterset_fields = []
-    permission_classes = []
+    permission_classes = [MediaAccessPolicy]
 
     @property
     def access_policy(self):
