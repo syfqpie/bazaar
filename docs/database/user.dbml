@@ -1,0 +1,53 @@
+// users app database
+
+Enum UserType {
+  admin [note: 'as 1']
+  vendor [note: 'as 2']
+  public [note: 'as 3']
+}
+
+Enum GenderType {
+  male [note: 'as 1']
+  female [note: 'as 2']
+  secret [note: 'as 3']
+}
+
+Table users as User {
+  id int [pk, increment]
+  username varchar
+  first_name varchar
+  last_name varchar
+  email varchar
+  user_type UserType
+  is_active bool
+  is_staff bool
+  is_superuser bool
+  date_joined timestamp
+  last_login timestamp
+  last_modified_at timestamp
+}
+
+Table vendors as Vendor {
+  id int [pk, increment]
+  name varchar
+  description varchar
+  phone_no varchar
+  is_verified bool
+  is_newsletter_enabled bool
+  user_id int [ref: > User.id]
+  is_active bool
+  created_at timestamp
+  last_modified_at timestamp
+}
+
+Table customers as Customer {
+  id int [pk, increment]
+  gender GenderType
+  date_of_birth timestamp
+  phone_no varchar
+  is_newsletter_enabled bool
+  user_id int [ref: > User.id]
+  is_active bool
+  created_at timestamp
+  last_modified_at timestamp
+}
