@@ -18,7 +18,8 @@ from .serializers import (
     MediaSerializer,
 
     PublicCategorySerializer,
-    PublicProductSerializer
+    PublicProductSerializer,
+    PublicVariantSerializer
 )
 
 
@@ -131,6 +132,7 @@ class VariantViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
     queryset = Variant.objects.all()
     serializer_class = VariantSerializer
+    serializer_public_class = { 'list': PublicVariantSerializer }
     filter_backend = []
     filterset_fields = []
     permission_classes = [VariantAccessPolicy]
@@ -160,6 +162,20 @@ class VariantViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         return self.access_policy.scope_queryset(
             self.request, queryset
         )
+    
+    def get_serializer_class(self):
+        """
+        Override get_serializer_class for
+        default action
+        """
+
+        user = self.request.user
+
+        if hasattr(self, 'serializer_public_class') and user.is_anonymous:
+            return self.serializer_public_class.get(self.action, self.serializer_class)
+
+        # Return default class
+        return super().get_serializer_class()
 
     def perform_create(self, serializer):
         """
