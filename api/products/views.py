@@ -194,36 +194,6 @@ class VariantViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             serializer.save()
 
 
-class InventoryViewSet(viewsets.ModelViewSet):
-    """
-    Viewset for Inventory model
-    """
-
-    queryset = Inventory.objects.all()
-    serializer_class = InventorySerializer
-    filter_backend = []
-    filterset_fields = []
-    permission_classes = []
-
-    @property
-    def access_policy(self):
-        """
-        To make get_queryset logic more explicit
-        """
-
-        return self.permission_classes[0]
-
-    def get_queryset(self):
-        """
-        Ensure that current user can only see the models
-        the are allowed to see
-        """
-
-        return self.access_policy.scope_queryset(
-            self.request, self.queryset
-        )
-
-
 class MediaViewSet(viewsets.ModelViewSet):
     """
     Viewset for Media model
