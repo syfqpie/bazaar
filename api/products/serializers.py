@@ -55,15 +55,45 @@ class PublicProductSerializer(serializers.ModelSerializer):
         read_only_fields = ['is_active','rating','vendor']
 
 
+class InventorySerializer(serializers.ModelSerializer):
+    """
+    Base serializer for Inventory model
+    """
+
+    class Meta:
+        model = Inventory
+        fields = ['quantity']
+
+
 class VariantSerializer(serializers.ModelSerializer):
     """
     Base serializer for Variant model
     """
 
+    quantity = serializers.IntegerField(
+        min_value=0, max_value=9999, default=0, write_only=True
+    )
+    inventory = InventorySerializer(read_only=True)
+
     class Meta:
         model = Variant
         fields = '__all__'
         read_only_fields = ['is_active', 'product']
+    
+    def create(self, validated_data):
+        """
+        Create Inventory entry after variant creation
+        """
+
+        quantity = validated_data.pop('quantity')
+        instance = super().create(validated_data)
+        
+        Inventory.objects.create(
+            variant=instance,
+            quantity=quantity
+        )
+
+        return instance
 
 
 class PublicVariantSerializer(serializers.ModelSerializer):
@@ -76,16 +106,6 @@ class PublicVariantSerializer(serializers.ModelSerializer):
         exclude = ['is_active', 'created_at', 'last_modified_at', 'product']
         read_only_fields = ['is_active', 'product']
 
-
-class InventorySerializer(serializers.ModelSerializer):
-    """
-    Base serializer for Inventory model
-    """
-
-    class Meta:
-        model = Inventory
-        fields = '__all__'
-        read_only_fields = ['is_active']
 
 
 class MediaSerializer(serializers.ModelSerializer):
