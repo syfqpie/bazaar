@@ -79,7 +79,7 @@ class VariantAccessPolicy(BaseAccessPolicy):
 
     statements = [
         {
-            'action': ['list', 'retrieve'],
+            'action': ['list'],
             'principal': '*',
             'effect': 'allow'
         },
@@ -90,7 +90,7 @@ class VariantAccessPolicy(BaseAccessPolicy):
             'condition': 'is_vendor'
         },
         {
-            'action': ['partial_update', 'destroy'],
+            'action': ['retrieve', 'partial_update', 'destroy'],
             'principal': ['authenticated'],
             'effect': 'allow',
             'condition_expression': 'is_vendor and is_owner'
