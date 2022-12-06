@@ -2,6 +2,7 @@ import uuid
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.core.validators import MinValueValidator
 
 from utils.models import MyBaseModel
 from vendors.models import Vendor
@@ -91,17 +92,25 @@ class Variant(MyBaseModel):
     """
 
     sku = models.CharField(_('variant sku'), null=True, max_length=128)
-    name = models.CharField(_('variant name'), null=True, max_length=128)
+    name = models.CharField(_('variant name'), max_length=128)
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
         related_name='variants',
         verbose_name=_('variant parent product')
     )
-    price = models.DecimalField(_('product price'), decimal_places=2, max_digits=20)
-    weight = models.FloatField(null=True)
+    price = models.DecimalField(
+        _('variant price'),
+        decimal_places=2,
+        max_digits=20,
+        validators=[MinValueValidator(0.00)]
+    )
+    weight = models.FloatField(_('variant weight'), null=True)
     
-    customer_quantity_limit = models.PositiveIntegerField(null=True)
+    customer_quantity_limit = models.PositiveIntegerField(
+        _('quantity per customer'),
+        null=True
+    )
     
     class Meta:
         ordering = ['name']
@@ -117,7 +126,7 @@ class Inventory(MyBaseModel):
     """
 
     quantity = models.PositiveIntegerField(_('variant quantity'), default=0)
-    product_variant = models.ForeignKey(
+    variant = models.ForeignKey(
         Variant,
         on_delete=models.CASCADE,
         related_name='inventories',
