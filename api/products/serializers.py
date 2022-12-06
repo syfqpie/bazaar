@@ -101,6 +101,8 @@ class PublicVariantSerializer(serializers.ModelSerializer):
     Public serializer for Variant model
     """
 
+    inventory = InventorySerializer(read_only=True)
+
     class Meta:
         model = Variant
         exclude = ['is_active', 'created_at', 'last_modified_at', 'product']
