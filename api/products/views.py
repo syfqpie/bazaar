@@ -1,12 +1,14 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, exceptions
 from rest_framework.filters import OrderingFilter, SearchFilter
 
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from .models import Product, Category, Variant, Inventory, Media
 from .policy import (
     CategoryAccessPolicy,
-    ProductAccessPolicy
+    ProductAccessPolicy,
+    VariantAccessPolicy
 )
 from .serializers import (
     ProductSerializer,
@@ -122,7 +124,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return super().get_serializer_class()
 
 
-class VariantViewSet(viewsets.ModelViewSet):
+class VariantViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     """
     Viewset for Variant model
     """
@@ -131,7 +133,7 @@ class VariantViewSet(viewsets.ModelViewSet):
     serializer_class = VariantSerializer
     filter_backend = []
     filterset_fields = []
-    permission_classes = []
+    permission_classes = [VariantAccessPolicy]
 
     @property
     def access_policy(self):
@@ -147,9 +149,33 @@ class VariantViewSet(viewsets.ModelViewSet):
         the are allowed to see
         """
 
+        # Queryset for nested
+        if 'parent_lookup_id' in self.kwargs:
+            queryset = self.queryset.filter(
+                product__id=self.kwargs['parent_lookup_id']
+            )
+        else:
+            queryset = self.queryset
+
         return self.access_policy.scope_queryset(
-            self.request, self.queryset
+            self.request, queryset
         )
+
+    def perform_create(self, serializer):
+        """
+        Ensure variant creation to point to the
+        exact nested parrent product
+        """
+
+        if 'parent_lookup_id' in self.kwargs:
+            # Double check if product exist?
+            try:
+                product = Product.objects.get(id=self.kwargs['parent_lookup_id'])
+                serializer.save(product=product)
+            except Product.DoesNotExist:
+                raise exceptions.ValidationError({ 'product': 'Product not found' })
+        else:
+            serializer.save()
 
 
 class InventoryViewSet(viewsets.ModelViewSet):
