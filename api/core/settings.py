@@ -211,7 +211,7 @@ REST_FRAMEWORK = {
 # https://dj-rest-auth.readthedocs.io/en/latest/configuration.html
 
 REST_AUTH_SERIALIZERS = {
-    'JWT_TOKEN_CLAIMS_SERIALIZER': 'utils.auth.tokens.MyTokenObtainPairSerializer'
+    'JWT_TOKEN_CLAIMS_SERIALIZER': 'utils.auth.tokens.CoreTokenObtainPairSerializer'
 }
 REST_SESSION_LOGIN = False
 REST_USE_JWT = True
@@ -227,7 +227,7 @@ AUTHENTICATION_BACKENDS = [
     # `allauth` specific authentication methods, such as login by e-mail
     # 'allauth.account.auth_backends.AuthenticationBackend',
 ]
-ACCOUNT_ADAPTER = 'utils.auth.adapters.MyAccountAdapter'
+ACCOUNT_ADAPTER = 'utils.auth.adapters.CoreAccountAdapter'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 

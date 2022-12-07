@@ -23,13 +23,13 @@ from dj_rest_auth.views import (
 
 from users.models import CustomUser
 from utils.auth.serializers import (
-    MyRegisterSerializer, MyResendVerificationSerializer,
-    MyPasswordResetSerializer, MySetPasswordSerializer,
-    MyVerifyEmailSerializer
+    CoreRegisterSerializer, CoreResendVerificationSerializer,
+    CorePasswordResetSerializer, CoreSetPasswordSerializer,
+    CoreVerifyEmailSerializer
 )
 
 
-class MyLoginView(LoginView):
+class CoreLoginView(LoginView):
     """
     Login
     
@@ -43,7 +43,7 @@ class MyLoginView(LoginView):
     pass
 
 
-class MyLogoutView(LogoutView):
+class CoreLogoutView(LogoutView):
     """
     Logout
     
@@ -56,7 +56,7 @@ class MyLogoutView(LogoutView):
     http_method_names = ['post']
 
 
-class MyRegisterView(RegisterView):
+class CoreRegisterView(RegisterView):
     """
     Register
 
@@ -71,7 +71,7 @@ class MyRegisterView(RegisterView):
         - last_name
     """
 
-    serializer_class = MyRegisterSerializer
+    serializer_class = CoreRegisterSerializer
     def create(self, request, *args, **kwargs):
 
         serializer = self.get_serializer(data=request.data)
@@ -88,7 +88,7 @@ class MyRegisterView(RegisterView):
         )
 
 
-class MyVerifyEmailView(VerifyEmailView):
+class CoreVerifyEmailView(VerifyEmailView):
     """
     Verify email
     
@@ -97,7 +97,7 @@ class MyVerifyEmailView(VerifyEmailView):
     def get_serializer(self, *args, **kwargs):
         """ Override to return custom serializer"""
 
-        return MyVerifyEmailSerializer(*args, **kwargs)
+        return CoreVerifyEmailSerializer(*args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         """ Override to append custom validations and actions """
@@ -122,7 +122,7 @@ class MyVerifyEmailView(VerifyEmailView):
         user.activated_at = datetime.now(timezone.utc)
 
         # Password validation
-        set_password_serializer = MySetPasswordSerializer(
+        set_password_serializer = CoreSetPasswordSerializer(
             data={
                 'new_password1': request.data['new_password1'],
                 'new_password2': request.data['new_password2']
@@ -144,7 +144,7 @@ class MyVerifyEmailView(VerifyEmailView):
         return Response({'detail': _('ok')}, status=status.HTTP_200_OK)
 
 
-class MyResendVerificationView(GenericAPIView):
+class CoreResendVerificationView(GenericAPIView):
     """
     Resend verification email
     
@@ -165,7 +165,7 @@ class MyResendVerificationView(GenericAPIView):
         account email not found
         """
         try:
-            serializer = MyResendVerificationSerializer(data=request.data)
+            serializer = CoreResendVerificationSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             user = CustomUser.objects.get(email=serializer.validated_data['email'])
             email_address = EmailAddress.objects.get(email=serializer.validated_data['email'])
@@ -188,7 +188,7 @@ class MyResendVerificationView(GenericAPIView):
             )
 
 
-class MyPasswordChangeView(PasswordChangeView):
+class CorePasswordChangeView(PasswordChangeView):
     """
     Change password
 
@@ -201,7 +201,7 @@ class MyPasswordChangeView(PasswordChangeView):
     pass
 
 
-class MyPasswordResetView(PasswordResetView):
+class CorePasswordResetView(PasswordResetView):
     """
     Request to reset password
     
@@ -211,10 +211,10 @@ class MyPasswordResetView(PasswordResetView):
 
     Returns the success/fail message.
     """
-    serializer_class = MyPasswordResetSerializer
+    serializer_class = CorePasswordResetSerializer
 
 
-class MyPasswordResetConfirmView(PasswordResetConfirmView):
+class CorePasswordResetConfirmView(PasswordResetConfirmView):
     """
     Confirm reset password
 

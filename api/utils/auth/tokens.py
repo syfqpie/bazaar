@@ -3,7 +3,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from users.models import UserType
 
 
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+class CoreTokenObtainPairSerializer(TokenObtainPairSerializer):
     """
     Override TokenObtainPairSerializer
     """

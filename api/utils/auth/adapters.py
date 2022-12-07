@@ -7,11 +7,34 @@ from allauth.account import app_settings
 from users.models import UserType
 
 
-class MyAccountAdapter(DefaultAccountAdapter):
+BASE_PATH = 'account/email/'
+BASE_FILENAME = 'email_confirmation'
+
+class CoreAccountAdapter(DefaultAccountAdapter):
     """
     Override DefaultAccountAdapter
     Add custom implementation here
     """
+
+    @staticmethod
+    def get_template_path(user, signup):
+        """
+        Return confirmation template path
+        based on user types
+        """
+        
+        if user.user_type == UserType.ADMIN:
+            user_type_str = f'{UserType.ADMIN.label.lower()}_'
+        elif user.user_type == UserType.VENDOR:
+            user_type_str = f'{UserType.VENDOR.label.lower()}_'
+        elif user.user_type == UserType.CUSTOMER:
+            user_type_str = f'{UserType.CUSTOMER.label.lower()}_'
+        else:
+            user_type_str = ''
+        
+        email_template = f'{BASE_PATH}{user_type_str}{BASE_FILENAME}'
+
+        return f'{email_template}_signup' if signup else email_template
 
     def send_confirmation_mail(self, request, emailconfirmation, signup):
         """
@@ -29,27 +52,8 @@ class MyAccountAdapter(DefaultAccountAdapter):
             'verification_url': 'https://{}/auth/verify-account?key={}'.format(current_site.domain, emailconfirmation.key)
         }
 
-        if current_user.user_type == UserType.ADMIN:
-            if signup:
-                email_template = "account/email/admin_email_confirmation_signup"
-            else:
-                email_template = "account/email/admin_email_confirmation"
-        elif current_user.user_type == UserType.VENDOR:
-            if signup:
-                email_template = "account/email/vendor_email_confirmation_signup"
-            else:
-                email_template = "account/email/vendor_email_confirmation"
-        elif current_user.user_type == UserType.CUSTOMER:
-            if signup:
-                email_template = "account/email/customer_email_confirmation_signup"
-            else:
-                email_template = "account/email/customer_email_confirmation"
-        else:
-            if signup:
-                email_template = 'account/email/email_confirmation_signup'
-            else:
-                email_template = 'account/email/email_confirmation'
-
+        email_template = self.get_template_path(current_user, signup)
+        
         self.send_mail(email_template, emailconfirmation.email_address.email, ctx)
 
     def format_email_subject(self, subject):

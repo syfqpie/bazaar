@@ -4,11 +4,11 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 
-from utils.models import MyBaseModel
+from utils.models import CoreBaseModel
 from vendors.models import Vendor
 
 
-class Category(MyBaseModel):
+class Category(CoreBaseModel):
     """
     A product category model. Might be useful
     for routing, analytics
@@ -32,7 +32,7 @@ class Category(MyBaseModel):
         return ('%s'%(self.name))
 
 
-class Product(MyBaseModel):
+class Product(CoreBaseModel):
     """
     Base product model. Can be considered as a
     parent product for variants
@@ -84,7 +84,7 @@ class CategoryProduct(models.Model):
     )
 
 
-class Variant(MyBaseModel):
+class Variant(CoreBaseModel):
     """
     A product variant model. If a product don't
     have any variant, so it should be default to
