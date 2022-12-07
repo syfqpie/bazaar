@@ -227,7 +227,7 @@ AUTHENTICATION_BACKENDS = [
     # `allauth` specific authentication methods, such as login by e-mail
     # 'allauth.account.auth_backends.AuthenticationBackend',
 ]
-ACCOUNT_ADAPTER = 'utils.auth.adapters.MyAccountAdapter'
+ACCOUNT_ADAPTER = 'utils.auth.adapters.CoreAccountAdapter'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
