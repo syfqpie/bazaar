@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from users.models import CustomUser, UserType
 from utils.choices import CountryChoice
-from utils.models import MyBaseModel
+from utils.models import CoreBaseModel
 
 
 class GenderType(models.IntegerChoices):
@@ -16,7 +16,7 @@ class GenderType(models.IntegerChoices):
     SECRET = 3, 'Secret'
 
 
-class Customer(MyBaseModel):
+class Customer(CoreBaseModel):
     """
     Customer base model
     """
@@ -50,7 +50,7 @@ class Customer(MyBaseModel):
         return ('%s'%(self.id))
 
 
-class CustomerAddress(MyBaseModel):
+class CustomerAddress(CoreBaseModel):
     """
     CustomerAddress base model
     """

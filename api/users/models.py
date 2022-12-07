@@ -5,12 +5,12 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 
-from utils.models import MyUserManager
+from utils.models import CoreUserManager
 
 
-class CustomUserManager(MyUserManager):
+class CustomUserManager(CoreUserManager):
     """
-    Custom user manager based on MyUserManager
+    Custom user manager based on CoreUserManager
     """
 
     def create_superuser(self, username, email=None, password=None, **extra_fields):
