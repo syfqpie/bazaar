@@ -31,9 +31,9 @@ from utils.auth.views import (CoreLoginView,
                               CoreRegisterView,
                               CoreVerifyEmailView,
                               CoreResendVerificationView,
-                              MyPasswordChangeView,
-                              MyPasswordResetView,
-                              MyPasswordResetConfirmView)
+                              CorePasswordChangeView,
+                              CorePasswordResetView,
+                              CorePasswordResetConfirmView)
 
 
 router = ExtendedDefaultRouter()
@@ -65,9 +65,9 @@ urlpatterns = [
     path('auth/registration/resend-verification/', CoreResendVerificationView.as_view(), name='resend_verification'),
     path('auth/login/', CoreLoginView.as_view(), name='rest_login'),
     path('auth/logout/', CoreLoginView.as_view(), name='rest_logout'),
-    path('auth/password/change/', MyPasswordChangeView.as_view(), name='password_change'),
-    path('auth/password/reset/', MyPasswordResetView.as_view(), name='rest_password_reset'),
-    path(r'auth/password/reset/confirm/', MyPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('auth/password/change/', CorePasswordChangeView.as_view(), name='password_change'),
+    path('auth/password/reset/', CorePasswordResetView.as_view(), name='rest_password_reset'),
+    path(r'auth/password/reset/confirm/', CorePasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('auth/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('auth/token/refresh/', get_refresh_view().as_view(), name='token_refresh'),
     re_path(r'v1/', include(router.urls)),

@@ -188,7 +188,7 @@ class CoreResendVerificationView(GenericAPIView):
             )
 
 
-class MyPasswordChangeView(PasswordChangeView):
+class CorePasswordChangeView(PasswordChangeView):
     """
     Change password
 
@@ -201,7 +201,7 @@ class MyPasswordChangeView(PasswordChangeView):
     pass
 
 
-class MyPasswordResetView(PasswordResetView):
+class CorePasswordResetView(PasswordResetView):
     """
     Request to reset password
     
@@ -214,7 +214,7 @@ class MyPasswordResetView(PasswordResetView):
     serializer_class = CorePasswordResetSerializer
 
 
-class MyPasswordResetConfirmView(PasswordResetConfirmView):
+class CorePasswordResetConfirmView(PasswordResetConfirmView):
     """
     Confirm reset password
 
