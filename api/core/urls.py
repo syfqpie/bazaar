@@ -26,6 +26,10 @@ from customers.views import (CustomerViewSet,
                              CustomerAddressViewSet,
                              CustomerRegisterView)
 from users.views import CustomUserViewSet
+from products.views import (CategoryViewSet,
+                            MediaViewSet,
+                            ProductViewSet,
+                            VariantViewSet)
 from vendors.views import VendorViewSet, VendorRegisterView
 from utils.auth.views import (CoreLoginView,
                               CoreRegisterView,
@@ -46,6 +50,22 @@ addresses_router = router.register(r'addresses',
 customers_router = router.register(r'customers',
                                    CustomerViewSet)
 
+# Products
+categories_router = router.register(r'categories',
+                                    CategoryViewSet)
+products_router = router.register(r'products',
+                                    ProductViewSet) \
+                        .register(r'variants',
+                                    VariantViewSet,
+                                    'product-variants',
+                                    parents_query_lookups=['id']) \
+                        .register(r'medias',
+                                    MediaViewSet,
+                                    'product-medias',
+                                    parents_query_lookups=[
+                                        'id', 'variant'
+                                    ])
+                                    
 # Users
 users_router = router.register(r'users',
                                CustomUserViewSet)
