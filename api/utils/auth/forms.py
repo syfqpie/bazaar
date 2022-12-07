@@ -8,7 +8,7 @@ from allauth.account.utils import user_pk_to_url_str, user_username
 from dj_rest_auth.forms import AllAuthPasswordResetForm
 
 
-class MyResetPasswordForm(AllAuthPasswordResetForm):
+class CoreResetPasswordForm(AllAuthPasswordResetForm):
     """
     Override AllAuthPasswordResetForm
     Add custom implementation here
