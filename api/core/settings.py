@@ -211,7 +211,7 @@ REST_FRAMEWORK = {
 # https://dj-rest-auth.readthedocs.io/en/latest/configuration.html
 
 REST_AUTH_SERIALIZERS = {
-    'JWT_TOKEN_CLAIMS_SERIALIZER': 'utils.auth.tokens.MyTokenObtainPairSerializer'
+    'JWT_TOKEN_CLAIMS_SERIALIZER': 'utils.auth.tokens.CoreTokenObtainPairSerializer'
 }
 REST_SESSION_LOGIN = False
 REST_USE_JWT = True
