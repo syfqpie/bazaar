@@ -18,14 +18,27 @@
             <span class="sr-only">Close menu</span>
         </button>
 
-        <div>
+        <form @submit.prevent>
             <div class="mb-3">
                 <label class="text-sm text-gray-700">
                     Variant name
                 </label>
                 <TheInput
                     type="text"
-                    placeholder="Enter variant name" />
+                    placeholder="Enter variant name"
+                    v-model="variantForm.name"
+                    :class="{
+                        'border-red-400': v$.name.$dirty &&
+                                            v$.name.$invalid 
+                        
+                    }"
+                    @blur="v$.name.$touch" />
+                <p
+                    v-for="error of v$.name.$errors"
+                    :key="error.$uid"
+                    class="mt-2 text-xs text-red-600 dark:text-red-500">
+                    {{ error.$message }}
+                </p>
             </div>
 
             <div class="mb-3">
@@ -34,7 +47,14 @@
                 </label>
                 <TheInput
                     type="text"
-                    placeholder="Enter variant sku no." />
+                    placeholder="Enter variant sku no."
+                    v-model="variantForm.sku"
+                    :class="{
+                        'border-red-400': v$.sku.$dirty &&
+                                            v$.sku.$invalid 
+                        
+                    }"
+                    @blur="v$.sku.$touch" />
             </div>
 
             <div class="mb-3 grid grid-cols-2 gap-4">
@@ -43,9 +63,22 @@
                         Price
                     </label>
                     <TheInput
-                        type="text"
-                        :class="'p-2'"
-                        placeholder="0.00" />
+                        :type="'number'"
+                        placeholder="0.00"
+                        v-model="variantForm.price"
+                        :class="{
+                            'p-2': true,
+                            'border-red-400': v$.price.$dirty &&
+                                                v$.price.$invalid 
+                            
+                        }"
+                        @blur="v$.price.$touch" />
+                    <p
+                        v-for="error of v$.price.$errors"
+                        :key="error.$uid"
+                        class="mt-2 text-xs text-red-600 dark:text-red-500">
+                        {{ error.$message }}
+                    </p>
                 </div>
 
                 <div class="col-span-1">
@@ -54,8 +87,21 @@
                     </label>
                     <TheInput
                         :type="'number'"
-                        :class="'p-2'"
-                        placeholder="0" />
+                        placeholder="0"
+                        v-model="variantForm.quantity"
+                        :class="{
+                            'p-2': true,
+                            'border-red-400': v$.quantity.$dirty &&
+                                                v$.quantity.$invalid 
+                            
+                        }"
+                        @blur="v$.quantity.$touch" />
+                    <p
+                        v-for="error of v$.quantity.$errors"
+                        :key="error.$uid"
+                        class="mt-2 text-xs text-red-600 dark:text-red-500">
+                        {{ error.$message }}
+                    </p>
                 </div>
             </div>
 
@@ -66,8 +112,9 @@
                     </label>
                     <TheInput
                         :type="'number'"
-                        :class="'p-2'"
-                        placeholder="0" />
+                        placeholder="0" 
+                        v-model="variantForm.customerQuantityLimit"
+                        @blur="v$.customerQuantityLimit.$touch" />
                 </div>
 
                 <div class="col-span-1">
@@ -76,30 +123,54 @@
                     </label>
                     <TheInput
                         :type="'number'"
-                        :class="'p-2'"
-                        placeholder="0" />
+                        placeholder="0"
+                        v-model="variantForm.weight"
+                        :class="{
+                            'p-2': true,
+                            'border-red-400': v$.weight.$dirty &&
+                                                v$.weight.$invalid 
+                            
+                        }"
+                        @blur="v$.weight.$touch" />
+                    <p
+                        v-for="error of v$.weight.$errors"
+                        :key="error.$uid"
+                        class="mt-2 text-xs text-red-600 dark:text-red-500">
+                        {{ error.$message }}
+                    </p>
                 </div>
             </div>
-        </div>
+        </form>
 
-        <div class="sticky top-[90vh] py-4 lg:py-6">
+        <div class="absolute bottom-0 inset-x-6 py-4 lg:py-6">
             <TheButton 
                 v-if="!isEdit"
                 :size="'lg'"
                 :is-full="true"
-                @click="emitSave()"> 
+                @click="onSave()"> 
                 Save
+            </TheButton>
+
+            <TheButton 
+                v-else
+                :size="'lg'"
+                :is-full="true"
+                @click="onSaveEdit()"> 
+                Update
             </TheButton>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { onMounted, defineComponent, ref } from 'vue'
+import { computed, onMounted, defineComponent, ref } from 'vue'
 
 import TheButton from '@/components/basics/TheButton.vue'
 import TheInput from '@/components/basics/TheInput.vue'
+import type { AddVariantList, VariantBaseInput } from '@/common/models/product.model'
 
+import useVuelidate from '@vuelidate/core'
+import { helpers, required, sameAs, maxLength, minValue } from '@vuelidate/validators'
 import { onClickOutside } from '@vueuse/core'
 
 export default defineComponent({
@@ -108,24 +179,116 @@ export default defineComponent({
         // Component ref
         const variantDrawer = ref(null)
 
+        // Form
+        const variantForm = ref<VariantBaseInput>({
+            name: (
+                props.variantItem ? props.variantItem.name : null
+            ),
+            price: (
+                props.variantItem ? props.variantItem.price : null
+            ), 
+            quantity: (
+                props.variantItem ? props.variantItem.quantity : null
+            ),
+            sku: (
+                props.variantItem ? props.variantItem.sku : null
+            ),
+            weight: (
+                props.variantItem ? props.variantItem.weight : null
+            ),
+            customerQuantityLimit: (
+                props.variantItem ? props.variantItem.customerQuantityLimit : null
+            )
+        })
+        const validation = computed(() => ({
+            name: {
+                required: helpers.withMessage(
+                    'Name is required',
+                    required
+                ),
+                maxLength: helpers.withMessage(
+                    'Max length is 128 words',
+                    maxLength(128)
+                )
+            },
+            price: {
+                required: helpers.withMessage(
+                    'Price is required',
+                    required
+                ),
+                minValue: helpers.withMessage(
+                    'Min price is 0.00',
+                    minValue(0.00)
+                )
+            },
+            quantity: {
+                required: helpers.withMessage(
+                    'Quantity is required',
+                    required
+                ),
+                minValue: helpers.withMessage(
+                    'Min quantity is 0',
+                    minValue(0)
+                )
+            },
+            sku: { },
+            weight: {
+                minValue: helpers.withMessage(
+                    'Min weight is 0',
+                    minValue(0)
+                )
+            },
+            customerQuantityLimit: {
+                minValue: helpers.withMessage(
+                    'Min limit is 0',
+                    minValue(0)
+                )
+            }
+        }))
+        const v$ = useVuelidate(validation, variantForm.value)
+
         onMounted(() => {
             // console.log('Mounted VariantDrawer')
+            // if (props.isEdit && props.variantItem) {
+            //     variantForm.value = props.variantItem
+            //     v$.value.$reset()
+            // }
         })
 
-        const toSaveVariant = () => {
-            const defVariant = {
-                name: null,
-                price: 0,
-                quantity: 0,
-                sku: undefined,
-                weight: undefined,
-                customerQuantityLimit: undefined
+        const onSave = () => {
+            v$.value.$touch()
+            console.log(variantForm.value)
+            console.log(v$.value.$invalid)
+
+            if (v$.value.$invalid) {
+                // noop
+            } else {
+                // omitSave bro
+                emitSave()
             }
-            return defVariant
+        }
+
+        const onSaveEdit = () => {
+            v$.value.$touch()
+            console.log(variantForm.value)
+            console.log(v$.value.$invalid)
+
+            if (v$.value.$invalid) {
+                // noop
+            } else {
+                // omitSave bro
+                emitUpdate()
+            }
+        }
+
+        const emitUpdate = () => {
+            if (props.variantItem) {
+                context.emit('onUpdate', variantForm.value, props.variantItem.idx)
+            }
         }
 
         const emitSave = () => {
-            context.emit('onSave', toSaveVariant())
+            context.emit('onSave', variantForm.value)
         }
 
         const emitToggle = () => {
@@ -138,9 +301,13 @@ export default defineComponent({
         })
 
         return {
+            variantForm,
+            v$,
+            validation,
+            onSave,
+            onSaveEdit,
             variantDrawer,
-            emitToggle,
-            emitSave
+            emitToggle
         }
     },
     components: { TheButton, TheInput },
@@ -148,8 +315,12 @@ export default defineComponent({
         isEdit: {
             type: Boolean,
             default: false
+        },
+        variantItem: {
+            type: Object as () => AddVariantList | null,
+            default: null
         }
     },
-    emits: ['onToggle', 'onSave']
+    emits: ['onToggle', 'onSave', 'onUpdate']
 })
 </script>

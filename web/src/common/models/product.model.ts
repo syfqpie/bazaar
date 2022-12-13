@@ -4,19 +4,19 @@ export interface VariantBaseInput {
     name: string | null,
 
     /** Variant's price */
-    price: number,
+    price: number | null,
 
     /** Variant's quantity */
-    quantity?: number,
+    quantity: number | null,
 
     /** Variant's sku no. */
-    sku?: string,
+    sku: string | null,
 
     /** Variant's  weight */
-    weight?: number,
+    weight: number | null,
 
     /** Variant's quantity limit for customer */
-    customerQuantityLimit?: number
+    customerQuantityLimit: number | null
 }
 
 /** Input interface for add variant list */
