@@ -32,6 +32,10 @@
             hover:bg-red-500 focus:outline-red-300 \
             bg-white disabled:text-red-300 \
             disabled:border-red-300': color === BasicColor.DANGER,
+            'border-gray-300 !text-gray-900 \
+            hover:bg-gray-100 focus:outline-gray-200 \
+            bg-white disabled:text-gray-300 \
+            disabled:border-gray-300': color === BasicColor.LIGHT,
         }">
         <slot>Button</slot>
     </button>
