@@ -260,6 +260,7 @@ export default defineComponent({
         })
 
         const onSave = () => {
+            // Validate
             v$.value.$touch()
 
             if (v$.value.$invalid) {
@@ -270,6 +271,7 @@ export default defineComponent({
         }
 
         const onSaveEdit = () => {
+            // Validate
             v$.value.$touch()
 
             if (v$.value.$invalid) {
@@ -281,7 +283,9 @@ export default defineComponent({
 
         const emitUpdate = () => {
             if (props.variantItem) {
-                context.emit('onUpdate', variantForm.value, props.variantItem.idx)
+                context.emit('onUpdate',
+                             variantForm.value,
+                             props.variantItem.idx)
             }
         }
 
