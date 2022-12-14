@@ -28,15 +28,17 @@
                     placeholder="Enter variant name"
                     v-model="variantForm.name"
                     :class="{
-                        'border-red-400': v$.name.$dirty &&
-                                            v$.name.$invalid 
+                        'p-2': true,
+                        'border-red-400 focus:!outline-red-200 \
+                        focus:!border-red-500': v$.name.$dirty &&
+                                                  v$.name.$invalid 
                         
                     }"
                     @blur="v$.name.$touch" />
                 <p
                     v-for="error of v$.name.$errors"
                     :key="error.$uid"
-                    class="mt-2 text-xs text-red-600 dark:text-red-500">
+                    class="mt-2 text-xs text-red-500">
                     {{ error.$message }}
                 </p>
             </div>
@@ -50,8 +52,10 @@
                     placeholder="Enter variant sku no."
                     v-model="variantForm.sku"
                     :class="{
-                        'border-red-400': v$.sku.$dirty &&
-                                            v$.sku.$invalid 
+                        'p-2': true,
+                        'border-red-400 focus:!outline-red-200 \
+                        focus:!border-red-500': v$.sku.$dirty &&
+                                                  v$.sku.$invalid 
                         
                     }"
                     @blur="v$.sku.$touch" />
@@ -68,15 +72,16 @@
                         v-model="variantForm.price"
                         :class="{
                             'p-2': true,
-                            'border-red-400': v$.price.$dirty &&
-                                                v$.price.$invalid 
+                            'border-red-400 focus:!outline-red-200 \
+                            focus:!border-red-500': v$.price.$dirty &&
+                                                      v$.price.$invalid 
                             
                         }"
                         @blur="v$.price.$touch" />
                     <p
                         v-for="error of v$.price.$errors"
                         :key="error.$uid"
-                        class="mt-2 text-xs text-red-600 dark:text-red-500">
+                        class="mt-2 text-xs text-red-500">
                         {{ error.$message }}
                     </p>
                 </div>
@@ -91,15 +96,16 @@
                         v-model="variantForm.quantity"
                         :class="{
                             'p-2': true,
-                            'border-red-400': v$.quantity.$dirty &&
-                                                v$.quantity.$invalid 
+                            'border-red-400 focus:!outline-red-200 \
+                            focus:!border-red-500': v$.quantity.$dirty &&
+                                                      v$.quantity.$invalid 
                             
                         }"
                         @blur="v$.quantity.$touch" />
                     <p
                         v-for="error of v$.quantity.$errors"
                         :key="error.$uid"
-                        class="mt-2 text-xs text-red-600 dark:text-red-500">
+                        class="mt-2 text-xs text-red-500">
                         {{ error.$message }}
                     </p>
                 </div>
@@ -112,6 +118,7 @@
                     </label>
                     <TheInput
                         :type="'number'"
+                        :class="'p-2'"
                         placeholder="0" 
                         v-model="variantForm.customerQuantityLimit"
                         @blur="v$.customerQuantityLimit.$touch" />
@@ -127,15 +134,16 @@
                         v-model="variantForm.weight"
                         :class="{
                             'p-2': true,
-                            'border-red-400': v$.weight.$dirty &&
-                                                v$.weight.$invalid 
+                            'border-red-400 focus:!outline-red-200 \
+                            focus:!border-red-500': v$.weight.$dirty &&
+                                                      v$.weight.$invalid 
                             
                         }"
                         @blur="v$.weight.$touch" />
                     <p
                         v-for="error of v$.weight.$errors"
                         :key="error.$uid"
-                        class="mt-2 text-xs text-red-600 dark:text-red-500">
+                        class="mt-2 text-xs text-red-500">
                         {{ error.$message }}
                     </p>
                 </div>
@@ -170,7 +178,7 @@ import TheInput from '@/components/basics/TheInput.vue'
 import type { AddVariantList, VariantBaseInput } from '@/common/models/product.model'
 
 import useVuelidate from '@vuelidate/core'
-import { helpers, required, sameAs, maxLength, minValue } from '@vuelidate/validators'
+import { helpers, required, maxLength, minValue } from '@vuelidate/validators'
 import { onClickOutside } from '@vueuse/core'
 
 export default defineComponent({
@@ -249,34 +257,24 @@ export default defineComponent({
 
         onMounted(() => {
             // console.log('Mounted VariantDrawer')
-            // if (props.isEdit && props.variantItem) {
-            //     variantForm.value = props.variantItem
-            //     v$.value.$reset()
-            // }
         })
 
         const onSave = () => {
             v$.value.$touch()
-            console.log(variantForm.value)
-            console.log(v$.value.$invalid)
 
             if (v$.value.$invalid) {
                 // noop
             } else {
-                // omitSave bro
                 emitSave()
             }
         }
 
         const onSaveEdit = () => {
             v$.value.$touch()
-            console.log(variantForm.value)
-            console.log(v$.value.$invalid)
 
             if (v$.value.$invalid) {
                 // noop
             } else {
-                // omitSave bro
                 emitUpdate()
             }
         }
