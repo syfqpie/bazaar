@@ -23,7 +23,7 @@
 
         <i 
             class="fa-solid fa-chevron-right
-            fa-fw transition-all duration-300"
+            fa-fw transition-all duration-150"
             :class="{
                 'rotate-0': !isActive,
                 'rotate-90': isActive
@@ -32,10 +32,10 @@
 
     <Transition
         enter-from-class="h-0 py-0"
-        enter-active-class="transition-all duration-300 overflow-hidden ease-in"
+        enter-active-class="transition-all duration-150 overflow-hidden ease-in"
         enter-to-class="h-[2.5rem]"
         leave-from-class="h-[2.5rem]"
-        leave-active-class="transition-all duration-300 overflow-hidden ease-out py-0"
+        leave-active-class="transition-all duration-150 overflow-hidden ease-out py-0"
         leave-to-class="h-0">
         <ul
             v-if="isActive"
