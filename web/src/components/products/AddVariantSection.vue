@@ -3,7 +3,7 @@
         <div
             v-for="(item, index) in variants"
             :key="item.idx"
-            class="p-2 shadow bg-white
+            class="p-2 bg-white
             border-[1px] mb-2 rounded-lg">
             <div
                 class="grid grid-cols-12 gap-4
