@@ -11,12 +11,13 @@
 			}"
 			:key="step.idx">
 			<span
-				class="wizard-step-counter 
+				class="wizard-step-counter
+				transition-colors duration-150
 				after:transition-all after:duration-150">
 			</span>
 
 			<a
-				class="wizard-step-link"
+				class="wizard-step-link transition-colors duration-150"
 				@click="goStep(step.idx)">
 				<span>{{ step.title }}</span>
 			</a>
@@ -141,7 +142,7 @@ export default defineComponent({
 		 * Go to next step
 		 */
 		const nextStep = () => {
-			if (config.value.next &&
+			if (config.value.next !== null &&
 				config.value.total > 0 &&
 				config.value.current! < config.value.total) {
 				goStep(config.value.next)
@@ -152,7 +153,7 @@ export default defineComponent({
 		 * Back step 
 		 */
 		const backStep = () => {
-			if (config.value.previous &&
+			if (config.value.previous !== null &&
 				config.value.total > 0 &&
 				config.value.current! > 0) {
 				goStep(config.value.previous)
