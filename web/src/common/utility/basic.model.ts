@@ -13,7 +13,10 @@ export enum BasicColor {
     WARNING = 'yellow',
 
     /** Danger color */
-    DANGER = 'red'
+    DANGER = 'red',
+
+    /** Light color */
+    LIGHT = 'light'
 }
 
 /** Enum for modal size */
