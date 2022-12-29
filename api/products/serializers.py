@@ -32,14 +32,42 @@ class ProductSerializer(serializers.ModelSerializer):
     Base serializer for Product model
     """
 
+    class Meta:
+        model = Product
+        fields = '__all__'
+        read_only_fields = ['is_active','rating','vendor']
+
+
+class CreateProductSerializer(serializers.ModelSerializer):
+    """
+    Create serializer for Product model
+    """
+
     category = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=Category.objects.all()
+        queryset=Category.objects.all(),
+        many=True, required=False
     )
+    is_publish = serializers.BooleanField(write_only=True)
 
     class Meta:
         model = Product
         fields = '__all__'
         read_only_fields = ['is_active','rating','vendor']
+    
+    def create(self, validated_data):
+        """
+        Override to add custom field
+
+        TODO:
+            variants creation
+        """
+
+        # Update data
+        is_publish = validated_data.pop('is_publish')
+        validated_data['is_active'] = is_publish
+
+        # Return default
+        return super().create(validated_data)
 
 
 class PublicProductSerializer(serializers.ModelSerializer):
