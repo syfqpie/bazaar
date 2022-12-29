@@ -1,0 +1,308 @@
+[
+    {
+        "model": "products.product",
+        "pk": 1,
+        "fields": {
+            "name": "Harry Potter Collection",
+            "slug": "harry-potter-collection-1672329618",
+            "description": "Chronicle the lives of a young wizard, Harry Potter, and his friends Hermione Granger and Ron Weasley, all of whom are students at Hogwarts School of Witchcraft and Wizardry.",
+            "category": [],
+            "rating": null,
+            "vendor": 1,
+            "is_active": true,
+            "created_at": "2022-11-12 11:29:32.397532+00:00",
+            "last_modified_at": "2022-11-12 11:29:32.397540+00:00"
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 2,
+        "fields": {
+            "name": "Percy Jackson & the Olympians",
+            "slug": "percy-jackson-the-olympians-1672329618",
+            "description": "Set in a world with the Greek gods in the 21st century, and follows the protagonist Percy Jackson, a young demigod who must prevent the Titans, led by Kronos (Cronus), from destroying the world.",
+            "category": [],
+            "rating": null,
+            "vendor": 1,
+            "is_active": true,
+            "created_at": "2022-11-12 11:29:32.397532+00:00",
+            "last_modified_at": "2022-11-12 11:29:32.397540+00:00"
+        }
+    },
+    {
+        "model": "products.variant",
+        "pk": 1,
+        "fields": {
+            "sku": null,
+            "name": "Harry Potter and the Philosopher's Stone",
+            "product": 1,
+            "price": 38.42,
+            "weight": null,
+            "customer_quantity_limit": 10,
+            "is_active": true,
+            "created_at": "2022-11-12 11:29:32.397532+00:00",
+            "last_modified_at": "2022-11-12 11:29:32.397540+00:00"
+        }
+    },
+    {
+        "model": "products.variant",
+        "pk": 2,
+        "fields": {
+            "sku": null,
+            "name": "Harry Potter and the Chamber of Secrets",
+            "product": 1,
+            "price": 38.42,
+            "weight": null,
+            "customer_quantity_limit": 10,
+            "is_active": true,
+            "created_at": "2022-11-12 11:29:32.397532+00:00",
+            "last_modified_at": "2022-11-12 11:29:32.397540+00:00"
+        }
+    },
+    {
+        "model": "products.variant",
+        "pk": 3,
+        "fields": {
+            "sku": null,
+            "name": "Harry Potter and the Prisoner of Azkaban",
+            "product": 1,
+            "price": 38.42,
+            "weight": null,
+            "customer_quantity_limit": 10,
+            "is_active": true,
+            "created_at": "2022-11-12 11:29:32.397532+00:00",
+            "last_modified_at": "2022-11-12 11:29:32.397540+00:00"
+        }
+    },
+    {
+        "model": "products.variant",
+        "pk": 4,
+        "fields": {
+            "sku": null,
+            "name": "Harry Potter and the Goblet of Fire",
+            "product": 1,
+            "price": 38.42,
+            "weight": null,
+            "customer_quantity_limit": 10,
+            "is_active": true,
+            "created_at": "2022-11-12 11:29:32.397532+00:00",
+            "last_modified_at": "2022-11-12 11:29:32.397540+00:00"
+        }
+    },
+    {
+        "model": "products.variant",
+        "pk": 5,
+        "fields": {
+            "sku": null,
+            "name": "Harry Potter and the Order of the Phoenix",
+            "product": 1,
+            "price": 38.42,
+            "weight": null,
+            "customer_quantity_limit": 10,
+            "is_active": true,
+            "created_at": "2022-11-12 11:29:32.397532+00:00",
+            "last_modified_at": "2022-11-12 11:29:32.397540+00:00"
+        }
+    },
+    {
+        "model": "products.variant",
+        "pk": 6,
+        "fields": {
+            "sku": null,
+            "name": "Harry Potter and the Half-Blood Prince",
+            "product": 1,
+            "price": 38.42,
+            "weight": null,
+            "customer_quantity_limit": 10,
+            "is_active": true,
+            "created_at": "2022-11-12 11:29:32.397532+00:00",
+            "last_modified_at": "2022-11-12 11:29:32.397540+00:00"
+        }
+    },
+    {
+        "model": "products.variant",
+        "pk": 7,
+        "fields": {
+            "sku": null,
+            "name": "Harry Potter and the Deathly Hallows",
+            "product": 1,
+            "price": 38.42,
+            "weight": null,
+            "customer_quantity_limit": 10,
+            "is_active": true,
+            "created_at": "2022-11-12 11:29:32.397532+00:00",
+            "last_modified_at": "2022-11-12 11:29:32.397540+00:00"
+        }
+    },
+    {
+        "model": "products.variant",
+        "pk": 8,
+        "fields": {
+            "sku": null,
+            "name": "The Lightning Thief",
+            "product": 2,
+            "price": 38.42,
+            "weight": null,
+            "customer_quantity_limit": 10,
+            "is_active": true,
+            "created_at": "2022-11-12 11:29:32.397532+00:00",
+            "last_modified_at": "2022-11-12 11:29:32.397540+00:00"
+        }
+    },
+    {
+        "model": "products.variant",
+        "pk": 9,
+        "fields": {
+            "sku": null,
+            "name": "The Sea of Monsters",
+            "product": 2,
+            "price": 38.42,
+            "weight": null,
+            "customer_quantity_limit": 10,
+            "is_active": true,
+            "created_at": "2022-11-12 11:29:32.397532+00:00",
+            "last_modified_at": "2022-11-12 11:29:32.397540+00:00"
+        }
+    },
+    {
+        "model": "products.variant",
+        "pk": 10,
+        "fields": {
+            "sku": null,
+            "name": "The Titan's Curse",
+            "product": 2,
+            "price": 38.42,
+            "weight": null,
+            "customer_quantity_limit": 10,
+            "is_active": true,
+            "created_at": "2022-11-12 11:29:32.397532+00:00",
+            "last_modified_at": "2022-11-12 11:29:32.397540+00:00"
+        }
+    },
+    {
+        "model": "products.variant",
+        "pk": 11,
+        "fields": {
+            "sku": null,
+            "name": "The Battle of the Labyrinth",
+            "product": 2,
+            "price": 38.42,
+            "weight": null,
+            "customer_quantity_limit": 10,
+            "is_active": true,
+            "created_at": "2022-11-12 11:29:32.397532+00:00",
+            "last_modified_at": "2022-11-12 11:29:32.397540+00:00"
+        }
+    },
+    {
+        "model": "products.variant",
+        "pk": 12,
+        "fields": {
+            "sku": null,
+            "name": "The Last Olympian",
+            "product": 2,
+            "price": 38.42,
+            "weight": null,
+            "customer_quantity_limit": 10,
+            "is_active": true,
+            "created_at": "2022-11-12 11:29:32.397532+00:00",
+            "last_modified_at": "2022-11-12 11:29:32.397540+00:00"
+        }
+    },
+    {
+        "model": "products.inventory",
+        "pk": 1,
+        "fields": {
+            "variant": 1,
+            "quantity": 50
+        }
+    },
+    {
+        "model": "products.inventory",
+        "pk": 2,
+        "fields": {
+            "variant": 2,
+            "quantity": 50
+        }
+    },
+    {
+        "model": "products.inventory",
+        "pk": 3,
+        "fields": {
+            "variant": 3,
+            "quantity": 50
+        }
+    },
+    {
+        "model": "products.inventory",
+        "pk": 4,
+        "fields": {
+            "variant": 4,
+            "quantity": 50
+        }
+    },
+    {
+        "model": "products.inventory",
+        "pk": 5,
+        "fields": {
+            "variant": 5,
+            "quantity": 50
+        }
+    },
+    {
+        "model": "products.inventory",
+        "pk": 6,
+        "fields": {
+            "variant": 6,
+            "quantity": 50
+        }
+    },
+    {
+        "model": "products.inventory",
+        "pk": 7,
+        "fields": {
+            "variant": 7,
+            "quantity": 50
+        }
+    },
+    {
+        "model": "products.inventory",
+        "pk": 8,
+        "fields": {
+            "variant": 8,
+            "quantity": 50
+        }
+    },
+    {
+        "model": "products.inventory",
+        "pk": 9,
+        "fields": {
+            "variant": 9,
+            "quantity": 50
+        }
+    },
+    {
+        "model": "products.inventory",
+        "pk": 10,
+        "fields": {
+            "variant": 10,
+            "quantity": 50
+        }
+    },
+    {
+        "model": "products.inventory",
+        "pk": 11,
+        "fields": {
+            "variant": 11,
+            "quantity": 50
+        }
+    },
+    {
+        "model": "products.inventory",
+        "pk": 12,
+        "fields": {
+            "variant": 12,
+            "quantity": 50
+        }
+    }
+]
