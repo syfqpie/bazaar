@@ -38,38 +38,6 @@ class ProductSerializer(serializers.ModelSerializer):
         read_only_fields = ['is_active','rating','vendor']
 
 
-class CreateProductSerializer(serializers.ModelSerializer):
-    """
-    Create serializer for Product model
-    """
-
-    category = serializers.PrimaryKeyRelatedField(
-        queryset=Category.objects.all(),
-        many=True, required=False
-    )
-    is_publish = serializers.BooleanField(write_only=True)
-
-    class Meta:
-        model = Product
-        fields = '__all__'
-        read_only_fields = ['is_active','rating','vendor']
-    
-    def create(self, validated_data):
-        """
-        Override to add custom field
-
-        TODO:
-            variants creation
-        """
-
-        # Update data
-        is_publish = validated_data.pop('is_publish')
-        validated_data['is_active'] = is_publish
-
-        # Return default
-        return super().create(validated_data)
-
-
 class PublicProductSerializer(serializers.ModelSerializer):
     """
     Public serializer for Product model
@@ -146,3 +114,54 @@ class MediaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Media
         fields = '__all__'
+
+
+class CreateProductSerializer(serializers.ModelSerializer):
+    """
+    Create serializer for Product model
+    """
+
+    category = serializers.PrimaryKeyRelatedField(
+        queryset=Category.objects.all(),
+        many=True, required=False
+    )
+    is_publish = serializers.BooleanField(write_only=True)
+    variants = VariantSerializer(many=True)
+
+    class Meta:
+        model = Product
+        fields = '__all__'
+        read_only_fields = ['is_active','rating','vendor']
+    
+    def create(self, validated_data):
+        """
+        Nested creation. Will create Product, Variant, Inventory
+        """
+        
+        # Pop required data
+        is_publish = validated_data.pop('is_publish')
+        variants_data = validated_data.pop('variants')
+
+        # Update data 
+        validated_data['is_active'] = is_publish
+
+        # Create product using default method
+        product = super().create(validated_data)
+        
+        # Create variants and related inventories
+        for variant in variants_data:
+            quantity = variant.pop('quantity')
+            variant_instance = Variant.objects.create(
+                product=product,
+                is_active=is_publish,
+                **variant
+            )
+            
+            # Create inventory 
+            Inventory.objects.create(
+                variant=variant_instance,
+                quantity=quantity
+            )
+
+        return product
+
