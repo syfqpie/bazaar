@@ -1,8 +1,13 @@
-from rest_framework import viewsets, exceptions
+import time
+
+from django.utils.text import slugify
+from rest_framework import exceptions, viewsets
 from rest_framework.filters import OrderingFilter, SearchFilter
 
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_extensions.mixins import NestedViewSetMixin
+
+from users.models import UserType
 
 from .models import Product, Category, Variant, Inventory, Media
 from .policy import (
@@ -16,6 +21,8 @@ from .serializers import (
     CategorySerializer,
     VariantSerializer,
     MediaSerializer,
+
+    CreateProductSerializer,
 
     PublicCategorySerializer,
     PublicProductSerializer,
@@ -31,6 +38,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     serializer_public_class = { 'list': PublicProductSerializer }
+    serializer_vendor_class = { 'create': CreateProductSerializer }
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['category','rating','vendor']
     search_fields = ['name']
@@ -71,11 +79,27 @@ class ProductViewSet(viewsets.ModelViewSet):
 
         user = self.request.user
 
+        if self.action == 'create_entry':
+            return CreateProductSerializer
+
         if hasattr(self, 'serializer_public_class') and user.is_anonymous:
             return self.serializer_public_class.get(self.action, self.serializer_class)
+        elif hasattr(self, 'serializer_vendor_class') and not user.is_anonymous and user.user_type == UserType.VENDOR:
+            return self.serializer_vendor_class.get(self.action, self.serializer_class)
 
         # Return default class
         return super().get_serializer_class()
+
+    def create(self, request, *args, **kwargs):
+        """
+        Override to generate slug
+        """
+
+        unix = int(time.time())
+        product_name = getattr(request.data, 'name', None)
+        request.data['slug'] = slugify(f'{product_name} {unix}')
+
+        return super().create(request, *args, **kwargs)
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
