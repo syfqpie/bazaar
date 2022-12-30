@@ -61,7 +61,7 @@ class Product(CoreBaseModel):
         ordering = ['-created_at', '-rating']
 
     def __str__(self):
-        return ('%s'%(self.name))
+        return (f'[{self.id}] {self.name}')
 
 
 class CategoryProduct(models.Model):
