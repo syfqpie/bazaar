@@ -28,7 +28,6 @@ class ProductSerializer(serializers.ModelSerializer):
         read_only_fields = ['is_active','rating','vendor']
 
 
-
 class InventorySerializer(serializers.ModelSerializer):
     """
     Base serializer for Inventory model

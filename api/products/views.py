@@ -112,7 +112,6 @@ class ProductViewSet(viewsets.ModelViewSet):
         request = serializer.context['request']
         serializer.save(vendor=request.user.related_vendor)
 
-    
     def perform_update(self, serializer):
         """
         Override perform_update to append variants data
