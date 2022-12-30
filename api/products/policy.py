@@ -68,7 +68,12 @@ class ProductAccessPolicy(BaseAccessPolicy):
     @classmethod
     def scope_queryset(cls, request, queryset):
         """ Filter queryset according to roles """
-        
+
+        user = request.user
+
+        if not user.is_anonymous and user.user_type == UserType.VENDOR:
+            return queryset.filter(vendor__user=user)
+
         return queryset
 
 
@@ -145,4 +150,5 @@ class MediaAccessPolicy(BaseAccessPolicy):
     def scope_queryset(cls, request, queryset):
         """ Filter queryset according to roles """
         
+
         return queryset
