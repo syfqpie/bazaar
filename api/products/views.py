@@ -3,6 +3,7 @@ import time
 from django.utils.text import slugify
 from rest_framework import exceptions, viewsets
 from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.response import Response
 
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_extensions.mixins import NestedViewSetMixin
@@ -22,7 +23,7 @@ from .serializers import (
     VariantSerializer,
     MediaSerializer,
 
-    CreateProductSerializer,
+    VendorProductSerializer,
 
     PublicCategorySerializer,
     PublicProductSerializer,
@@ -37,8 +38,8 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    serializer_vendor_class = VendorProductSerializer
     serializer_public_class = { 'list': PublicProductSerializer }
-    serializer_vendor_class = { 'create': CreateProductSerializer }
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['category','rating','vendor']
     search_fields = ['name']
@@ -63,14 +64,6 @@ class ProductViewSet(viewsets.ModelViewSet):
             self.request, self.queryset
         )
     
-    def perform_create(self, serializer):
-        """
-        Override perform_create to update created_by
-        """
-
-        request = serializer.context['request']
-        serializer.save(vendor=request.user.related_vendor)
-    
     def get_serializer_class(self):
         """
         Override get_serializer_class for
@@ -80,12 +73,12 @@ class ProductViewSet(viewsets.ModelViewSet):
         user = self.request.user
 
         if self.action == 'create_entry':
-            return CreateProductSerializer
+            return VendorProductSerializer
 
         if hasattr(self, 'serializer_public_class') and user.is_anonymous:
             return self.serializer_public_class.get(self.action, self.serializer_class)
         elif hasattr(self, 'serializer_vendor_class') and not user.is_anonymous and user.user_type == UserType.VENDOR:
-            return self.serializer_vendor_class.get(self.action, self.serializer_class)
+            return self.serializer_vendor_class
 
         # Return default class
         return super().get_serializer_class()
@@ -100,6 +93,32 @@ class ProductViewSet(viewsets.ModelViewSet):
         request.data['slug'] = slugify(f'{product_name} {unix}')
 
         return super().create(request, *args, **kwargs)
+
+    def partial_update(self, request, *args, **kwargs):
+        """
+        Override to support nested partial_update
+        """
+
+        variants = request.data.pop('variants', [])
+        self.kwargs.setdefault('variants', variants)
+
+        return super().partial_update(request, args, kwargs)
+    
+    def perform_create(self, serializer):
+        """
+        Override perform_create to update created_by
+        """
+
+        request = serializer.context['request']
+        serializer.save(vendor=request.user.related_vendor)
+
+    
+    def perform_update(self, serializer):
+        """
+        Override perform_update to append variants data
+        """
+
+        serializer.save(variants=self.kwargs.pop('variants', []))
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
