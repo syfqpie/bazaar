@@ -9,6 +9,7 @@
             text-gray-500 uppercase">
             {{  !isEdit ? 'New' : 'Edit' }} variant
         </h5>
+        
         <button type="button"
             class="text-gray-400 bg-transparent hover:bg-gray-200 
             hover:text-gray-900 rounded-lg text-sm p-3 absolute
@@ -32,7 +33,6 @@
                         'border-red-400 focus:!outline-red-200 \
                         focus:!border-red-500': v$.name.$dirty &&
                                                   v$.name.$invalid 
-                        
                     }"
                     @blur="v$.name.$touch" />
                 <p
@@ -55,8 +55,7 @@
                         'p-2': true,
                         'border-red-400 focus:!outline-red-200 \
                         focus:!border-red-500': v$.sku.$dirty &&
-                                                  v$.sku.$invalid 
-                        
+                                                  v$.sku.$invalid
                     }"
                     @blur="v$.sku.$touch" />
             </div>
@@ -74,8 +73,7 @@
                             'p-2': true,
                             'border-red-400 focus:!outline-red-200 \
                             focus:!border-red-500': v$.price.$dirty &&
-                                                      v$.price.$invalid 
-                            
+                                                      v$.price.$invalid
                         }"
                         @blur="v$.price.$touch" />
                     <p
@@ -98,8 +96,7 @@
                             'p-2': true,
                             'border-red-400 focus:!outline-red-200 \
                             focus:!border-red-500': v$.quantity.$dirty &&
-                                                      v$.quantity.$invalid 
-                            
+                                                      v$.quantity.$invalid
                         }"
                         @blur="v$.quantity.$touch" />
                     <p
@@ -175,7 +172,7 @@ import { computed, onMounted, defineComponent, ref } from 'vue'
 
 import TheButton from '@/components/basics/TheButton.vue'
 import TheInput from '@/components/basics/TheInput.vue'
-import type { AddVariantList, VariantBaseInput } from '@/common/models/product.model'
+import type { VariantInput } from '@/common/models/product.model'
 
 import useVuelidate from '@vuelidate/core'
 import { helpers, required, maxLength, minValue } from '@vuelidate/validators'
@@ -188,7 +185,7 @@ export default defineComponent({
         const variantDrawer = ref(null)
 
         // Form
-        const variantForm = ref<VariantBaseInput>({
+        const variantForm = ref<VariantInput>({
             name: (
                 props.variantItem ? props.variantItem.name : null
             ),
@@ -281,18 +278,26 @@ export default defineComponent({
             }
         }
 
+        /**
+         * Emit onUpdate
+         */
         const emitUpdate = () => {
             if (props.variantItem) {
                 context.emit('onUpdate',
-                             variantForm.value,
-                             props.variantItem.idx)
+                             variantForm.value)
             }
         }
 
+        /**
+         * Emit onSave
+         */
         const emitSave = () => {
             context.emit('onSave', variantForm.value)
         }
 
+        /**
+         * Emit onToggle
+         */
         const emitToggle = () => {
             context.emit('onToggle')
         }
@@ -319,7 +324,7 @@ export default defineComponent({
             default: false
         },
         variantItem: {
-            type: Object as () => AddVariantList | null,
+            type: Object as () => VariantInput | null,
             default: null
         }
     },

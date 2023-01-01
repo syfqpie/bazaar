@@ -2,7 +2,7 @@
     <div class="mb-3">
         <div
             v-for="(item, index) in variants"
-            :key="item.idx"
+            :key="index"
             class="p-2 bg-white
             border-[1px] mb-2 rounded-lg">
             <div
@@ -18,9 +18,6 @@
 
                             <span v-else>
                                 Name not available
-                                <span class="text-sm font-extralight">
-                                    *will use product name as default
-                                </span>
                             </span>
                         </span>
                     </p>
@@ -42,6 +39,7 @@
                                 class="rounded-r-none"
                                 size="sm"
                                 :color="BasicColor.LIGHT"
+                                :disabled="isWizardCompleted"
                                 @click="toggleDrawer(true, item)">
                                 <i
                                     class="fa-solid
@@ -53,7 +51,7 @@
                                 class="rounded-l-none border-l-0"
                                 size="sm"
                                 :color="BasicColor.LIGHT"
-                                :disabled="(index === 0)"
+                                :disabled="(index === 0) || isWizardCompleted"
                                 @click="onRemoveVariant(index)">
                                 <i class="fa-regular fa-trash-can"></i>
                             </TheOutlineButton>
@@ -63,13 +61,17 @@
             </div>
         </div>
 
-        <TheOutlineButton
-            class="mt-1"
-            :size="'sm'"
-            @click="toggleDrawer()"> 
-            <i class="fa-solid fa-circle-plus"></i>
-            Add more
-        </TheOutlineButton>
+        <div class="grid justify-items-end">
+            <TheOutlineButton
+                class="mt-1"
+                :size="'sm'"
+                :disabled="isWizardCompleted || (variants.length === 1 &&
+                !variants[0].name && !variants[0].price)"
+                @click="toggleDrawer()"> 
+                <i class="fa-solid fa-circle-plus"></i>
+                Add more
+            </TheOutlineButton>
+        </div>
 
         <Transition
             enter-from-class="transition-transform translate-x-full"
@@ -108,15 +110,17 @@ import TheInput from '@/components/basics/TheInput.vue'
 import TheOutlineButton from '@/components/basics/TheOutlineButton.vue'
 import VariantDrawer from './VariantDrawer.vue'
 import { BasicColor } from '@/common/utility/basic.model'
-import type { AddVariantList, VariantBaseInput } from '@/common/models/product.model'
+import type { VariantInput } from '@/common/models/product.model'
 import { useProductStore } from '@/stores'
+
+const DEL_COUNT = 1
 
 export default defineComponent({
     name: 'AddVariantSection',
-    setup() {
+    setup(props, context) {
         // Data
-        const variants = ref<AddVariantList[]>([])
-        const selectedItem = ref<AddVariantList | null>(null)
+        const variants = ref<VariantInput[]>([])
+        const selectedItem = ref<VariantInput | null>(null)
 
         // Checker
         const isDrawerOpen = ref(false)
@@ -124,7 +128,12 @@ export default defineComponent({
 
         onMounted(() => {
             // console.log('Mounted AddVariantSection')
-            addDefault()
+            if (props.formVariants.length === 0) {
+                addDefault()
+            } else {
+                variants.value = [...props.formVariants]
+            }
+            
         })
 
         // Services
@@ -136,20 +145,7 @@ export default defineComponent({
          * one variant.
          */
         const addDefault = () => {
-            const defVariant = {
-                name: null,
-                price: 0,
-                quantity: 0,
-                sku: null,
-                weight: null,
-                customerQuantityLimit: null
-            }
-            return variants.value.push(
-                productStore.saveToArray(
-                    defVariant,
-                    variants.value.length
-                )
-            )
+            return variants.value.push(productStore.getGenericProduct())
         }
 
         /**
@@ -159,7 +155,7 @@ export default defineComponent({
          * @param current selected variant to edit
          */
         const toggleDrawer = (isEdit: boolean = false,
-                              current: AddVariantList | null = null) => {
+                              current: VariantInput | null = null) => {
             // Pre toggle
             if (!isDrawerOpen.value) {
                 isDrawerEdit.value = isEdit
@@ -185,10 +181,11 @@ export default defineComponent({
          * and toggle drawer
          * 
          * @param draftVariant variant new update
-         * @param idx variant id
+         * @param index variant index
          */
-        const onUpdateVariant = (draftVariant: VariantBaseInput, idx: number) => {
-            variants.value.splice(idx, 1, { ...draftVariant, ...{ idx: idx } })
+        const onUpdateVariant = (draftVariant: VariantInput, index: number) => {
+            variants.value.splice(index, DEL_COUNT, draftVariant)
+            emitUpdate()
             toggleDrawer()
         }
 
@@ -198,14 +195,9 @@ export default defineComponent({
          * 
          * @param draftVariant variant to add
          */
-        const onAddVariant = (draftVariant: VariantBaseInput) => {
-            variants.value.push(
-                productStore.saveToArray(
-                    draftVariant,
-                    variants.value.length
-                )
-            )
-
+        const onAddVariant = (draftVariant: VariantInput) => {
+            variants.value.push(draftVariant)
+            emitUpdate()
             toggleDrawer()
         }
 
@@ -215,27 +207,18 @@ export default defineComponent({
          * Remove variant from array and
          * trigger update list id
          * 
-         * @param idx variant id
+         * @param index variant index
          */
-        const onRemoveVariant = (idx: number) => {
-            variants.value.splice(idx, 1)
-            variants.value = updateListIdx()
+        const onRemoveVariant = (index: number) => {
+            variants.value.splice(index, DEL_COUNT)
+            emitUpdate()
         }
 
         /**
-         * Update list id
-         * 
-         * Remap variant list ids
+         * Emit changes value
          */
-        const updateListIdx = () => {
-            return variants.value.map(
-                (item, index) => {
-                    return {
-                        ...item,
-                        ...{ idx: index }
-                    }
-                }
-            )
+        const emitUpdate = () => {
+            context.emit('onUpdate', variants.value)
         }
 
         return {
@@ -254,6 +237,17 @@ export default defineComponent({
         TheInput,
         TheOutlineButton,
         VariantDrawer
-    }
+    },
+    props: {
+        formVariants: {
+            type: Array as () => VariantInput[],
+            default: []
+        },
+        isWizardCompleted: {
+            type: Boolean,
+            default: false
+        }
+    },
+    emits: ['onUpdate']
 })
 </script>
