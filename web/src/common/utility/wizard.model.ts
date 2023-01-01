@@ -7,7 +7,10 @@ export interface GandalfItem {
     description?: string,
 
     /** Is item skippable? */
-    isSkippable?: boolean
+    isSkippable?: boolean,
+
+    /** Is step no icon? */
+    isNoIcon?: boolean
 }
 
 /** Interface for gandalf (the wizard) step */
