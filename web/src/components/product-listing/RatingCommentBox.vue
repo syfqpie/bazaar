@@ -134,3 +134,49 @@ export default defineComponent({
     ]
 })
 </script>
+        return {
+            onNotHelpful,
+            onHelpful
+        }
+    },
+    props: {
+        userName: {
+            type: String,
+            required: true
+        },
+        // userCountry: {
+        //     type: String,
+        //     required: true
+        // },
+        userImage: {
+            type: String,
+            required: true,
+            // default: '@/assets/img/default/user-icon.png'
+        },
+        userJoinDate: {
+            type: String,
+            required: true
+        },
+        userProductReviewDate: {
+            type: String,
+            required: true
+        },
+        userProductReviewTitle:{
+            type: String,
+            required: true
+        },
+        userProductReviewRating:{
+            type: String,
+            required: true
+        },
+        userProductReviewComment: {
+            type: String,
+            required: true
+        }
+    },
+    emits: [
+        'onHelpful',
+        'onNotHelpful'
+    ]
+})
+</script>
