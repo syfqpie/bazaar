@@ -1,5 +1,5 @@
 /** Base interface for variant input */
-export interface VariantBaseInput {
+export interface VariantInput {
     /** Variant's name */
     name: string | null,
 
@@ -19,8 +19,20 @@ export interface VariantBaseInput {
     customerQuantityLimit: number | null
 }
 
-/** Input interface for add variant list */
-export interface AddVariantList extends VariantBaseInput {
-    /** List index */
-    idx: number
+/** Base interface for product input  */
+export interface ProductInput {
+    /** Product's name */
+    name: string | null,
+
+    /** Product's description */
+    description: string | null,
+
+    /** Product's categories */
+    category: number[],
+
+    /** Publish product and variants? */
+    is_publish: boolean,
+
+    /** Product's variants */
+    variants: VariantInput[]
 }
