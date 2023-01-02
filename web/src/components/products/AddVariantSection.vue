@@ -28,7 +28,8 @@
                         <i
                             v-if="!item.name && !item.price"
                             class="fa-solid mr-3 text-sm
-                            fa-triangle-exclamation">
+                            fa-triangle-exclamation
+                            text-red-600 dark:text-red-500">
                         </i>
 
                         <div
@@ -110,7 +111,7 @@ import TheInput from '@/components/basics/TheInput.vue'
 import TheOutlineButton from '@/components/basics/TheOutlineButton.vue'
 import VariantDrawer from './VariantDrawer.vue'
 import { BasicColor } from '@/common/utility/basic.model'
-import type { VariantInput } from '@/common/models/product.model'
+import type { VariantInput } from '@/common/models/variant.model'
 import { useProductStore } from '@/stores'
 
 const DEL_COUNT = 1
@@ -244,6 +245,10 @@ export default defineComponent({
             default: []
         },
         isWizardCompleted: {
+            type: Boolean,
+            default: false
+        },
+        isWizardOnSubmit: {
             type: Boolean,
             default: false
         }
