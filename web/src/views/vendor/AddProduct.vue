@@ -103,6 +103,7 @@
 
                         <AddVariantSection
                             :is-wizard-completed="isWizardCompleted"
+                            :is-wizard-on-submit="isWizardOnSubmit"
                             :form-variants="productForm.variants"
                             @on-update="onVariantsUpdate" />
 
@@ -123,13 +124,49 @@
                             </TheOutlineButton>
                         </div>
                     </div>
-                </form>
 
-                <div class="mb-3" v-if="false">
-                    <TheButton>
-                        Add product
-                    </TheButton>
-                </div>
+                    <div class="mb-3" v-else-if="theWizard?.config.current === 2">
+                        <div
+                            class="flex flex-row align-middle items-center">
+                            <div class="basis-3/12">
+                                <img
+                                    v-if="isWizardOnSubmit && !isWizardCompleted"
+                                    src="@/assets/img/icons/package-on-conveyor.png"
+                                    class="h-auto w-9/12"
+                                    alt="Empty" />
+                                
+                                <img
+                                    v-else-if="!isWizardOnSubmit && isWizardCompleted"
+                                    src="@/assets/img/icons/package-checked.png"
+                                    class="h-auto w-9/12"
+                                    alt="Empty" />
+                            </div>
+
+                            <div class="basis-9/12">
+                                <div v-if="isWizardOnSubmit && !isWizardCompleted">
+                                    <p class="text-sm text-gray-900">
+                                        <span class="font-semibold text-indigo-700">Processing.</span>
+                                        You product with the variants are being processed.
+                                    </p>
+                                    <p class="text-sm mb-2">
+                                        Please wait...
+                                    </p>
+                                </div>
+
+                                <div v-else-if="!isWizardOnSubmit && isWizardCompleted">
+                                    <p class="text-sm text-gray-900">
+                                        <span class="font-semibold text-indigo-700">Success!</span>
+                                        You product with the variants has been saved!
+                                    </p>
+                                    <p class="text-sm mb-2">
+                                        Please wait, you will be redirected to
+                                        the product main page in 5 seconds..
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </section>
@@ -145,11 +182,13 @@ import TheTextArea from '@/components/basics/TheTextArea.vue'
 import TheOutlineButton from '@/components/basics/TheOutlineButton.vue'
 import AddVariantSection from '@/components/products/AddVariantSection.vue'
 import type { GandalfConfig, GandalfItem, GandalfStep } from '@/common/utility/wizard.model'
+import type { ProductInput } from '@/common/models/product.model'
+import type { VariantInput } from '@/common/models/variant.model'
+import { useProductStore } from '@/stores'
 
 import { useToast } from 'vue-toastification'
 import useVuelidate from '@vuelidate/core'
 import { helpers, minLength, required } from '@vuelidate/validators'
-import type { ProductInput, VariantInput } from '@/common/models/product.model'
 
 export default defineComponent({
     name: 'AddProduct',
@@ -158,16 +197,18 @@ export default defineComponent({
         const theWizard = ref<InstanceType<typeof TheGandalf> | null>(null)
         const wizardItems = ref<GandalfItem[]>([
 			{ title: 'Product details', isSkippable: true  },
-			{ title: 'Variants' }
+			{ title: 'Variants' },
+            { title: 'Completed', isSkippable: true, isNoIcon: true }
 		])
         const isWizardCompleted = ref(false)
+        const isWizardOnSubmit = ref(false)
 
         // Form
         const productForm = ref<ProductInput>({
             name: null,
             description: null,
             category: [],
-            is_publish: false,
+            isPublish: false,
             variants: []
         })
         const validation = computed(() => ({
@@ -195,33 +236,58 @@ export default defineComponent({
             }
         }))
         const v$ = useVuelidate(validation, productForm.value)
-        
-
-        onMounted(() => {
-            // console.log('Mounted AddProduct')
-        })
 
         // Services
         const toast = useToast()
+        const productStore = useProductStore()
+        
+        onMounted(() => {
+            // console.log('Mounted AddProduct')
+        })
         
         const onStep = (step: GandalfStep,
 					    config: GandalfConfig) => { }
         
+        /**
+         * Submit form to create new product.
+         * Would call validate first and only
+         * proceed to request if no error found.
+         * 
+         */
         const onSubmit = () => {
             v$.value.$validate()
             if (v$.value.$error) {
-                for (let item of v$.value.$errors) {
-                    toast.error(item.$message)
-                }
+                toast.error('Form not valid. Please check')
             } else {
-                isWizardCompleted.value = true
-                toast.success('Added new product!')
+                theWizard.value!.nextStep()
+                theWizard.value!.steps[2].isCompleted = true
+                isWizardOnSubmit.value = true
+                // console.log('Product form: ', productForm.value)
+                createProduct()
             }
             // toast.success('Added new product!')
         }
 
         /**
+         * TODO:
+         *      Redirect to product page after success
+         */
+        const createProduct = () => {
+            return productStore.create(productForm.value)
+                .then(data => {
+                    toast.success('Added new product!')
+                    isWizardOnSubmit.value = false
+                    isWizardCompleted.value = true
+                })
+                .catch(err => {
+                    toast.error('Error')
+                    isWizardOnSubmit.value = false
+                })
+        }
+
+        /**
          * AddVariantSection onUpdate's emitter receiver
+         * 
          * @param variants new updated variants
          */
         const onVariantsUpdate = (variants: VariantInput[]) => {
@@ -231,7 +297,7 @@ export default defineComponent({
         /**
          * Update steps isCompleted flag
          */
-         watch(v$, (newValue, oldValue) => {
+        watch(v$, (newValue, oldValue) => {
             const step1Completed = (
                 !newValue.name.$error && newValue.name.$dirty &&
                 !newValue.description.$error && newValue.description.$dirty
@@ -244,12 +310,26 @@ export default defineComponent({
             }
         })
 
+        /**
+         * Update complete step title
+         * when on submit (loading state)
+         */
+        watch(isWizardOnSubmit, (newValue, oldValue) => {
+            if (theWizard.value && newValue) {
+                theWizard.value.steps[wizardItems.value.length - 1].title = 'Submitting...'
+            } else if (theWizard.value && !newValue) {
+                theWizard.value.steps[wizardItems.value.length - 1].title =
+                    wizardItems.value[wizardItems.value.length - 1].title
+            }
+        })
+
 		return {
             productForm,
             v$,
             theWizard,
 			wizardItems,
             isWizardCompleted,
+            isWizardOnSubmit,
 			onStep,
             onSubmit,
             onVariantsUpdate
