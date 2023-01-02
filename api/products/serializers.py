@@ -51,7 +51,7 @@ class VariantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Variant
-        fields = '__all__'
+        exclude = ['product']
         read_only_fields = ['is_active', 'product']
     
     def create(self, validated_data):

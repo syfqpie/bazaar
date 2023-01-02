@@ -30,9 +30,6 @@ export interface Variant extends VariantBase {
     /** Variant's name */
     name: string,
 
-    /** Variant's parent Product id */
-    product: number,
-
     /** Variant's price */
     price: number,
 

@@ -15,7 +15,7 @@ export interface ProductInput extends ProductBase {
     category: number[],
 
     /** Publish product and variants? */
-    is_publish: boolean,
+    isPublish: boolean,
 
     /** Product's variants */
     variants: VariantInput[]
