@@ -172,10 +172,10 @@ import { computed, onMounted, defineComponent, ref } from 'vue'
 
 import TheButton from '@/components/basics/TheButton.vue'
 import TheInput from '@/components/basics/TheInput.vue'
-import type { VariantInput } from '@/common/models/product.model'
+import type { VariantInput } from '@/common/models/variant.model'
 
 import useVuelidate from '@vuelidate/core'
-import { helpers, required, maxLength, minValue } from '@vuelidate/validators'
+import { helpers, required, maxLength, maxValue, minValue } from '@vuelidate/validators'
 import { onClickOutside } from '@vueuse/core'
 
 export default defineComponent({
@@ -224,6 +224,10 @@ export default defineComponent({
                 minValue: helpers.withMessage(
                     'Min price is 0.00',
                     minValue(0.00)
+                ),
+                maxValue: helpers.withMessage(
+                    'That\'s too high',
+                    maxValue(999999.99)
                 )
             },
             quantity: {
@@ -234,6 +238,10 @@ export default defineComponent({
                 minValue: helpers.withMessage(
                     'Min quantity is 0',
                     minValue(0)
+                ),
+                maxValue: helpers.withMessage(
+                    'Max quantity is 9999',
+                    maxValue(9999)
                 )
             },
             sku: { },
