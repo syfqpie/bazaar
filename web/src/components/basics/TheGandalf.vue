@@ -81,8 +81,7 @@ export default defineComponent({
 
 		/**
 		 * Validation for step.
-		 * Should be call before using jumping
-		 * step.
+		 * Should be call before jumping step.
 		 * 
 		 * isComplete flag should be handled by
 		 * parent.
@@ -90,18 +89,25 @@ export default defineComponent({
 		 * @param next next step index
 		 */
 		const isValidStep = (next: number,
-							 initial: boolean =false) => {
+							 initial: boolean = false) => {
+			const isCurrentNum: boolean = typeof(config.value.current) === 'number'
+			const isBackward: boolean = config.value.current ? next < config.value.current : false
+			const isForward: boolean = config.value.current ? next > config.value.current : false
 			const validStep: boolean = next >= config.value.first! &&
 									   next < config.value.total
 			let validSkip: boolean = false
 
-			if (initial || typeof(config.value.current) === 'number' &&
-				next < config.value.current) {
+			if (initial || isCurrentNum && isBackward) {
 				validSkip = true
-			} else if (!initial || typeof(config.value.current) === 'number' &&
-				next > config.value.current) {
-				validSkip = !!steps.value[config.value.current!].isSkippable ||
-							steps.value[config.value.current!].isCompleted
+			} else if (!initial || isCurrentNum && isForward) {
+				if (!props.isCompleted) {
+					const isCurrentSkippable: boolean = !!steps.value[config.value.current!].isSkippable
+					const isCurrentCompleted: boolean = steps.value[config.value.current!].isCompleted
+
+					validSkip = (isCurrentSkippable || isCurrentCompleted) && next !== config.value.last
+				} else {
+					validSkip = true
+				}
 			}
 
 			return validStep && validSkip
@@ -200,6 +206,10 @@ export default defineComponent({
 		items: {
 			type: Array as () => GandalfItem[],
 			default: []
+		},
+		isCompleted: {
+			type: Boolean,
+			default: false
 		}
 	},
 	emits: [
