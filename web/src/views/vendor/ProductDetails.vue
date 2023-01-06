@@ -6,10 +6,7 @@
         <h5
             class="mb-0 text-base font-semibold 
             text-gray-900 md:text-xl">
-            Product details: 
-            <!-- <span class="font-bold">
-                {{  productStore.$state.product?.name  }}
-            </span> -->
+            Product details
         </h5>
 
         <p
@@ -35,6 +32,7 @@ import { defineComponent, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useProductStore } from '@/stores'
+import { useToast } from 'vue-toastification'
 
 export default defineComponent({
     name: 'ProductDetails',
@@ -47,6 +45,7 @@ export default defineComponent({
 
         // Services
         const route = useRoute()
+        const toast = useToast()
         const productStore = useProductStore()
 
         onMounted(() => {
@@ -65,10 +64,12 @@ export default defineComponent({
             productStore.retrieve(productId.value!)
                         .then(() => {
                             isLoading.value = false
+                            toast.info('Loaded product information')
                             console.log(productStore.$state.product)
                         })
                         .catch(() => {
                             isLoading.value = false
+                            toast.error('Error fetching product information')
                         })
         }
         
