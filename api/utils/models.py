@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from allauth.account.models import EmailAddress
 
 
-class MyUserManager(UserManager):
+class CoreUserManager(UserManager):
     """
     Base custom user manager based on UserManager
     """
@@ -30,7 +30,7 @@ class MyUserManager(UserManager):
         address.send_confirmation()
 
 
-class MyBaseModel(models.Model):
+class CoreBaseModel(models.Model):
     """
     Base model for all models
     """

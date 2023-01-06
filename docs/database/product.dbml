@@ -1,0 +1,59 @@
+// products app
+
+Table categories as Category {
+    id int [pk, increment]
+    name varchar
+    slug varchar
+    description varchar
+    parent int [ref: > Category.id]
+    is_active bool
+    created_at timestamp
+    last_modified_at timestamp
+}
+
+Table products as Product {
+    id int [pk, increment]
+    name varchar
+    slug varchar
+    description varchar
+    category int[] [ref: > CategoryProduct.id]
+    is_active bool
+    created_at timestamp
+    last_modified_at timestamp
+}
+
+Table category_product as CategoryProduct {
+    id int [pk, increment]
+    category_id int [ref: > Category.id]
+    product_id int [ref: > Product.id]
+}
+
+Table variant as Variant {
+    id int [pk, increment]
+    sku varchar
+    name varchar
+    product int [ref: > Product.id]
+    price varchar
+    weight float
+    customer_quantity_limit int
+    is_active bool
+    created_at timestamp
+    last_modified_at timestamp
+}
+
+Table inventory as Inventory {
+    id int [pk, increment]
+    quantity int
+    variant int [ref: > Variant.id]
+    is_active bool
+    created_at timestamp
+    last_modified_at timestamp
+}
+
+Table media as Media {
+    id uuid [pk]
+    short_description varchar
+    variant int [ref: > Variant.id]
+    is_main bool
+    created_at timestamp
+}

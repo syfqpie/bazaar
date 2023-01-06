@@ -8,10 +8,10 @@ from dj_rest_auth.serializers import PasswordResetSerializer
 from allauth.account import app_settings
 from allauth.account.adapter import get_adapter
 
-from .forms import MyResetPasswordForm
+from .forms import CoreResetPasswordForm
 
 
-class MyRegisterSerializer(RegisterSerializer):
+class CoreRegisterSerializer(RegisterSerializer):
     """
     Override RegisterSerializer
 
@@ -39,25 +39,25 @@ class MyRegisterSerializer(RegisterSerializer):
         return email
 
 
-class MyResendVerificationSerializer(serializers.Serializer):
+class CoreResendVerificationSerializer(serializers.Serializer):
     """
-    Serializer for MyResendVerificationView
+    Serializer for CoreResendVerificationView
     """
 
     email = serializers.EmailField(max_length=app_settings.EMAIL_MAX_LENGTH)
 
 
-class MyPasswordResetSerializer(PasswordResetSerializer):
+class CorePasswordResetSerializer(PasswordResetSerializer):
     """
     Override PasswordResetSerializer
     """
 
     @property
     def password_reset_form_class(self):
-        return MyResetPasswordForm
+        return CoreResetPasswordForm
 
 
-class MyVerifyEmailSerializer(VerifyEmailSerializer):
+class CoreVerifyEmailSerializer(VerifyEmailSerializer):
     """
     Custom serializer to for M
     """
@@ -66,7 +66,7 @@ class MyVerifyEmailSerializer(VerifyEmailSerializer):
     new_password2 = serializers.CharField(max_length=128)
 
 
-class MySetPasswordSerializer(serializers.Serializer):
+class CoreSetPasswordSerializer(serializers.Serializer):
     """
     Custom serializer to enable change password while
     verifying email

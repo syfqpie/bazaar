@@ -16,7 +16,10 @@ export enum BasicColor {
     DANGER = 'red',
 
     /** Outline with default color */
-    OUTLINE  = 'outline'
+    OUTLINE  = 'outline', 
+    
+    /** Light color */
+    LIGHT = 'light'
 }
 
 /** Enum for modal size */

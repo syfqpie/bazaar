@@ -19,32 +19,28 @@ from django.urls import path, re_path
 from django.views.generic import TemplateView
 
 from dj_rest_auth.jwt_auth import get_refresh_view
-from rest_framework import routers
-from rest_framework_extensions.routers import NestedRouterMixin
+from rest_framework_extensions.routers import ExtendedDefaultRouter
 from rest_framework_simplejwt.views import TokenVerifyView
 
 from customers.views import (CustomerViewSet,
                              CustomerAddressViewSet,
                              CustomerRegisterView)
 from users.views import CustomUserViewSet
+from products.views import (CategoryViewSet,
+                            MediaViewSet,
+                            ProductViewSet,
+                            VariantViewSet)
 from vendors.views import VendorViewSet, VendorRegisterView
-from utils.auth.views import (MyLoginView,
-                              MyRegisterView,
-                              MyVerifyEmailView,
-                              MyResendVerificationView,
-                              MyPasswordChangeView,
-                              MyPasswordResetView,
-                              MyPasswordResetConfirmView)
+from utils.auth.views import (CoreLoginView,
+                              CoreRegisterView,
+                              CoreVerifyEmailView,
+                              CoreResendVerificationView,
+                              CorePasswordChangeView,
+                              CorePasswordResetView,
+                              CorePasswordResetConfirmView)
 
 
-class NestedDefaultRouter(NestedRouterMixin, routers.DefaultRouter):
-    """
-    Nested default router extended from NestedRouterMixin and DefaultRouter 
-    """
-    pass
-
-
-router = NestedDefaultRouter()
+router = ExtendedDefaultRouter()
 
 # Addresses
 addresses_router = router.register(r'addresses',
@@ -54,6 +50,22 @@ addresses_router = router.register(r'addresses',
 customers_router = router.register(r'customers',
                                    CustomerViewSet)
 
+# Products
+categories_router = router.register(r'categories',
+                                    CategoryViewSet)
+products_router = router.register(r'products',
+                                    ProductViewSet) \
+                        .register(r'variants',
+                                    VariantViewSet,
+                                    'product-variants',
+                                    parents_query_lookups=['id']) \
+                        .register(r'medias',
+                                    MediaViewSet,
+                                    'product-medias',
+                                    parents_query_lookups=[
+                                        'id', 'variant'
+                                    ])
+                                    
 # Users
 users_router = router.register(r'users',
                                CustomUserViewSet)
@@ -64,18 +76,18 @@ vendors_router = router.register(r'vendors',
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('auth/registration/', MyRegisterView.as_view(), name='public_register'),
+    # path('auth/registration/', CoreRegisterView.as_view(), name='public_register'),
     path('auth/registration/customer/', CustomerRegisterView.as_view(), name='customer_register'),
     path('auth/registration/vendor/', VendorRegisterView.as_view(), name='vendor_register'),
-    path('auth/registration/verify-email/', MyVerifyEmailView.as_view(), name='account_email_verification_sent'),
+    path('auth/registration/verify-email/', CoreVerifyEmailView.as_view(), name='account_email_verification_sent'),
     re_path(r'^auth/registration/account-confirm-email/(?P<key>[-:\w]+)/$', TemplateView.as_view(),
         name='account_confirm_email'),
-    path('auth/registration/resend-verification/', MyResendVerificationView.as_view(), name='resend_verification'),
-    path('auth/login/', MyLoginView.as_view(), name='rest_login'),
-    path('auth/logout/', MyLoginView.as_view(), name='rest_logout'),
-    path('auth/password/change/', MyPasswordChangeView.as_view(), name='password_change'),
-    path('auth/password/reset/', MyPasswordResetView.as_view(), name='rest_password_reset'),
-    path(r'auth/password/reset/confirm/', MyPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('auth/registration/resend-verification/', CoreResendVerificationView.as_view(), name='resend_verification'),
+    path('auth/login/', CoreLoginView.as_view(), name='rest_login'),
+    path('auth/logout/', CoreLoginView.as_view(), name='rest_logout'),
+    path('auth/password/change/', CorePasswordChangeView.as_view(), name='password_change'),
+    path('auth/password/reset/', CorePasswordResetView.as_view(), name='rest_password_reset'),
+    path(r'auth/password/reset/confirm/', CorePasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('auth/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('auth/token/refresh/', get_refresh_view().as_view(), name='token_refresh'),
     re_path(r'v1/', include(router.urls)),
