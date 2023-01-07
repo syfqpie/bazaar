@@ -2,11 +2,11 @@
     <button
         type="button" 
         class="flex items-center py-2 px-3 text-base
-        font-normal rounded-lg w-full text-gray-900 
-        hover:bg-gray-100 dark:hover:bg-gray-700
-        transition duration-100 ease-out" 
+        font-normal rounded-lg w-full text-gray-900
+        hover:bg-gray-200 dark:text-gray-300 
+        dark:hover:bg-gray-700 transition duration-100 ease-out" 
         :class="{
-            'dark:text-indigo-500 dark:bg-gray-700': 
+            '!text-indigo-500 dark:bg-gray-800': 
                 $route.path.startsWith(subItem.path),
             'dark:text-white': 
                 !$route.path.startsWith(subItem.path)
@@ -46,10 +46,11 @@
                 <router-link
                     :to="`${subItem.path}/${sub.path}`"
                     class="flex items-center py-2 px-3 text-base
-                    font-normal text-gray-900 rounded-lg w-full
-                    dark:text-white hover:bg-gray-100 [&:last-child]:mb-0
-                    dark:hover:bg-gray-700 transition duration-100 ease-out"
-                    active-class="dark:text-indigo-500 dark:bg-gray-700">
+                    font-normal rounded-lg text-gray-900
+                    hover:bg-gray-200 dark:text-gray-300
+                    [&:last-child]:mb-0 dark:hover:bg-gray-700
+                    transition duration-100 ease-out"
+                    active-class="!text-indigo-500 dark:bg-gray-800">
                     <i class="fa-solid fa-minus fa-2xs"></i>
                     
                     <span class="flex-1 ml-2 text-left whitespace-nowrap">

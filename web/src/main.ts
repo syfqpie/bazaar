@@ -21,7 +21,7 @@ app.use(router)
 
 // Vue toastification options
 const options: PluginOptions = {
-    position: POSITION.BOTTOM_CENTER,
+    position: POSITION.BOTTOM_RIGHT,
     transition: 'Vue-Toastification__fade',
     maxToasts: 3,
     newestOnTop: true,

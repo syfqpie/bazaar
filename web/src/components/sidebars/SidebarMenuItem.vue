@@ -2,10 +2,10 @@
     <router-link
         :to="menuItem.path"
         class="flex items-center py-2 px-3 text-base
-        font-normal text-gray-900 rounded-lg
-        dark:text-white hover:bg-gray-100
+        font-normal rounded-lg text-gray-900
+        hover:bg-gray-200 dark:text-gray-300 
         dark:hover:bg-gray-700 transition duration-100 ease-out"
-        active-class="!text-indigo-500 dark:bg-gray-700">
+        active-class="!text-indigo-500 dark:bg-gray-800">
         <i 
             class="fa-fw"
             :class="menuItem.icon">
