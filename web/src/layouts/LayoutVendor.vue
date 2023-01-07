@@ -1,7 +1,9 @@
 <template>
     <div class="min-h-screen bg-gray-100">
         <div class="flex">
-            <SidebarVendor class="flex-none sticky top-0 h-screen" />
+            <SidebarVendor
+                class="flex-none fixed z-40 md:z-auto
+                md:sticky top-0 h-screen" />
             <div class="flex-auto bg-white">
                 <RouterView />
             </div>
