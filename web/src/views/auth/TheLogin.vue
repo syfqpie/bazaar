@@ -120,6 +120,7 @@ import { useAuthStore } from '@/stores'
 import useVuelidate from '@vuelidate/core'
 import { email, helpers, minLength, required } from '@vuelidate/validators'
 import { useToast } from 'vue-toastification'
+import { UserType } from '@/common/models/user.model'
 
 export default defineComponent({
   name: 'TheLogin',
@@ -179,7 +180,10 @@ export default defineComponent({
                 
                 // Navigate home
                 const nextRoute = router.currentRoute.value.query['redirectTo'] ?
-                    String(router.currentRoute.value.query['redirectTo']) : '/home'
+                    String(router.currentRoute.value.query['redirectTo']) :
+                    authStore.$state.userType === UserType.Vendor ?
+                    '/vendor/products/add' :
+                    '/home'
                 
                 router.push({ path: nextRoute })
             })
