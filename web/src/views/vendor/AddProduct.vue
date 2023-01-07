@@ -15,15 +15,16 @@
             Register new products to your shop
         </p>
 
-        <div class="flex flex-row mt-4">
-            <div class="basis-3/12 border-r border-r-gray-200">
+        <div class="grid grid-cols-12 divide-x mt-4">
+            <div class="col-span-3 lg:pr-6">
                 <TheGandalf
                     ref="theWizard"
                     :items="wizardItems"
+                    :isCompleted="isWizardCompleted"
                     @on-post-step="onStep" />
             </div>
 
-            <div class="basis-9/12 overflow-scroll max-h-[80vh] lg:pl-6">
+            <div class="col-span-9 overflow-scroll max-h-[80vh] lg:pl-6">
                 <form @submit.prevent>
                     <div class="mb-3" v-if="theWizard?.config.current === 0">
                         <h6
@@ -55,7 +56,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="text-sm text-gray-700">
+                            <label class="text-sm">
                                 Description
                             </label>
                             <TheTextArea
@@ -116,11 +117,20 @@
                             </TheOutlineButton>
 
                             <TheOutlineButton
+                                v-if="!isWizardCompleted"
                                 size="sm"
                                 class="rounded-l-none border-l-0"
                                 :disabled="isWizardCompleted"
                                 @click="onSubmit">
                                 Submit
+                            </TheOutlineButton>
+
+                            <TheOutlineButton
+                                v-else
+                                size="sm"
+                                class="rounded-l-none border-l-0"
+                                @click="theWizard?.nextStep()">
+                                <i class="fa-solid fa-chevron-down"></i>
                             </TheOutlineButton>
                         </div>
                     </div>
@@ -189,6 +199,7 @@ import { useProductStore } from '@/stores'
 import { useToast } from 'vue-toastification'
 import useVuelidate from '@vuelidate/core'
 import { helpers, minLength, required } from '@vuelidate/validators'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
     name: 'AddProduct',
@@ -238,6 +249,7 @@ export default defineComponent({
         const v$ = useVuelidate(validation, productForm.value)
 
         // Services
+        const router = useRouter()
         const toast = useToast()
         const productStore = useProductStore()
         
@@ -245,6 +257,12 @@ export default defineComponent({
             // console.log('Mounted AddProduct')
         })
         
+        /**
+         * On step callback function
+         * 
+         * @param step current step
+         * @param config current config
+         */
         const onStep = (step: GandalfStep,
 					    config: GandalfConfig) => { }
         
@@ -259,13 +277,10 @@ export default defineComponent({
             if (v$.value.$error) {
                 toast.error('Form not valid. Please check')
             } else {
-                theWizard.value!.nextStep()
                 theWizard.value!.steps[2].isCompleted = true
                 isWizardOnSubmit.value = true
-                // console.log('Product form: ', productForm.value)
                 createProduct()
             }
-            // toast.success('Added new product!')
         }
 
         /**
@@ -278,6 +293,17 @@ export default defineComponent({
                     toast.success('Added new product!')
                     isWizardOnSubmit.value = false
                     isWizardCompleted.value = true
+
+                    // hack
+                    setTimeout(() => {
+                        return theWizard.value!.nextStep()
+                    }, 200)
+
+                    setTimeout(() => {
+                        const nextPath = `${ data.id }/details`
+                        return router.push({ path: nextPath })
+                    }, 5200)
+                    
                 })
                 .catch(err => {
                     toast.error('Error')
